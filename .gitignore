@@ -10,6 +10,10 @@
 .svn/
 migrate_working_dir/
 
+# Security exclusions
+google-services.json
+
+
 # IntelliJ related
 *.iml
 *.ipr

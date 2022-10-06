@@ -1,22 +1,30 @@
 import 'dart:io'; // This is for sleep
+import 'dart:math';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:vibration/vibration.dart';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 import 'package:lovetap3/package.dart';
 
 
-void main() {
+Future<void> main() async {
   /*
     This is the entry point that runs MyApp;
    */
-  runApp(const LoveTap());
+  WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp();
+
+  runApp(LoveTap());
 }
 
 class LoveTap extends StatelessWidget {
-  const LoveTap({super.key});
+
+  final Future<FirebaseApp> _fbApp = Firebase.initializeApp();
+
+
+  LoveTap({super.key});
 
   // This widget is the root of your application.
   @override
@@ -26,7 +34,31 @@ class LoveTap extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: FutureBuilder(
+        /*
+          This code is to deal with the loading of the FirebaseApp _fbApp
+          This allows us to have a short loading screen while it loads, for example.
+         */
+        future: _fbApp,
+        builder: (context, snapshot){
+          if (snapshot.hasError){
+            // runs if there was an error initializing FirebaseApp _fbApp
+            print("You have an error! ${snapshot.error.toString()}");
+            return const Text("Something went wrong");
+          } else if (snapshot.hasData){
+            // It worked, so we return the MyHomePage normally
+            return const MyHomePage(title: 'Flutter Demo Home Page');
+          } else {
+            // This is when it is still loading, so for now we just show a loading screen
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+
+        }
+      )
+      // const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -45,6 +77,9 @@ class _MyHomePageState extends State<MyHomePage> {
   late Package curPackage = Package.PlaceHolder();
 
   void _incrementCounter() async {
+    DatabaseReference _testRef = FirebaseDatabase.instance.ref().child("test");
+    _testRef.set("Hello world ${Random().nextInt(100)}");
+
 
     setState(() {
 
@@ -133,7 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: _incrementCounter,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 

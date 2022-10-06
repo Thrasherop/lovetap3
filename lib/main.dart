@@ -77,6 +77,8 @@ class _MyHomePageState extends State<MyHomePage> {
   late Package curPackage = Package.PlaceHolder();
 
   void _incrementCounter() async {
+
+    // Test code for the realtime database. This merely updates the test child with a random number
     DatabaseReference _testRef = FirebaseDatabase.instance.ref().child("test");
     _testRef.set("Hello world ${Random().nextInt(100)}");
 

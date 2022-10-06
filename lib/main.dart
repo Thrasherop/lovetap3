@@ -55,11 +55,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _actionButton(){
     // Nothing to do here atm
+
   }
 
   void _press(PointerDownEvent event){
     /*
-      This method is called when the botton is pressed. It
+      This method is called when the button is pressed. It
       then processes it by first initializing a valid Package
       object (if curPackage is invalid), then by calling
       curPackage.press()

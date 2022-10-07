@@ -1,20 +1,25 @@
 import 'dart:io'; // This is for sleep
 import 'dart:math';
 
+
 import 'package:flutter/material.dart';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:google_api_availability/google_api_availability.dart';
 
 import 'package:lovetap3/package.dart';
-
+import 'package:lovetap3/myFirebaseInterface.dart';
 
 Future<void> main() async {
   /*
     This is the entry point that runs MyApp;
    */
-  WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
+  WidgetsFlutterBinding.ensureInitialized(); // This makes sure that bindings are initialized
+  // Registers message handlers
+  FirebaseMessaging.onBackgroundMessage(MyFirebaseInterface.createBackgroundHandler);
+  FirebaseMessaging.onMessage.listen(MyFirebaseInterface.foregroundHandler);
 
   runApp(LoveTap());
 }
@@ -35,8 +40,9 @@ class LoveTap extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: FutureBuilder(
+
         /*
-          This code is to deal with the loading of the FirebaseApp _fbApp
+          This code (inside the FutureBuilder) is to deal with the loading of the FirebaseApp _fbApp
           This allows us to have a short loading screen while it loads, for example.
          */
         future: _fbApp,
@@ -54,7 +60,6 @@ class LoveTap extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           }
-
 
         }
       )
@@ -81,6 +86,9 @@ class _MyHomePageState extends State<MyHomePage> {
     // Test code for the realtime database. This merely updates the test child with a random number
     DatabaseReference _testRef = FirebaseDatabase.instance.ref().child("test");
     _testRef.set("Hello world ${Random().nextInt(100)}");
+
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+    print("FirebaseMessaging token: $fcmToken");
 
 
     setState(() {
@@ -173,6 +181,8 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
+
+
 
 }
 

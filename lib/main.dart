@@ -10,16 +10,18 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:google_api_availability/google_api_availability.dart';
 
 import 'package:lovetap3/package.dart';
+import 'package:lovetap3/incomingPackage.dart';
+import 'package:lovetap3/outgoingPackage.dart';
 import 'package:lovetap3/myFirebaseInterface.dart';
+import 'package:vibration/vibration.dart';
 
 Future<void> main() async {
   /*
     This is the entry point that runs MyApp;
    */
   WidgetsFlutterBinding.ensureInitialized(); // This makes sure that bindings are initialized
-  // Registers message handlers
-  FirebaseMessaging.onBackgroundMessage(MyFirebaseInterface.createBackgroundHandler);
-  FirebaseMessaging.onMessage.listen(MyFirebaseInterface.foregroundHandler);
+
+
 
   runApp(LoveTap());
 }
@@ -34,6 +36,8 @@ class LoveTap extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -52,6 +56,13 @@ class LoveTap extends StatelessWidget {
             print("You have an error! ${snapshot.error.toString()}");
             return const Text("Something went wrong");
           } else if (snapshot.hasData){
+
+            // Registers message handlers
+            FirebaseMessaging.instance.getToken(); //await // This needs to be called before calling listeners. See https://github.com/firebase/flutterfire/issues/6011
+            FirebaseMessaging.onBackgroundMessage(MyFirebaseInterface.createBackgroundHandler);
+            FirebaseMessaging.onMessage.listen(MyFirebaseInterface.foregroundHandler);
+
+
             // It worked, so we return the MyHomePage normally
             return const MyHomePage(title: 'Flutter Demo Home Page');
           } else {
@@ -79,7 +90,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0; // Holds the counter for the demo page
-  late Package curPackage = Package.PlaceHolder();
+  late OutgoingPackage curPackage = OutgoingPackage.PlaceHolder();
 
   void _incrementCounter() async {
 
@@ -90,6 +101,9 @@ class _MyHomePageState extends State<MyHomePage> {
     final fcmToken = await FirebaseMessaging.instance.getToken();
     print("FirebaseMessaging token: $fcmToken");
 
+    // Vibration.vibrate(pattern: [100, 1000, 100, 1000]);
+
+    Vibration.vibrate(pattern: [1000, 100, 1000]);
 
     setState(() {
 
@@ -114,7 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // Create a new package if the current one has timed out
     // This is why we need Packages of PlaceHolder type
     if (curPackage.isPlaceHolder() || curPackage.hasTimedOut()){
-      curPackage = Package();
+      curPackage = OutgoingPackage();
     }
 
     curPackage.press();

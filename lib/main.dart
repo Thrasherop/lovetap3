@@ -4,16 +4,19 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import 'package:vibration/vibration.dart';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:google_api_availability/google_api_availability.dart';
 
+import 'package:lovetap3/config.dart';
 import 'package:lovetap3/package.dart';
 import 'package:lovetap3/incomingPackage.dart';
 import 'package:lovetap3/outgoingPackage.dart';
 import 'package:lovetap3/myFirebaseInterface.dart';
-import 'package:vibration/vibration.dart';
+import 'package:lovetap3/myBuffer.dart';
 
 Future<void> main() async {
   /*
@@ -58,7 +61,11 @@ class LoveTap extends StatelessWidget {
           } else if (snapshot.hasData){
 
             // Registers message handlers
-            FirebaseMessaging.instance.getToken(); //await // This needs to be called before calling listeners. See https://github.com/firebase/flutterfire/issues/6011
+            //TODO: the getToken() needs to be handled by a Future
+            // MyBuffer.currentToken = FirebaseMessaging.instance.getToken(); //await // This needs to be called before calling listeners. See https://github.com/firebase/flutterfire/issues/6011
+
+            FirebaseMessaging.instance.getToken().then((value) => MyBuffer.currentToken = value);
+
             FirebaseMessaging.onBackgroundMessage(MyFirebaseInterface.createBackgroundHandler);
             FirebaseMessaging.onMessage.listen(MyFirebaseInterface.foregroundHandler);
 
@@ -91,6 +98,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0; // Holds the counter for the demo page
   late OutgoingPackage curPackage = OutgoingPackage.PlaceHolder();
+  String _selectedDestination = Config.DESTINATION_OPTIONS[0].value;
 
   void _incrementCounter() async {
 
@@ -144,6 +152,20 @@ class _MyHomePageState extends State<MyHomePage> {
     curPackage.release();
   }
 
+  void _destinationChanged(newValue){
+
+    if (newValue is String){
+      setState(() {
+        print("New target destination is $newValue");
+
+        // Updates target in buffer
+        MyBuffer.currentTargetDestination = newValue;
+
+        _selectedDestination = newValue;
+      });
+    }
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -166,7 +188,6 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
-
             Listener(
               /*
                 This listener contains the main pressing button.
@@ -184,6 +205,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: const Icon(Icons.accessibility_sharp),
                 ),
               ),
+            ),
+            DropdownButton(
+                items: Config.DESTINATION_OPTIONS,
+                onChanged: _destinationChanged,
+                value: _selectedDestination,
+
             ),
           ],
         ),

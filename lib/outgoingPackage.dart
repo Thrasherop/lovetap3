@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:lovetap3/myFirebaseInterface.dart';
 import 'package:lovetap3/package.dart';
-
 import 'package:lovetap3/config.dart';
+import 'package:lovetap3/myBuffer.dart';
 
 
 class OutgoingPackage extends Package {
@@ -65,6 +67,25 @@ class OutgoingPackage extends Package {
       This is a getter to check if this instance is a PlaceHolder
      */
     return _isPlaceHolder;
+  }
+
+  Map<String, String> getJson(){
+
+    // Creates timingArray string
+    String timingString = "";
+    for (var element in timingArray) {
+      timingString += "$element!!!";
+    }
+    print("Timing string: $timingString");
+
+
+
+    return <String, String>{
+      Config.DATA_MAP: timingString,
+      Config.TARGET_MAP: MyBuffer.currentTargetDestination,
+      Config.ORIGIN_MAP: MyBuffer.currentToken.toString(),
+    };
+
   }
 
 
@@ -143,7 +164,9 @@ class OutgoingPackage extends Package {
 
     print("Package._sendPackage() has been called. The package is: ${timingArray.toString()}");
 
-    play();
+    MyFirebaseInterface.sendPackage(this);
+
+    // play();
   }
 
 

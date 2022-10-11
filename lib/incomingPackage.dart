@@ -17,6 +17,11 @@ class IncomingPackage extends Package {
 
     // Converts all the values from String to int
     for (var element in patternStr) {
+
+      if (element == ""){
+        continue;
+      }
+
       timingArray.add(int.parse(element));
     }
 

@@ -37,6 +37,8 @@ dependencies:
   google_api_availability: ^3.0.1
   firebase_analytics: ^9.3.8
   cloud_firestore: ^3.5.1
+  google_sign_in: ^5.4.2
+  firebase_auth: ^3.11.2
 
 
 

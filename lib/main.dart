@@ -2,6 +2,7 @@ import 'dart:io'; // This is for sleep
 import 'dart:math';
 
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:vibration/vibration.dart';
@@ -9,14 +10,16 @@ import 'package:vibration/vibration.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:google_api_availability/google_api_availability.dart';
 
 import 'package:lovetap3/config.dart';
 import 'package:lovetap3/package.dart';
-import 'package:lovetap3/incomingPackage.dart';
+import 'package:lovetap3/IncomingPackage.dart';
 import 'package:lovetap3/outgoingPackage.dart';
 import 'package:lovetap3/myFirebaseInterface.dart';
 import 'package:lovetap3/myBuffer.dart';
+import 'package:lovetap3/MyAuthenticator.dart';
 
 Future<void> main() async {
   /*
@@ -100,6 +103,10 @@ class _MyHomePageState extends State<MyHomePage> {
   late OutgoingPackage curPackage = OutgoingPackage.PlaceHolder();
   String _selectedDestination = Config.DESTINATION_OPTIONS[0].value;
 
+
+  bool _isSigningIn = false;
+  bool _isSigningOut = false;
+
   void _incrementCounter() async {
 
     // Test code for the realtime database. This merely updates the test child with a random number
@@ -123,6 +130,57 @@ class _MyHomePageState extends State<MyHomePage> {
   void _actionButton(){
     // Nothing to do here atm
 
+  }
+
+  void _minorActionButton() async {
+    print("minor button pressed");
+
+    setState(() {
+      _isSigningIn = true;
+    });
+
+    User? user = await MyAuthenticator.signInWithGoogle(context: context);
+
+    print(user?.email);
+
+    setState(() {
+      _isSigningIn = false;
+    });
+
+    if (user != null) {
+      // Navigator.of(context).pushReplacement(
+      //   MaterialPageRoute(
+      //     builder: (context) =>
+      //         UserInfoScreen(
+      //           user: user,
+      //         ),
+      //   ),
+      // );
+      print("user != null");
+    } else {
+      print("User == null");
+    }
+
+    print("afterwards");
+  }
+
+  void _microActionButton() async {
+    setState(() {
+      _isSigningOut = true;
+    });
+
+    await MyAuthenticator.signOut(context: context);
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null){
+      print("signout failed");
+    } else {
+      print("signout succeeded");
+    }
+
+    setState(() {
+      _isSigningOut = false;
+    });
   }
 
   void _press(PointerDownEvent event){
@@ -170,7 +228,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
 
-
     // This is prebuilt crap from
     return Scaffold(
       appBar: AppBar(
@@ -212,6 +269,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 value: _selectedDestination,
 
             ),
+            ElevatedButton(
+                onPressed: _minorActionButton,
+                child: Text("Sign in: ${_isSigningIn.toString()}"),
+            ),
+            ElevatedButton(
+              onPressed: _microActionButton,
+              child: Text("Sign out: ${_isSigningOut.toString()}"),
+            )
           ],
         ),
       ),

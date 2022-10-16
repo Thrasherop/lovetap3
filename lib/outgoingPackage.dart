@@ -4,6 +4,7 @@ import 'package:lovetap3/package.dart';
 import 'package:lovetap3/config.dart';
 import 'package:lovetap3/myBuffer.dart';
 
+import 'package:lovetap3/MyAuthenticator.dart';
 
 class OutgoingPackage extends Package {
 

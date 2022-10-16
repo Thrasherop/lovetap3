@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:lovetap3/config.dart';
 import 'package:vibration/vibration.dart';
 
+
 class Package {
 
   // Keeps track of the timing arrays

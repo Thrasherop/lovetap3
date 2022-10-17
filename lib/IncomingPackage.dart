@@ -1,6 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:lovetap3/config.dart';
+import 'package:lovetap3/Config.dart';
 import 'package:lovetap3/package.dart';
 
 class IncomingPackage extends Package {

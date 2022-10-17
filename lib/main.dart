@@ -13,7 +13,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:google_api_availability/google_api_availability.dart';
 
-import 'package:lovetap3/config.dart';
+import 'package:lovetap3/Config.dart';
 import 'package:lovetap3/package.dart';
 import 'package:lovetap3/IncomingPackage.dart';
 import 'package:lovetap3/outgoingPackage.dart';

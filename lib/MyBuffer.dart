@@ -1,4 +1,4 @@
-import 'package:lovetap3/config.dart';
+import 'package:lovetap3/Config.dart';
 
 class MyBuffer {
 

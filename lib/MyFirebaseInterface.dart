@@ -8,7 +8,7 @@ import 'package:lovetap3/package.dart';
 
 import 'package:vibration/vibration.dart';
 
-import 'package:lovetap3/config.dart';
+import 'package:lovetap3/Config.dart';
 
 class MyFirebaseInterface {
 

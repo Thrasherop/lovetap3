@@ -1,12 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:lovetap3/myFirebaseInterface.dart';
-import 'package:lovetap3/package.dart';
+import 'package:lovetap3/MyFirebaseInterface.dart';
+import 'package:lovetap3/Package.dart';
 import 'package:lovetap3/Config.dart';
-import 'package:lovetap3/myBuffer.dart';
+import 'package:lovetap3/MyBuffer.dart';
 
 import 'package:lovetap3/MyAuthenticator.dart';
+import 'package:lovetap3/functions.dart';
 
 class OutgoingPackage extends Package {
+
+  /*
+    This package represents outgoing packages
+    that will send to Firebase.
+
+    Attributes::
+        - _lastUpdate: DateTime
+        - _isPressed: bool
+        - _hasTimedOut: bool
+        _ _isPlaceHolder: bool
+
+     Methods::
+        + OutgoingPackage() -> Default constructor
+   */
 
   late DateTime _lastUpdate;
   late bool _isPressed;
@@ -19,10 +34,10 @@ class OutgoingPackage extends Package {
       Default constructor.
 
       return:
-          -- Package: Default, non-placeholder Package object
+          -- OutgoingPackage: Default, non-placeholder Package object
      */
 
-    print("New Package has been constructed. NOTE: This does NOT call press(), but it does update _lastUpdate");
+    stamp("New Package has been constructed. NOTE: This does NOT call press(), but it does update _lastUpdate");
     _lastUpdate = DateTime.now();
 
   }
@@ -35,7 +50,7 @@ class OutgoingPackage extends Package {
      */
 
     _isPlaceHolder = true;
-    print("Package of nullable has been declared");
+    stamp("Package of nullable has been declared");
   }
 
   /*
@@ -44,7 +59,7 @@ class OutgoingPackage extends Package {
 
   bool isPressed(){
     /*
-      Simple getter to check if the package is currently being pressed
+      Getter to check if the package is currently being pressed
 
       return:
           -- Boolean: Whether the package is being pressed
@@ -55,7 +70,7 @@ class OutgoingPackage extends Package {
 
   bool hasTimedOut(){
     /*
-      Simple getter to check if this package has timed out
+      Getter to check if this package has timed out
 
       return:
           -- Boolean: whether the package has timed out
@@ -65,22 +80,34 @@ class OutgoingPackage extends Package {
 
   bool isPlaceHolder(){
     /*
-      This is a getter to check if this instance is a PlaceHolder
+      Getter to check if this instance is a PlaceHolder
+
+      return::
+          -- bool -> whether this instance is a PlaceHolder or not
      */
     return _isPlaceHolder;
   }
 
   Map<String, String> getJson(){
 
+    /*
+      This method is used to compile the data of
+      this OutgoingPackage into json to be sent
+      to firebase
+
+      return::
+          -- Map<String, String> -> The data of this package
+     */
+
     // Creates timingArray string
     String timingString = "";
     for (var element in timingArray) {
       timingString += "$element!!!";
     }
-    print("Timing string: $timingString");
+    stamp("Timing string: $timingString");
 
 
-
+    // Returns the map of the data
     return <String, String>{
       Config.DATA_MAP: timingString,
       Config.TARGET_MAP: MyBuffer.currentTargetDestination,
@@ -94,13 +121,20 @@ class OutgoingPackage extends Package {
     Setters
    */
 
+
+
+  /*
+    Functional Methods (do-ers)
+   */
+
+
   void press(){
     /*
-      Call this when the tap is pressed
+      Call this when the tap is pressed. This will add the time delta
+      to the timing array, and set _isPressed to true
      */
 
     // Updates lastUpdate to right now
-    // _lastUpdate = DateTime.now();
     _cycleTimings();
 
     // Updates the _isPressed function
@@ -109,7 +143,9 @@ class OutgoingPackage extends Package {
 
   void release() {
     /*
-      Call this when the tap is released
+      Call this when the tap is released. This will add the time delta
+      to the timing array, and set _isPressed to false. It also creates
+      a new _packageTimeout daemon with the delay of Config.PACKAGE_TIMEOUT
      */
 
     _cycleTimings();
@@ -120,10 +156,6 @@ class OutgoingPackage extends Package {
     _isPressed = false;
   }
 
-
-  /*
-    Functional Methods
-   */
 
   void _cycleTimings(){
     /*
@@ -145,31 +177,35 @@ class OutgoingPackage extends Package {
 
   void _packageTimeout(){
     /*
-      This function is called when a package
+      This function is called to check if a package has timed-out.
+      Specifically, this is called 4 seconds after every release.
+      If no update has happened in Config.PACKAGE_TIMEOUT time, then
+      the package will send.
      */
 
     Duration timeDelta = DateTime.now().difference(_lastUpdate);
 
     if (timeDelta.inMilliseconds > Config.PACKAGE_TIMEOUT){
-      print("Package has timed out");
+      stamp("Package has timed out");
       _sendPackage();
       _hasTimedOut = true;
     } else {
-      print("Daemon has finished without a timeout.");
+      stamp("Daemon has finished without a timeout.");
       _hasTimedOut = false;
     }
 
   }
 
   void _sendPackage(){
+    /*
+      Uploads this package object to Firebase. This is done
+      through MyFirebaseInterface.sendPackage(this).
+     */
 
-    print("Package._sendPackage() has been called. The package is: ${timingArray.toString()}");
+    stamp("Package._sendPackage() has been called. The package is: ${timingArray.toString()}");
 
     MyFirebaseInterface.sendPackage(this);
 
-    // play();
   }
-
-
 }
 

@@ -1,20 +1,70 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:lovetap3/IncomingPackage.dart';
-import 'package:lovetap3/outgoingPackage.dart';
-import 'package:lovetap3/package.dart';
+import 'package:lovetap3/OutgoingPackage.dart';
+import 'package:lovetap3/functions.dart';
 
-import 'package:vibration/vibration.dart';
 
 import 'package:lovetap3/Config.dart';
 
+import 'MyBuffer.dart';
+
 class MyFirebaseInterface {
+  /*
+    This class is for interfacing with Firebase.
 
-  static Future<void> createBackgroundHandler(RemoteMessage message) async {
+    Attributes::
+        - _fbApp: Future<FirebaseApp> -> a future containing the FirebaseApp instance
 
-    print("background handler called");
+    Methods::
+        + initialize()
+        + backgroundHandler()
+        + foregroundHandler()
+        + sendPackage()
+        - _handleData()
+   */
+
+
+  static final Future<FirebaseApp> _fbApp = Firebase.initializeApp();
+
+  static Future<bool> initialize() async {
+    /*
+      This method does the required initialization for proper
+      firebase usage. This includes:
+          - Getting the token
+          - Create background FCM listener
+          - Create foreground FCM listener
+
+       return::
+          - status: Future<bool> -> This returns true on success, false on failure
+     */
+
+    try {
+      FirebaseMessaging.instance.getToken().then((value) => MyBuffer.currentToken = value);
+
+      FirebaseMessaging.onBackgroundMessage(MyFirebaseInterface.backgroundHandler);
+      FirebaseMessaging.onMessage.listen(MyFirebaseInterface.foregroundHandler);
+      stamp("Firebase initialized");
+
+      return true;
+    } catch (e){
+      return false;
+    }
+  }
+
+  static Future<void> backgroundHandler(RemoteMessage message) async {
+
+    /*
+      The callback function for a background FCM message. This
+      requires us to initialize firebase first, and then we call
+      _handleData.
+
+      params::
+        -- message: RemoteMessage -> Message to be parsed
+     */
+
+    stamp("background handler called");
 
     await Firebase.initializeApp();
 
@@ -23,14 +73,49 @@ class MyFirebaseInterface {
   }
 
   static void foregroundHandler(RemoteMessage message){
-     print("Foreground listener triggered");
+    /*
+      The callback function for a foreground FCM message.
+      This currently only passes the data to _handleData();
+
+      params::
+        -- message: RemoteMessage -> Message to be parsed
+     */
+     stamp("Foreground listener triggered");
      _handleData(message);
-     print("Called _handleData");
+  }
+
+  static Future<void> sendPackage(OutgoingPackage package) async {
+    /*
+      This uploads a package to the Firebase database.
+
+      params::
+        -- package: OutgoingPackage -> The package to be delivered
+
+      return::
+        -- Future<void> -> Contains no information
+     */
+
+    stamp("sending Package");
+
+    // Uploads package
+    final docUser = FirebaseFirestore.instance.collection("incoming").doc(Config.DEMO_USER_NAME).collection(Config.USER_SEND_COLLECTION);
+    await docUser.add(package.getJson());
+
+    stamp("Package sent");
+
   }
 
   static void _handleData(RemoteMessage message) {
+    /*
+      This function parses the message. This includes
+      checking if it has data (key defined in Config.DATA_MAP).
+      If it does contain the data, it will initialize a new
+      IncomingPackage instance with said data. Finally,
+      it will play the message.
 
-
+      params::
+         -- message: RemoteMessage -> the data message to parse
+     */
 
     if (message.data.containsKey(Config.DATA_MAP)){
 
@@ -40,23 +125,8 @@ class MyFirebaseInterface {
 
 
     } else {
-      print("Incoming package did not have pattern");
+      stamp("Incoming package did not have pattern");
     }
-
-    // if (message.data.containsKey(Config.DATA_MAP)){
-    //   Vibration.vibrate(duration: int.parse(message.data[Config.DATA_MAP]));
-    // }
-  }
-
-  static Future<void> sendPackage(OutgoingPackage package) async {
-
-    print("sending Package");
-
-    final docUser = FirebaseFirestore.instance.collection("incoming").doc(Config.DEMO_USER_NAME).collection(Config.USER_SEND_COLLECTION);
-
-    await docUser.add(package.getJson()); //set(package.getJson());
-
-    print("Package sent");
 
   }
 

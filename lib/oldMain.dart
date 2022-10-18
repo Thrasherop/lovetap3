@@ -4,10 +4,6 @@ import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:lovetap3/pages/ConnectionFailedScreen.dart';
-import 'package:lovetap3/pages/HomeScreen.dart';
-import 'package:lovetap3/pages/LoadingScreen.dart';
-import 'package:lovetap3/pages/LoginScreen.dart';
 
 import 'package:vibration/vibration.dart';
 
@@ -29,21 +25,13 @@ Future<void> main() async {
   /*
     This is the entry point that runs MyApp;
    */
+  WidgetsFlutterBinding.ensureInitialized(); // This makes sure that bindings are initialized
 
-  // This starts the app via routing information
-  runApp(MaterialApp(
-    initialRoute: "/loading",
-    routes: {
-      "/loading":(context) =>LoadingScreen(),
-      "/home": (context) => HomeScreen(),
-      Config.CONNECTION_FAILED_SCREEN:(context) => ConnectionFailedScreen(),
-      "/login": (context) => LoginScreen()
-    },
-  ));
 
+
+  runApp(LoveTap());
 }
 
-@Deprecated("this is the old LoveTap widget. Don't use lol")
 class LoveTap extends StatelessWidget {
 
   final Future<FirebaseApp> _fbApp = Firebase.initializeApp();
@@ -57,45 +45,45 @@ class LoveTap extends StatelessWidget {
 
 
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: FutureBuilder(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: FutureBuilder(
 
-        /*
+          /*
           This code (inside the FutureBuilder) is to deal with the loading of the FirebaseApp _fbApp
           This allows us to have a short loading screen while it loads, for example.
          */
-        future: _fbApp,
-        builder: (context, snapshot){
-          if (snapshot.hasError){
-            // runs if there was an error initializing FirebaseApp _fbApp
-            print("You have an error! ${snapshot.error.toString()}");
-            return const Text("Something went wrong");
-          } else if (snapshot.hasData){
+            future: _fbApp,
+            builder: (context, snapshot){
+              if (snapshot.hasError){
+                // runs if there was an error initializing FirebaseApp _fbApp
+                print("You have an error! ${snapshot.error.toString()}");
+                return const Text("Something went wrong");
+              } else if (snapshot.hasData){
 
-            // Registers message handlers
-            //TODO: the getToken() needs to be handled by a Future
-            // MyBuffer.currentToken = FirebaseMessaging.instance.getToken(); //await // This needs to be called before calling listeners. See https://github.com/firebase/flutterfire/issues/6011
+                // Registers message handlers
+                //TODO: the getToken() needs to be handled by a Future
+                // MyBuffer.currentToken = FirebaseMessaging.instance.getToken(); //await // This needs to be called before calling listeners. See https://github.com/firebase/flutterfire/issues/6011
 
-            FirebaseMessaging.instance.getToken().then((value) => MyBuffer.currentToken = value);
+                FirebaseMessaging.instance.getToken().then((value) => MyBuffer.currentToken = value);
 
-            FirebaseMessaging.onBackgroundMessage(MyFirebaseInterface.backgroundHandler);
-            FirebaseMessaging.onMessage.listen(MyFirebaseInterface.foregroundHandler);
+                FirebaseMessaging.onBackgroundMessage(MyFirebaseInterface.backgroundHandler);
+                FirebaseMessaging.onMessage.listen(MyFirebaseInterface.foregroundHandler);
 
 
-            // It worked, so we return the MyHomePage normally
-            return const MyHomePage(title: 'Flutter Demo Home Page');
-          } else {
-            // This is when it is still loading, so for now we just show a loading screen
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+                // It worked, so we return the MyHomePage normally
+                return const MyHomePage(title: 'Flutter Demo Home Page');
+              } else {
+                // This is when it is still loading, so for now we just show a loading screen
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
 
-        }
-      )
+            }
+        )
       // const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -276,14 +264,14 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             DropdownButton(
-                items: Config.DESTINATION_OPTIONS,
-                onChanged: _destinationChanged,
-                value: _selectedDestination,
+              items: Config.DESTINATION_OPTIONS,
+              onChanged: _destinationChanged,
+              value: _selectedDestination,
 
             ),
             ElevatedButton(
-                onPressed: _minorActionButton,
-                child: Text("Sign in: ${_isSigningIn.toString()}"),
+              onPressed: _minorActionButton,
+              child: Text("Sign in: ${_isSigningIn.toString()}"),
             ),
             ElevatedButton(
               onPressed: _microActionButton,

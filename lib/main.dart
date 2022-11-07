@@ -8,6 +8,7 @@ import 'package:lovetap3/pages/ConnectionFailedScreen.dart';
 import 'package:lovetap3/pages/HomeScreen.dart';
 import 'package:lovetap3/pages/LoadingScreen.dart';
 import 'package:lovetap3/pages/LoginScreen.dart';
+import 'package:lovetap3/pages/TestingScreen.dart';
 
 import 'package:vibration/vibration.dart';
 
@@ -37,7 +38,8 @@ Future<void> main() async {
       "/loading":(context) =>LoadingScreen(),
       "/home": (context) => HomeScreen(),
       Config.CONNECTION_FAILED_SCREEN:(context) => ConnectionFailedScreen(),
-      "/login": (context) => LoginScreen()
+      "/login": (context) => LoginScreen(),
+      "/testing": (context) => TestingScreen(),
     },
   ));
 

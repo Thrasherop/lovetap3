@@ -11,5 +11,7 @@ class MyBuffer {
 
   static late dynamic signinFunction;
 
+  static late String userID;
+
 
 }

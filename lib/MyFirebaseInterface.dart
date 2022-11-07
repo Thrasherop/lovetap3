@@ -41,7 +41,8 @@ class MyFirebaseInterface {
      */
 
     try {
-      FirebaseMessaging.instance.getToken().then((value) => MyBuffer.currentToken = value);
+      // This can take awhile, and we don't want to send messages based on tokens, but instead based on UIDs
+      // FirebaseMessaging.instance.getToken().then((value) => MyBuffer.currentToken = value);
 
       FirebaseMessaging.onBackgroundMessage(MyFirebaseInterface.backgroundHandler);
       FirebaseMessaging.onMessage.listen(MyFirebaseInterface.foregroundHandler);

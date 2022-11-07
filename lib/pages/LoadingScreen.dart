@@ -17,6 +17,12 @@ import 'package:lovetap3/functions.dart';
 
 class LoadingScreen extends StatefulWidget {
 
+  /*
+    The double screen bug is because we first load loading screen, then
+    it immediately gets switched. Possibly perform initialization checks
+    here (before the UI loads). If initialization is good, go to /home
+   */
+
   LoadingScreen({Key? key}) : super(key: key);
 
   @override
@@ -35,12 +41,17 @@ class _LoadingScreenState extends State<LoadingScreen> {
       the user is logged in. If the user is not logged in, the login
       screen is pushed onto the navigator. If the user IS logged in,
       the screen is replaced with /home.
+
+      For now, I've fixed this by just delaying the loading screen _initialize
+      daemon by 300 ms instead of the 100ms before. this also shows a loading
+      screen for a second, which is nice and makes it feel super fast
      */
+
 
 
     // Initialize MyFirebaseInterface
     await MyFirebaseInterface.initialize();
-    stamp("Firebase initialized");
+    stamp("Loading screen: Firebase initialized");
 
 
     // Goes to home if logged in, goes to /login if not
@@ -62,7 +73,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
     // This calls _initilize with a 100ms delay. This delay
     // ensures that the UI below has a chance to render.
     // This is important since initialization can take a moment
-    Future.delayed(Duration(milliseconds: 100), _initialize);
+    Future.delayed(Duration(milliseconds: 300), _initialize);
+
 
 
     // This is the LoadingScreen UI
@@ -75,6 +87,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: const [
             Text("Loading..."),
             CircularProgressIndicator()

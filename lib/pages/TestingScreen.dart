@@ -1,8 +1,13 @@
+import 'dart:io';
+
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:lovetap3/MyAuthenticator.dart';
+import 'package:lovetap3/MyFirebaseInterface.dart';
 import 'package:lovetap3/interfaces/MyFileInterface.dart';
+import 'package:lovetap3/objects/ConnectionObject.dart';
 
 import '../Config.dart';
 import '../MyBuffer.dart';
@@ -25,17 +30,29 @@ class _TestingScreenState extends State<TestingScreen> {
   void actionbtn1() async {
 
     stamp("Testing screen: Action button call");
-    // print(FirebaseFunctions.instanceFor(region: "us-central1").httpsCallable("testing").call());
+    
+    // stamp("Calling MyFireBaseInterface.requestConnection: ${await MyFirebaseInterface.requestConnection("ultraprim@gmail.com")}");
+    // FirebaseMessaging.instance.getToken().then((value) => stamp("Token: $value"));
 
-    // HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('testing');
-    // final results = await callable();
 
-    test();
+    // await MyFileInterface.addConnection("connectionID", "userID", false);
+    // await MyFileInterface.addConnection("connection 2", "user 2", true);
 
-    HttpsCallable callable = FirebaseFunctions.instanceFor(region: "us-central1").httpsCallable("testing", options: HttpsCallableOptions(timeout: Duration(seconds: 5)));
-    final result = await callable();
+    // stamp("MyFileInterface.getConnections());
 
-    stamp("result from function.testing is $result, data: ${result.data}");
+
+    // await MyFileInterface.addConnection(ConnectionObject.direct("connection4", "user3", false));
+    //
+    stamp("Connections: ${await MyFileInterface.getConnections()}");
+    // stamp("Connections: ${(await MyFileInterface.getConnections())["connection3"]}");
+
+  }
+
+  void actionBtn2() async {
+    stamp("actionBtn2 called");
+
+
+    stamp("Calling MyFireBaseInterface.requestConnection: ${await MyFirebaseInterface.requestConnection("ultraprim@gmail.com")}");
 
   }
 
@@ -49,6 +66,7 @@ class _TestingScreenState extends State<TestingScreen> {
             children: [
               Text("testing screen"),
               ElevatedButton(onPressed: actionbtn1, child: Text("Action Button 1")),
+              ElevatedButton(onPressed: actionBtn2, child: Text("Action Button 2")),
 
             ],
           ),

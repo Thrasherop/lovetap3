@@ -32,7 +32,7 @@ class IncomingPackage extends Package {
      */
 
     // Gets the pattern and parses it
-    String rawPattern = _packet.data[Config.DATA_MAP].toString();
+    String rawPattern = _packet.data[Config.PACKAGE_DATA_MAP].toString();
     List<String> patternStr = rawPattern.split(Config.PATTERN_DELIMETER);
 
     // Converts all the values from String to int

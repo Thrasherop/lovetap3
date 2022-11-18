@@ -10,7 +10,6 @@ class MyFileInterface {
 
   late SharedPreferences data;
 
-  // MyFileInterface();
 
   static Future<Object> getValue(String key) async {
     final prefs = await SharedPreferences.getInstance();
@@ -42,13 +41,18 @@ class MyFileInterface {
     return dataArray;
   }
 
+  static Future<bool> deleteAllConnections() async {
+    setValue("connections", <String>[]);
+    return true;
+  }
+
   static Future<bool> setValue(String key, Object value) async{
 
     // obtain shared preferences
     final prefs = await SharedPreferences.getInstance();
 
 
-    // Checks the type, and uses the appropriate sharepreferences method
+    // Checks the type, and uses the appropriate SharePreferences method
     if (value.runtimeType == 1.runtimeType){
       await prefs.setInt(key, value as int);
     } else if (value.runtimeType == "".runtimeType){
@@ -61,6 +65,7 @@ class MyFileInterface {
       await prefs.setStringList(key, value as List<String>);
     } else {
       stampE("That type is not supported");
+      throw ("Invalid value passed into setValue");
       return false;
     }
 
@@ -71,7 +76,7 @@ class MyFileInterface {
   static Future<bool> addConnection(ConnectionObject newConnection) async {
 
     List<String> dataArray = await getStringList("connections");
-    dataArray.add("${newConnection.getConnectionID()}!!!${newConnection.getTargetUser()}!!!${newConnection.isActive().toString()}");
+    dataArray.add("${newConnection.getConnectionID()}!!!${newConnection.getTargetUser()}!!!${newConnection.getTargetEmail()}!!!${newConnection.isActive().toString()}");
     stamp("Dataarray: ${dataArray.toList()}");
     setValue("connections", dataArray);
 

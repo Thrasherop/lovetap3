@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lovetap3/pages/ConnectionFailedScreen.dart';
+import 'package:lovetap3/pages/ConnectionManagementScreen.dart';
 import 'package:lovetap3/pages/HomeScreen.dart';
 import 'package:lovetap3/pages/LoadingScreen.dart';
 import 'package:lovetap3/pages/LoginScreen.dart';
@@ -40,6 +41,7 @@ Future<void> main() async {
       Config.CONNECTION_FAILED_SCREEN:(context) => ConnectionFailedScreen(),
       "/login": (context) => LoginScreen(),
       "/testing": (context) => TestingScreen(),
+      "/connection_management": (context) => ConnectionManagementScreen(),
     },
   ));
 

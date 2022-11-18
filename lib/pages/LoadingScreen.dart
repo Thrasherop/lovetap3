@@ -57,6 +57,9 @@ class _LoadingScreenState extends State<LoadingScreen> {
     // Goes to home if logged in, goes to /login if not
     bool signedIn = await MyAuthenticator.checkSignedIn();
     if (signedIn){
+
+      // Tries to get the user's profile picture for use later
+
       Navigator.pushReplacementNamed(context, "/home");
     } else {
       stamp("User not logged in; sending them to /login");

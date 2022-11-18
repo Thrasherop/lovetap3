@@ -8,6 +8,7 @@ import 'package:lovetap3/MyAuthenticator.dart';
 import 'package:lovetap3/MyFirebaseInterface.dart';
 import 'package:lovetap3/interfaces/MyFileInterface.dart';
 import 'package:lovetap3/objects/ConnectionObject.dart';
+import 'package:lovetap3/objects/MyNullObject.dart';
 
 import '../Config.dart';
 import '../MyBuffer.dart';
@@ -42,8 +43,15 @@ class _TestingScreenState extends State<TestingScreen> {
 
 
     // await MyFileInterface.addConnection(ConnectionObject.direct("connection4", "user3", false));
-    //
-    stamp("Connections: ${await MyFileInterface.getConnections()}");
+
+
+    // stamp("Connections: ${await MyFileInterface.getConnections()}");
+
+    Map<String, ConnectionObject> connections = await MyFileInterface.getConnections();
+    stamp("Connections: ${connections}");
+    connections.forEach((key, value) {
+      stamp("${value.getTargetEmail()}");
+    });
     // stamp("Connections: ${(await MyFileInterface.getConnections())["connection3"]}");
 
   }
@@ -54,6 +62,14 @@ class _TestingScreenState extends State<TestingScreen> {
 
     stamp("Calling MyFireBaseInterface.requestConnection: ${await MyFirebaseInterface.requestConnection("ultraprim@gmail.com")}");
 
+  }
+
+  void actionBtn3() async {
+    stamp("Action button 3");
+
+    await MyFileInterface.deleteAllConnections();
+
+    stamp("deleted data");
   }
 
   @override
@@ -67,6 +83,8 @@ class _TestingScreenState extends State<TestingScreen> {
               Text("testing screen"),
               ElevatedButton(onPressed: actionbtn1, child: Text("Action Button 1")),
               ElevatedButton(onPressed: actionBtn2, child: Text("Action Button 2")),
+              ElevatedButton(onPressed: actionBtn3, child: Text("Action button 3")),
+
 
             ],
           ),

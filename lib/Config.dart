@@ -43,6 +43,8 @@ class Config {
   static const MaterialColor secondaryColor = Colors.red;
   static const MaterialColor accent = Colors.pink;
 
+  // Home screen
+  static const String DEFAULT_PROFILE_PICTURE = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fpowerusers.microsoft.com%2Ft5%2Fmedia%2Fgallerypage%2Fimage-id%2F98171iCC9A58CAF1C9B5B9&psig=AOvVaw1K8_lA5ZgMWsYmtuLjiqCQ&ust=1668821492316000&source=images&cd=vfe&ved=0CA4QjRxqFwoTCOCG1dLKtvsCFQAAAAAdAAAAABAE";
 
 
 }

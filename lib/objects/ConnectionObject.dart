@@ -1,21 +1,21 @@
-
-
 import 'package:lovetap3/functions.dart';
 
 class ConnectionObject {
 
     late String _connectionID;
     late String _targetUser;
+    late String _targetEmail;
     late bool _isActive;
 
     ConnectionObject.parseString(String rawString){
       List<String> parsed = rawString.split("!!!");
       _connectionID = parsed[0];
       _targetUser = parsed[1];
+      _targetEmail = parsed[2];
 
-      if (parsed[2].toLowerCase() == "true"){
+      if (parsed[3].toLowerCase() == "true"){
         _isActive = true;
-      } else if (parsed[2].toLowerCase() == "false"){
+      } else if (parsed[3].toLowerCase() == "false"){
         _isActive = false;
       } else {
         stampWTF("_IsActive is not true nor false on CoonnectionObject $rawString");
@@ -23,13 +23,16 @@ class ConnectionObject {
 
     }
 
-    ConnectionObject.direct(String connectionID, String targetUser, bool isActive){
+    ConnectionObject.explicit(String connectionID, String targetUser, String targetEmail, bool isActive){
       _connectionID = connectionID;
       _targetUser = targetUser;
       _isActive = isActive;
+      _targetEmail = targetEmail;
     }
 
-
+    String getTargetEmail(){
+      return _targetEmail;
+    }
 
     String getConnectionID(){
       return _connectionID;

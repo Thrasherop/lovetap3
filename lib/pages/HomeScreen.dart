@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:lovetap3/MyAuthenticator.dart';
@@ -15,6 +16,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  TextStyle hamburgerTextStyle = TextStyle(
+    color: Config.mainColor,
+    fontStyle: FontStyle.italic
+  );
 
   late OutgoingPackage curPackage = OutgoingPackage.PlaceHolder();
   String _selectedDestination = Config.DESTINATION_OPTIONS[0].value;
@@ -50,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (newValue is String){
       setState(() {
-        print("New target destination is $newValue");
+        stamp("New target destination is $newValue");
 
         // Updates target in buffer
         MyBuffer.currentTargetDestination = newValue;
@@ -64,17 +70,68 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      endDrawer: Drawer(
+        /*
+          This is the layout for the drawer.
+         */
+
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: NetworkImage(FirebaseAuth.instance.currentUser?.photoURL ?? Config.DEFAULT_PROFILE_PICTURE),
+                    fit: BoxFit.cover,
+                ),
+              ),
+              child: Text(''),
+            ),
+            ListTile(
+              title: Text('Manage Connections', style: hamburgerTextStyle,),
+              onTap: () {
+                // Close the drawer first
+                Navigator.pop(context);
+
+                // Navigate to connection management screen
+                Navigator.pushNamed(context, "/connection_management");
+
+              },
+            ),
+            ListTile(
+              title: Text("Testing Screen", style: hamburgerTextStyle,),
+              onTap: () {
+                // Close the drawer first
+                Navigator.pop(context);
+
+                // Navigate to testing screen
+                Navigator.pushNamed(context, "/testing");
+              },
+            ),
+            ListTile(
+              title: Text("Sign Out", style: hamburgerTextStyle),
+              onTap: () async {
+                await MyAuthenticator.signOut(context: context);
+                Navigator.pushReplacementNamed(context, "/loading");
+              },
+            )
+          ],
+        ),
+      ),
 
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Config.mainColor), // this sets the drawer color
+        automaticallyImplyLeading: false, // Removes the back arrow from the top left
         title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: const [
-            Icon(Icons.accessible_forward),
-            Text("LoveTap"),
-            Icon(Icons.menu)
+            Icon(Icons.account_circle_rounded, color: Config.mainColor),
+            SizedBox(width: 118), // centers the title
+            Text("LoveTap", style: TextStyle(color: Config.mainColor),),
           ]
         ),
         centerTitle: false,
-        backgroundColor: Config.mainColor,
+        backgroundColor: Colors.transparent,//Config.mainColor,
         elevation: 0.0,
       ),
 
@@ -102,27 +159,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
               children: [
 
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, "/testing");
-                  },
-                  child: Text("Go to testing screen"),
-                ),
-
-                TextButton(
-                    onPressed: () async {
-                      await MyAuthenticator.signOut(context: context);
-                      Navigator.pushReplacementNamed(context, "/loading");
-                      },
-                    child: Text("Sign out")
-                ),
-
-
                 DropdownButton(
                   items: Config.DESTINATION_OPTIONS,
                   onChanged: _destinationChanged,
                   value: _selectedDestination,
                 ),
+
+                SizedBox(height: 140),
 
                 InkWell(
                   onTapDown: _press,

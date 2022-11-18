@@ -170,7 +170,7 @@ class MyFirebaseInterface {
 
       stamp("Received connection request: $connectionID $targetUser");
 
-      ConnectionObject newConnection = ConnectionObject.direct(connectionID, targetUser, false);
+      ConnectionObject newConnection = ConnectionObject.explicit(connectionID, targetUser, message.data["senderEmail"] ,false);
       MyFileInterface.addConnection(newConnection);
 
 

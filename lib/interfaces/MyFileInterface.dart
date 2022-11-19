@@ -46,6 +46,80 @@ class MyFileInterface {
     return true;
   }
 
+  static Future<bool> deleteConnection(String connectionID) async {
+    Map<String, ConnectionObject> allConnections = await getConnections();
+    List<String> updatedArray = <String>[];
+
+    allConnections.forEach((key, value) {
+
+      if (value.getConnectionID() == connectionID){
+        // Do nothing: we don't want to write this connection
+      } else {
+        // Write this value
+        updatedArray.add(value.toDataString());
+      }
+
+    });
+
+    // dataArray.add("${newConnection.getConnectionID()}!!!${newConnection.getTargetUser()}!!!${newConnection.getTargetEmail()}!!!${newConnection.isActive().toString()}");
+    // stamp("Dataarray: ${dataArray.toList()}");
+    setValue("connections", updatedArray);
+
+    // TODO: Safe the original connections if this fails
+
+    return true;
+  }
+
+  static Future<bool> acceptConnection(String connectionID) async {
+
+    Map<String, ConnectionObject> allConnections = await getConnections();
+
+    if (!allConnections.containsKey(connectionID)){
+      // We don't have that connection, so something is wrong
+      stampE("Failed to accept connection $connectionID: It does not exist}");
+      return false;
+    } else if (allConnections[connectionID] == null){
+      stampE("Failed to accept connection $connectionID: Connection null}");
+      return false;
+    }
+
+    ConnectionObject targetConnection = allConnections[connectionID]!;
+    targetConnection.setActive(true);
+
+    stamp("updated object: ${targetConnection.toDataString()}");
+
+    _updateConnection(targetConnection);
+
+    return true;
+
+  }
+
+  static Future<bool> _updateConnection(ConnectionObject connection) async {
+
+    Map<String, ConnectionObject> allConnections = await getConnections();
+    List<String> updatedArray = <String>[];
+
+    allConnections.forEach((key, value) {
+
+      if (value.getConnectionID() == connection.getConnectionID()){
+        // Update that connection by writing the new one, not old
+        updatedArray.add(connection.toDataString());
+      } else {
+        // Write this value
+        updatedArray.add(value.toDataString());
+      }
+
+    });
+
+    // dataArray.add("${newConnection.getConnectionID()}!!!${newConnection.getTargetUser()}!!!${newConnection.getTargetEmail()}!!!${newConnection.isActive().toString()}");
+    // stamp("Dataarray: ${dataArray.toList()}");
+    setValue("connections", updatedArray);
+
+    // TODO: Save the original connections if this fails
+
+    return true;
+  }
+
   static Future<bool> setValue(String key, Object value) async{
 
     // obtain shared preferences
@@ -76,7 +150,8 @@ class MyFileInterface {
   static Future<bool> addConnection(ConnectionObject newConnection) async {
 
     List<String> dataArray = await getStringList("connections");
-    dataArray.add("${newConnection.getConnectionID()}!!!${newConnection.getTargetUser()}!!!${newConnection.getTargetEmail()}!!!${newConnection.isActive().toString()}");
+    // dataArray.add("${newConnection.getConnectionID()}!!!${newConnection.getTargetUser()}!!!${newConnection.getTargetEmail()}!!!${newConnection.isActive().toString()}");
+    dataArray.add(newConnection.toDataString());
     stamp("Dataarray: ${dataArray.toList()}");
     setValue("connections", dataArray);
 
@@ -96,6 +171,19 @@ class MyFileInterface {
 
     return connections;
   }
+
+  static Future<List<String>> getConnectionsString() async {
+
+    List<String> stringList = <String>[];
+
+    (await getConnections()).forEach((key, value) {
+      stringList.add(value.toDataString());
+    });
+
+    return stringList;
+
+  }
+
 
 
 

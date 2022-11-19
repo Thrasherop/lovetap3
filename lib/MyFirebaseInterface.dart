@@ -53,6 +53,7 @@ class MyFirebaseInterface {
 
       FirebaseMessaging.onBackgroundMessage(MyFirebaseInterface.backgroundHandler);
       FirebaseMessaging.onMessage.listen(MyFirebaseInterface.foregroundHandler);
+      FirebaseMessaging.onMessageOpenedApp.listen(MyFirebaseInterface.foregroundHandler); // I added this to try and fight the "onMessage" not called bug.
       stamp("Firebase Messaging listeners initialized");
 
       return true;
@@ -91,6 +92,10 @@ class MyFirebaseInterface {
      stamp("Foreground listener triggered");
      await Firebase.initializeApp();
      _handleData(message);
+  }
+
+  static void getToken() async {
+    stamp("Token request fulfilled: ${await FirebaseMessaging.instance.getToken()}");
   }
 
   static Future<void> sendPackage(OutgoingPackage package) async {
@@ -173,12 +178,18 @@ class MyFirebaseInterface {
       ConnectionObject newConnection = ConnectionObject.explicit(connectionID, targetUser, message.data["senderEmail"] ,false);
       MyFileInterface.addConnection(newConnection);
 
-
     }
     
     
     else {
       stamp("Incoming package did not have known pattern");
+    }
+
+    // attempts to update the screen in case this new data is pertinant
+    try {
+      MyBuffer.updateScreenCallback();
+    } catch (e){
+      stamp("Failed to update screen after receiving notification: ${e.toString()}");
     }
 
   }

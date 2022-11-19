@@ -46,4 +46,12 @@ class ConnectionObject {
       return _isActive;
     }
 
+    void setActive(bool newStatus){
+      _isActive = newStatus;
+    }
+
+    String toDataString(){
+      return "${getConnectionID()}!!!${getTargetUser()}!!!${getTargetEmail()}!!!${isActive().toString()}";
+    }
+
 }

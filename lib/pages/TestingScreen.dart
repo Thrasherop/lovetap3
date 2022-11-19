@@ -67,7 +67,8 @@ class _TestingScreenState extends State<TestingScreen> {
   void actionBtn3() async {
     stamp("Action button 3");
 
-    await MyFileInterface.deleteAllConnections();
+    // await MyFileInterface.deleteAllConnections();
+    MyFirebaseInterface.getToken();
 
     stamp("deleted data");
   }

@@ -47,12 +47,16 @@ class _TestingScreenState extends State<TestingScreen> {
 
     // stamp("Connections: ${await MyFileInterface.getConnections()}");
 
-    Map<String, ConnectionObject> connections = await MyFileInterface.getConnections();
-    stamp("Connections: ${connections}");
-    connections.forEach((key, value) {
-      stamp("${value.getTargetEmail()}");
-    });
+    // Map<String, ConnectionObject> connections = await MyFileInterface.getConnections();
+    // stamp("Connections: ${connections}");
+    // connections.forEach((key, value) {
+    //   stamp("${value.getTargetEmail()}");
+    // });
     // stamp("Connections: ${(await MyFileInterface.getConnections())["connection3"]}");
+
+    FirebaseMessaging.instance.deleteToken().then((value) async {
+      stamp("new token should exist: ${await FirebaseMessaging.instance.getToken()}");
+    });
 
   }
 

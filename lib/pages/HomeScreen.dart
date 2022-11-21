@@ -2,6 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:lovetap3/MyAuthenticator.dart';
+import 'package:lovetap3/interfaces/MyFileInterface.dart';
+import 'package:lovetap3/objects/ConnectionObject.dart';
+import 'package:lovetap3/objects/MyNullObject.dart';
 
 import '../Config.dart';
 import '../MyBuffer.dart';
@@ -17,13 +20,64 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
+
   TextStyle hamburgerTextStyle = TextStyle(
     color: Config.mainColor,
     fontStyle: FontStyle.italic
   );
 
   late OutgoingPackage curPackage = OutgoingPackage.PlaceHolder();
-  String _selectedDestination = Config.DESTINATION_OPTIONS[0].value;
+
+  List<DropdownMenuItem> destinationOptions = <DropdownMenuItem>[DropdownMenuItem(child: Text("Loading..."), value: "Loading...")];
+  late String _selectedDestination;// = MyNullObject().toString();//Config.DESTINATION_OPTIONS[0].value;
+
+  @override
+  void initState(){
+    super.initState();
+    _selectedDestination = destinationOptions[0].value;
+
+    // Push our updateList() callback onto MyBuffer.updateScreenCallback stack.
+    MyBuffer.updateScreenCallback.insert(0, updateList);
+
+
+    // Initialize the list, but delayed to ensure the screen has been created
+    Future.delayed(Duration(milliseconds: 100), updateList);
+
+  }
+
+
+  void updateList() async {
+
+    stamp("Update list called");
+
+    await _updateDestinationOptions();
+
+    if (destinationOptions.isEmpty){
+      destinationOptions = <DropdownMenuItem>[DropdownMenuItem(child: Text("No connections"), value: "No connections")];
+    }
+    _selectedDestination = destinationOptions[0].value;
+    setState(() {});
+
+  }
+
+  Future<void> _updateDestinationOptions() async {
+
+    // Fetch connection information & add to newDestinationOptions
+    Map<String, ConnectionObject> connectionsMap = (await MyFileInterface.getConnections());
+
+    List<DropdownMenuItem> newDestinationOptions = <DropdownMenuItem>[];
+    connectionsMap.forEach((key, value) {
+      if (value.isActive()) {
+        // Add the value IF its active
+        newDestinationOptions.add(DropdownMenuItem(child: Text(value.getTargetEmail()), value: value.getConnectionID()));
+      }
+    });
+
+    // overwrite the old destination options
+    destinationOptions = newDestinationOptions;
+    Config.DESTINATION_OPTIONS = destinationOptions;
+
+  }
 
   void _press(TapDownDetails event){
     /*
@@ -35,6 +89,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // Create a new package if the current one has timed out
     // This is why we need Packages of PlaceHolder type
+
+
     if (curPackage.isPlaceHolder() || curPackage.hasTimedOut()){
       curPackage = OutgoingPackage();
     }
@@ -69,6 +125,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    _updateDestinationOptions();
+
     return Scaffold(
       endDrawer: Drawer(
         /*
@@ -159,10 +218,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
               children: [
 
-                DropdownButton(
-                  items: Config.DESTINATION_OPTIONS,
-                  onChanged: _destinationChanged,
-                  value: _selectedDestination,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      // width: 200,
+                      child: DropdownButton (
+                        items: destinationOptions,//Config.DESTINATION_OPTIONS,
+                        onChanged: _destinationChanged,
+                        value: _selectedDestination,
+                      ),
+                    ),
+                    IconButton(
+                      // Update the list and setState()
+                      onPressed: () {updateList(); setState(() {});},
+                      icon: const Icon(Icons.refresh),
+                    )
+                  ],
                 ),
 
                 SizedBox(height: 140),
@@ -204,6 +276,7 @@ class _HomeScreenState extends State<HomeScreen> {
       )
     );
   }
+
 }
 
 

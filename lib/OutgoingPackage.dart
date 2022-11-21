@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:lovetap3/MyFirebaseInterface.dart';
 import 'package:lovetap3/Package.dart';
 import 'package:lovetap3/Config.dart';
@@ -6,6 +7,8 @@ import 'package:lovetap3/MyBuffer.dart';
 
 import 'package:lovetap3/MyAuthenticator.dart';
 import 'package:lovetap3/functions.dart';
+import 'package:lovetap3/interfaces/MyFileInterface.dart';
+import 'package:lovetap3/objects/ConnectionObject.dart';
 
 class OutgoingPackage extends Package {
 
@@ -88,7 +91,7 @@ class OutgoingPackage extends Package {
     return _isPlaceHolder;
   }
 
-  Map<String, String> getJson(){
+  Future<Map<String, String>> getJson() async {
 
     /*
       This method is used to compile the data of
@@ -107,14 +110,34 @@ class OutgoingPackage extends Package {
     stamp("Timing string: $timingString");
 
 
+
+    // Get the target's Uid
+    Map<String, ConnectionObject> connections = await MyFileInterface.getConnections();
+    stamp("currentTargetDestination: ${MyBuffer.currentTargetDestination}");
+    connections.forEach((key, value) {
+      stamp("Connection: ${value.getConnectionID()}");
+    });
+
+    if (!connections.containsKey(MyBuffer.currentTargetDestination)){
+      stampE("Target connection does not exist in connection database");
+      return {};
+    }
+
+    ConnectionObject thisConnection = connections[MyBuffer.currentTargetDestination]!;
+
+    String currentUserId = FirebaseAuth.instance.currentUser!.uid;
+
+
+
+
     // Returns the map of the data
     return <String, String>{
       Config.PACKAGE_DATA_MAP: timingString,
       Config.TARGET_MAP: MyBuffer.currentTargetDestination,
       // Config.ORIGIN_MAP: MyBuffer.currentToken.toString(), // This is only causing issues since getting current token can take awhile and we don't even need it anymore
-      "toUid": "DkJeDgCrl5b2eLTzTqo7Ch9al1Q2", //find a way to store connection data. Probably time to make a "add connection" feature
+      "toUid": thisConnection.getTargetUser(), //"DkJeDgCrl5b2eLTzTqo7Ch9al1Q2", //find a way to store connection data. Probably time to make a "add connection" feature
       Config.CONNECTION_ID_MAP: MyBuffer.currentTargetDestination,//"tagO7nMVdwGSqRoRrETW",
-      "fromUid": "DkJeDgCrl5b2eLTzTqo7Ch9al1Q2" //make this just generate using like Firebase.getuser or smt
+      "fromUid": currentUserId,//"DkJeDgCrl5b2eLTzTqo7Ch9al1Q2" //make this just generate using like Firebase.getuser or smt
     };
 
   }

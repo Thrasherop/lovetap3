@@ -20,8 +20,11 @@ class MyBuffer {
    * For example, the ConnectionManagementScreen assigns its "updateScreen()" function
    * to this when it is initialized. This is so that when a new connection request comes
    * in from FCM the screen is automagically updated with the new data.
+   *
+   * It is a stack, with the beginning as the entry point. This means that the function to call
+   * is the one at index 0.
    */
-  static late Function updateScreenCallback;
+  static late List<Function> updateScreenCallback = <Function>[];
 
 
 }

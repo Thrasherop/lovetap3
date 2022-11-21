@@ -1,9 +1,14 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lovetap3/MyAuthenticator.dart';
 
 import '../MyFirebaseInterface.dart';
 import 'package:lovetap3/functions.dart';
+
+import 'package:auto_start_flutter/auto_start_flutter.dart';
 
 /*
   This screen is used as a temporary display, and makes app
@@ -46,7 +51,6 @@ class _LoadingScreenState extends State<LoadingScreen> {
       daemon by 300 ms instead of the 100ms before. this also shows a loading
       screen for a second, which is nice and makes it feel super fast
      */
-
 
 
     // Initialize MyFirebaseInterface

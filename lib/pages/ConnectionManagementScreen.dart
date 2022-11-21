@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:lovetap3/MyBuffer.dart';
+import 'package:lovetap3/MyFirebaseInterface.dart';
 import 'package:lovetap3/interfaces/MyFileInterface.dart';
 import 'package:lovetap3/objects/MyNullObject.dart';
 
@@ -19,8 +20,51 @@ class ConnectionManagementScreen extends StatefulWidget {
 
 class _ConnectionManagementScreenState extends State<ConnectionManagementScreen> {
 
+  final emailInput = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the text input controller when the widget is disposed.
+    emailInput.dispose();
+
+    // Pop our updateScreen off the MyBuffer.updateScreenCallback stack
+    if (MyBuffer.updateScreenCallback.isNotEmpty) {
+      MyBuffer.updateScreenCallback.removeAt(0);
+    }
+
+    super.dispose();
+  }
+
+  void requestConnection() async {
+
+    stamp("Email input: ${emailInput.text}");
+
+    // validate that it is a gmail email
+    String email = emailInput.text;
+    if (!email.contains("@gmail.com")){
+      stampE("Input email was NOT a gmail email");
+      // TODO: Make better validation here
+    }
+
+    // send request
+    Map<String, String> data = await MyFirebaseInterface.requestConnection(email);
+    if (data["status"] != "200"){
+      stampE("Request connection failed: Received !200");
+      return;
+    }
 
 
+    // Add the connection locally
+    ConnectionObject newConnection = ConnectionObject.explicit(data["connectionID"]!, data["targetUid"]!, data["targetEmail"]!, true);
+    MyFileInterface.addConnection(newConnection);
+
+    emailInput.text = ""; // clear the text
+    FocusManager.instance.primaryFocus?.unfocus(); // this closes the keyboard
+
+    setState(() {
+
+    });
+  }
 
   void acceptConnection(ConnectionObject connection) async {
     stamp("Accepting ${connection.getConnectionID()}");
@@ -28,6 +72,9 @@ class _ConnectionManagementScreenState extends State<ConnectionManagementScreen>
     bool success = await MyFileInterface.acceptConnection(connection.getConnectionID());
     stamp("Acceptance status: $success");
     stamp("Data: ${await MyFileInterface.getConnectionsString()}");
+
+    stamp("Requested acceptance: ${await MyFirebaseInterface.acceptConnection(connection.getConnectionID())}");
+
 
     // Reload the screen to show changes
     setState(() {});
@@ -53,14 +100,39 @@ class _ConnectionManagementScreenState extends State<ConnectionManagementScreen>
   Widget build(BuildContext context) {
 
     // update callback
-    MyBuffer.updateScreenCallback = updateScreen;
+    MyBuffer.updateScreenCallback.insert(0, updateScreen);
 
     return Scaffold(
       body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Text("Connection management screen"),
+
+            // Section to input email and request connection
+            Row (
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                SizedBox(
+                  width: 200,
+                  child: TextField(
+                    controller: emailInput,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: "Enter an email to request",
+                    ),
+                  ),
+                ),
+
+
+                ElevatedButton(
+                    onPressed: requestConnection,
+                    child: Text("REQUEST")
+                )
+              ],
+            ),
+
+
+
             FutureBuilder(builder: (stx, snapshot){
 
                 if (snapshot.hasData && snapshot.data != null){
@@ -136,28 +208,6 @@ class _ConnectionManagementScreenState extends State<ConnectionManagementScreen>
 
                     widgetList.add(thisWidget);
                   }
-
-                  // return SizedBox(
-                  //   height: 300,
-                  //   child: ClipRRect(
-                  //     borderRadius: BorderRadius.circular(15),
-                  //     child: GlowingOverscrollIndicator(
-                  //       axisDirection: AxisDirection.down,
-                  //       color: Config.accent,
-                  //       child: Container(
-                  //         margin: EdgeInsets.all(30),
-                  //         padding: EdgeInsets.all(10),
-                  //         decoration: BoxDecoration(
-                  //           borderRadius: BorderRadius.circular(20),
-                  //           color: Config.mainColor,
-                  //         ),
-                  //         child: ListView(
-                  //             children: widgetList,
-                  //           ),
-                  //         ),
-                  //     ),
-                  //   ),
-                  // );
 
                   return Material(
                     child: SizedBox(

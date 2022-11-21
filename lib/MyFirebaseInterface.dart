@@ -43,23 +43,117 @@ class MyFirebaseInterface {
           - status: Future<bool> -> This returns true on success, false on failure
      */
 
-    try {
-      // This needs to run. Don't know why, but messages might not get delivered if this isn't called
-      // TODO: Figure out why this must be called. Foreground messages might not get delivered properly if it isn't
-      FirebaseMessaging.instance.getToken().then((value) {
-        MyBuffer.currentToken = value;
-        stamp("Token acquired: ${MyBuffer.currentToken}");
-      });
 
-      FirebaseMessaging.onBackgroundMessage(MyFirebaseInterface.backgroundHandler);
-      FirebaseMessaging.onMessage.listen(MyFirebaseInterface.foregroundHandler);
-      FirebaseMessaging.onMessageOpenedApp.listen(MyFirebaseInterface.foregroundHandler); // I added this to try and fight the "onMessage" not called bug.
-      stamp("Firebase Messaging listeners initialized");
+    await Firebase.initializeApp();
 
-      return true;
-    } catch (e){
-      return false;
+    // This needs to run. Don't know why, but messages might not get delivered if this isn't called
+    // TODO: Figure out why this must be called. Foreground messages might not get delivered properly if it isn't
+    await FirebaseMessaging.instance.getToken().then((value) {
+      MyBuffer.currentToken = value;
+      stamp("Token acquired: ${MyBuffer.currentToken}");
+      newTokenReceived(MyBuffer.currentToken!);
+    });
+
+    FirebaseMessaging.onBackgroundMessage(MyFirebaseInterface.backgroundHandler);
+    FirebaseMessaging.onMessage.listen(MyFirebaseInterface.foregroundHandler);
+    FirebaseMessaging.onMessageOpenedApp.listen(MyFirebaseInterface.foregroundHandler); // I added this to try and fight the "onMessage" not called bug.
+    FirebaseMessaging.instance.onTokenRefresh.listen(MyFirebaseInterface.newTokenReceived);
+    stamp("Firebase Messaging listeners initialized");
+
+
+    return true;
+
+  }
+
+
+  static void getToken() async {
+    stamp("Token request fulfilled: ${await FirebaseMessaging.instance.getToken()}");
+  }
+
+  static Future<void> sendPackage(OutgoingPackage package) async {
+    /*
+      This uploads a package to the Firebase database.
+
+      params::
+        -- package: OutgoingPackage -> The package to be delivered
+
+      return::
+        -- Future<void> -> Contains no information
+     */
+
+    stamp("sending Package");
+
+    // Uploads package
+    final docUser = FirebaseFirestore.instance.collection("incoming").doc(Config.DEMO_USER_NAME).collection(Config.USER_SEND_COLLECTION);
+    await docUser.add(await package.getJson());
+
+    stamp("Package sent");
+
+  }
+
+  static Future<Map<String, String>> requestConnection(String targetEmail) async{
+
+    stamp("Requesting connection for $targetEmail");
+
+    HttpsCallable callable = FirebaseFunctions.instanceFor(region: "us-central1").httpsCallable("requestConnection", options: HttpsCallableOptions(timeout: Duration(seconds: 5)));
+    // final result = await callable();
+    final result = await callable.call(<String, dynamic>{
+      // 'YOUR_PARAMETER_NAME': 'YOUR_PARAMETER_VALUE',
+      "data": {
+        "target": targetEmail, //"ultraprim@gmail.com"
+      }
+    });
+
+    stamp("Result: $result");
+    stamp("data: ${result.data}");
+
+    // Get the connectionID, targetUserID, and targetEmail and put it in a map
+    Map<String, String> data = {
+      "status":"200",
+      "connectionID": result.data["data"]["connectionID"],
+      "targetUid": result.data["data"]["targetUid"],
+      "targetEmail": result.data["data"]["targetEmail"]
+    };
+
+
+    if (result.data['status'] != 200){
+      return {"status":"400"};
     }
+
+    return data;
+  }
+
+  static Future<bool> acceptConnection(String connectionID) async {
+
+    HttpsCallable callable = FirebaseFunctions.instanceFor(region: "us-central1").httpsCallable("acceptConnection", options: HttpsCallableOptions(timeout: Duration(seconds: 5)));
+    // final result = await callable();
+    final result = await callable.call(<String, dynamic>{
+      // 'YOUR_PARAMETER_NAME': 'YOUR_PARAMETER_VALUE',
+      "data": {
+        "connectionID": connectionID,
+      }
+    });
+
+    stamp("Result: ${result.data}");
+
+
+    return true;
+  }
+
+  static void newTokenReceived(String newToken) async{
+    stamp("New token received: $newToken");
+
+    HttpsCallable callable = FirebaseFunctions.instanceFor(region: "us-central1").httpsCallable("updateToken", options: HttpsCallableOptions(timeout: Duration(seconds: 5)));
+    // final result = await callable();
+    final result = await callable.call(<String, dynamic>{
+      // 'YOUR_PARAMETER_NAME': 'YOUR_PARAMETER_VALUE',
+      "data": {
+        "newToken": newToken,
+      }
+    });
+
+    stamp("Token request update: ${result.data}");
+
   }
 
   static Future<void> backgroundHandler(RemoteMessage message) async {
@@ -89,57 +183,9 @@ class MyFirebaseInterface {
       params::
         -- message: RemoteMessage -> Message to be parsed
      */
-     stamp("Foreground listener triggered");
-     await Firebase.initializeApp();
-     _handleData(message);
-  }
-
-  static void getToken() async {
-    stamp("Token request fulfilled: ${await FirebaseMessaging.instance.getToken()}");
-  }
-
-  static Future<void> sendPackage(OutgoingPackage package) async {
-    /*
-      This uploads a package to the Firebase database.
-
-      params::
-        -- package: OutgoingPackage -> The package to be delivered
-
-      return::
-        -- Future<void> -> Contains no information
-     */
-
-    stamp("sending Package");
-
-    // Uploads package
-    final docUser = FirebaseFirestore.instance.collection("incoming").doc(Config.DEMO_USER_NAME).collection(Config.USER_SEND_COLLECTION);
-    await docUser.add(package.getJson());
-
-    stamp("Package sent");
-
-  }
-
-  static Future<bool> requestConnection(String targetEmail) async{
-
-    stamp("Requesting connection for $targetEmail");
-
-    HttpsCallable callable = FirebaseFunctions.instanceFor(region: "us-central1").httpsCallable("requestConnection", options: HttpsCallableOptions(timeout: Duration(seconds: 5)));
-    // final result = await callable();
-    final result = await callable.call(<String, dynamic>{
-      // 'YOUR_PARAMETER_NAME': 'YOUR_PARAMETER_VALUE',
-      "data": {
-        "target": "ultraprim@gmail.com"
-      }
-    });
-
-    stamp("Result: $result");
-    stamp("data: ${result.data}");
-
-    if (result.data['status'] != 200){
-      return false;
-    }
-
-    return true;
+    stamp("Foreground listener triggered");
+    await Firebase.initializeApp();
+    _handleData(message);
   }
 
   static void _handleData(RemoteMessage message) {
@@ -185,15 +231,16 @@ class MyFirebaseInterface {
       stamp("Incoming package did not have known pattern");
     }
 
-    // attempts to update the screen in case this new data is pertinant
+    // attempts to update the screen in case this new data is pertinent
     try {
-      MyBuffer.updateScreenCallback();
+      stamp("Attempting updateScreenCallback. It is: ${MyBuffer.updateScreenCallback}");
+      MyBuffer.updateScreenCallback[0]();
+      stamp("updateScreenCallback complete");
     } catch (e){
       stamp("Failed to update screen after receiving notification: ${e.toString()}");
     }
 
   }
-
 
 
 }

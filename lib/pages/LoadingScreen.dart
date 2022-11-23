@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lovetap3/MyAuthenticator.dart';
+import 'package:lovetap3/interfaces/MyAuthenticator.dart';
 
-import '../MyFirebaseInterface.dart';
-import 'package:lovetap3/functions.dart';
+import '../interfaces/MyFirebaseInterface.dart';
+import 'package:lovetap3/misc/functions.dart';
 
 
 /*

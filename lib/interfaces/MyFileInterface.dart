@@ -1,6 +1,6 @@
 import 'dart:ffi';
 
-import 'package:lovetap3/functions.dart';
+import 'package:lovetap3/misc/functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../objects/ConnectionObject.dart';

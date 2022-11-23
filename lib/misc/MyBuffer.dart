@@ -1,4 +1,4 @@
-import 'package:lovetap3/Config.dart';
+import 'package:lovetap3/misc/Config.dart';
 import 'package:lovetap3/pages/ConnectionManagementScreen.dart';
 
 class MyBuffer {

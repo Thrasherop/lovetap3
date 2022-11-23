@@ -1,4 +1,4 @@
-import 'package:lovetap3/functions.dart';
+import 'package:lovetap3/misc/functions.dart';
 
 class ConnectionObject {
 

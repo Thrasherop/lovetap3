@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:lovetap3/MyFirebaseInterface.dart';
-import 'package:lovetap3/Package.dart';
-import 'package:lovetap3/Config.dart';
-import 'package:lovetap3/MyBuffer.dart';
+import 'package:lovetap3/interfaces/MyFirebaseInterface.dart';
+import 'package:lovetap3/objects/Package.dart';
+import 'package:lovetap3/misc/Config.dart';
+import 'package:lovetap3/misc/MyBuffer.dart';
 
-import 'package:lovetap3/MyAuthenticator.dart';
-import 'package:lovetap3/functions.dart';
+import 'package:lovetap3/interfaces/MyAuthenticator.dart';
+import 'package:lovetap3/misc/functions.dart';
 import 'package:lovetap3/interfaces/MyFileInterface.dart';
 import 'package:lovetap3/objects/ConnectionObject.dart';
 

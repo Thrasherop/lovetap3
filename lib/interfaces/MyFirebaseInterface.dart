@@ -2,16 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:lovetap3/object/IncomingPackage.dart';
+import 'package:lovetap3/objects/IncomingPackage.dart';
 import 'package:lovetap3/objects/OutgoingPackage.dart';
-import 'package:lovetap3/functions.dart';
+import 'package:lovetap3/misc/functions.dart';
 
 
-import 'package:lovetap3/Config.dart';
+import 'package:lovetap3/misc/Config.dart';
 import 'package:lovetap3/objects/ConnectionObject.dart';
 
-import 'MyBuffer.dart';
-import 'interfaces/MyFileInterface.dart';
+import '../misc/MyBuffer.dart';
+import 'MyFileInterface.dart';
 
 class MyFirebaseInterface {
   /*

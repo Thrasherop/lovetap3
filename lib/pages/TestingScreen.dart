@@ -4,16 +4,16 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:lovetap3/MyAuthenticator.dart';
-import 'package:lovetap3/MyFirebaseInterface.dart';
+import 'package:lovetap3/interfaces/MyAuthenticator.dart';
+import 'package:lovetap3/interfaces/MyFirebaseInterface.dart';
 import 'package:lovetap3/interfaces/MyFileInterface.dart';
 import 'package:lovetap3/objects/ConnectionObject.dart';
 import 'package:lovetap3/objects/MyNullObject.dart';
 
-import '../Config.dart';
-import '../MyBuffer.dart';
+import '../misc/Config.dart';
+import '../misc/MyBuffer.dart';
 import '../objects/OutgoingPackage.dart';
-import '../functions.dart';
+import '../misc/functions.dart';
 
 import 'package:logger/logger.dart';
 

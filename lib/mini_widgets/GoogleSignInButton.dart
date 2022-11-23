@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lovetap3/MyAuthenticator.dart';
-import 'package:lovetap3/MyBuffer.dart';
-import 'package:lovetap3/functions.dart';
+import 'package:lovetap3/interfaces/MyAuthenticator.dart';
+import 'package:lovetap3/misc/MyBuffer.dart';
+import 'package:lovetap3/misc/functions.dart';
 import 'package:lovetap3/pages/LoadingScreen.dart';
 
 

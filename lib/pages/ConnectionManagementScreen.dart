@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:lovetap3/MyBuffer.dart';
-import 'package:lovetap3/MyFirebaseInterface.dart';
+import 'package:lovetap3/misc/MyBuffer.dart';
+import 'package:lovetap3/interfaces/MyFirebaseInterface.dart';
 import 'package:lovetap3/interfaces/MyFileInterface.dart';
 import 'package:lovetap3/objects/MyNullObject.dart';
 
-import '../Config.dart';
-import '../functions.dart';
+import '../misc/Config.dart';
+import '../misc/functions.dart';
 import '../objects/ConnectionObject.dart';
 
 

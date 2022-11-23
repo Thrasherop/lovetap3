@@ -19,15 +19,15 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:google_api_availability/google_api_availability.dart';
 
-import 'package:lovetap3/Config.dart';
-import 'package:lovetap3/Package.dart';
-import 'package:lovetap3/object/IncomingPackage.dart';
+import 'package:lovetap3/misc/Config.dart';
+import 'package:lovetap3/objects/Package.dart';
+import 'package:lovetap3/objects/IncomingPackage.dart';
 import 'package:lovetap3/objects/OutgoingPackage.dart';
-import 'package:lovetap3/MyFirebaseInterface.dart';
-import 'package:lovetap3/MyBuffer.dart';
-import 'package:lovetap3/MyAuthenticator.dart';
+import 'package:lovetap3/interfaces/MyFirebaseInterface.dart';
+import 'package:lovetap3/misc/MyBuffer.dart';
+import 'package:lovetap3/interfaces/MyAuthenticator.dart';
 
-import 'functions.dart';
+import 'misc/functions.dart';
 
 Future<void> main() async {
   /*

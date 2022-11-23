@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:lovetap3/Config.dart';
+import 'package:lovetap3/misc/Config.dart';
 import 'package:vibration/vibration.dart';
 
 

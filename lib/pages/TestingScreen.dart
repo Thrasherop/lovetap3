@@ -12,7 +12,7 @@ import 'package:lovetap3/objects/MyNullObject.dart';
 
 import '../Config.dart';
 import '../MyBuffer.dart';
-import '../OutgoingPackage.dart';
+import '../objects/OutgoingPackage.dart';
 import '../functions.dart';
 
 import 'package:logger/logger.dart';

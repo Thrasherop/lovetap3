@@ -8,7 +8,6 @@ import 'package:lovetap3/MyAuthenticator.dart';
 import '../MyFirebaseInterface.dart';
 import 'package:lovetap3/functions.dart';
 
-import 'package:auto_start_flutter/auto_start_flutter.dart';
 
 /*
   This screen is used as a temporary display, and makes app
@@ -21,12 +20,6 @@ import 'package:auto_start_flutter/auto_start_flutter.dart';
 
 
 class LoadingScreen extends StatefulWidget {
-
-  /*
-    The double screen bug is because we first load loading screen, then
-    it immediately gets switched. Possibly perform initialization checks
-    here (before the UI loads). If initialization is good, go to /home
-   */
 
   LoadingScreen({Key? key}) : super(key: key);
 
@@ -61,9 +54,6 @@ class _LoadingScreenState extends State<LoadingScreen> {
     // Goes to home if logged in, goes to /login if not
     bool signedIn = await MyAuthenticator.checkSignedIn();
     if (signedIn){
-
-      // Tries to get the user's profile picture for use later
-
       Navigator.pushReplacementNamed(context, "/home");
     } else {
       stamp("User not logged in; sending them to /login");
@@ -81,7 +71,6 @@ class _LoadingScreenState extends State<LoadingScreen> {
     // ensures that the UI below has a chance to render.
     // This is important since initialization can take a moment
     Future.delayed(Duration(milliseconds: 300), _initialize);
-
 
 
     // This is the LoadingScreen UI

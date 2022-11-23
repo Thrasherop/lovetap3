@@ -15,8 +15,8 @@ import 'package:google_api_availability/google_api_availability.dart';
 
 import 'package:lovetap3/Config.dart';
 import 'package:lovetap3/Package.dart';
-import 'package:lovetap3/IncomingPackage.dart';
-import 'package:lovetap3/OutgoingPackage.dart';
+import 'package:lovetap3/object/IncomingPackage.dart';
+import 'package:lovetap3/objects/OutgoingPackage.dart';
 import 'package:lovetap3/MyFirebaseInterface.dart';
 import 'package:lovetap3/MyBuffer.dart';
 import 'package:lovetap3/MyAuthenticator.dart';

@@ -36,7 +36,6 @@ dependencies:
   vibration: ^1.7.3
   logger: ^1.1.0
   shared_preferences: ^2.0.15
-  auto_start_flutter: ^0.1.1
 
   # Firebase & google API's
   firebase_core: ^2.1.1 #^1.24.0

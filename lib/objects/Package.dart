@@ -35,10 +35,13 @@ class Package {
   void play(){
     
     /*
-      This method plays the current _timingArray on
-      this device. This is done by passing the timingArray
+      Plays the current _timingArray on this device.
+
+      This is done by passing the timingArray
       into Vibration.vibrate() as the pattern parameter.
+
      */
+
     // Vibration.vibrate(duration: 199);
     print(".play() is playing $timingArray");
     Vibration.vibrate(pattern: timingArray);

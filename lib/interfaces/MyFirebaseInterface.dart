@@ -37,7 +37,11 @@ class MyFirebaseInterface {
       firebase usage. This includes:
           - Getting the token
           - Create background FCM listener
-          - Create foreground FCM listener
+          - Create foreground FCM
+          - Create listener for a token refresh
+
+       params::
+          -- None
 
        return::
           - status: Future<bool> -> This returns true on success, false on failure
@@ -54,6 +58,7 @@ class MyFirebaseInterface {
       newTokenReceived(MyBuffer.currentToken!);
     });
 
+    // Register listeners
     FirebaseMessaging.onBackgroundMessage(MyFirebaseInterface.backgroundHandler);
     FirebaseMessaging.onMessage.listen(MyFirebaseInterface.foregroundHandler);
     FirebaseMessaging.onMessageOpenedApp.listen(MyFirebaseInterface.foregroundHandler); // I added this to try and fight the "onMessage" not called bug.
@@ -67,6 +72,18 @@ class MyFirebaseInterface {
 
 
   static void getToken() async {
+
+    /*
+      Forces FCM to generate a token.
+
+      params::
+        -- None
+
+      return::
+        -- void
+
+     */
+
     stamp("Token request fulfilled: ${await FirebaseMessaging.instance.getToken()}");
   }
 
@@ -81,8 +98,6 @@ class MyFirebaseInterface {
         -- Future<void> -> Contains no information
      */
 
-    stamp("sending Package");
-
     // Uploads package
     final docUser = FirebaseFirestore.instance.collection("incoming").doc(Config.DEMO_USER_NAME).collection(Config.USER_SEND_COLLECTION);
     await docUser.add(await package.getJson());
@@ -92,6 +107,21 @@ class MyFirebaseInterface {
   }
 
   static Future<Map<String, String>> requestConnection(String targetEmail) async{
+
+    /*
+      Requests a connection with an email.
+
+      Takes in a target email and calls the firebase function "requestConnection"
+      using it. After the function call succeeds, it will package the relevant
+      data and return that as a Map<String, String>.
+
+      params::
+        -- String targetEmail: the email of the target user
+
+      return::
+        -- Future<Map<String, String>>: Future of the relevant connection data
+
+     */
 
     stamp("Requesting connection for $targetEmail");
 
@@ -104,6 +134,8 @@ class MyFirebaseInterface {
       }
     });
 
+    // TODO: check that the request was successful
+
     stamp("Result: $result");
     stamp("data: ${result.data}");
 
@@ -115,7 +147,6 @@ class MyFirebaseInterface {
       "targetEmail": result.data["data"]["targetEmail"]
     };
 
-
     if (result.data['status'] != 200){
       return {"status":"400"};
     }
@@ -125,22 +156,49 @@ class MyFirebaseInterface {
 
   static Future<bool> acceptConnection(String connectionID) async {
 
+    /*
+      Accepts a connection.
+
+      Takes in a connectionID string to accept. It calls the firebase
+      function "acceptConnection" and passes in connectionID
+
+      params::
+        -- String connectionID: the connection ID to accept
+
+      return::
+        -- Future<bool>: Whether the operation succeeded
+
+     */
+
     HttpsCallable callable = FirebaseFunctions.instanceFor(region: "us-central1").httpsCallable("acceptConnection", options: HttpsCallableOptions(timeout: Duration(seconds: 5)));
     // final result = await callable();
     final result = await callable.call(<String, dynamic>{
-      // 'YOUR_PARAMETER_NAME': 'YOUR_PARAMETER_VALUE',
       "data": {
         "connectionID": connectionID,
       }
     });
 
-    stamp("Result: ${result.data}");
-
-
     return true;
   }
 
   static void newTokenReceived(String newToken) async{
+
+    /*
+      Handler for new token generation.
+
+      This method calls the Firebase function "updateToken", and passes
+      in the newToken. Firebase will validate/authenticate and then
+      update this user's primary token in the database.
+
+      params::
+        -- String newToken: the newly generated token
+
+      return::
+        -- None
+
+     */
+
+
     stamp("New token received: $newToken");
 
     HttpsCallable callable = FirebaseFunctions.instanceFor(region: "us-central1").httpsCallable("updateToken", options: HttpsCallableOptions(timeout: Duration(seconds: 5)));

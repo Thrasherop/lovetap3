@@ -2,21 +2,26 @@ import 'package:flutter/material.dart';
 
 class Config {
 
-  // Routing configs
-  // static const String CONNECTION_FAILED_SCREEN = "/connection_failed";
+  /*
+      Holds configuration data for the app.
+
+      This is so that all configuration is held in one
+      location. This makes it easy to find variables.
+
+     */
 
   // General configs
   static const int SNACKBAR_TIMEOUT = 3000; // ms of how long to keep snackbars on the screen
 
   // Configs for package
-  static const int PACKAGE_TIMEOUT = 4000; // This is the time delay before sending a package. This is in ms
+  static const int PACKAGE_TIMEOUT = 3000; // This is the time delay before sending a package. This is in ms
   static const String PACKAGE_DATA_MAP = "pattern";
   static const String PATTERN_DELIMETER = "!!!";
   static const String TARGET_MAP = "to";
   static const String ORIGIN_MAP = "from";
   static const String CONNECTION_ID_MAP = "connectionID";
 
-
+  // Default value
   static List<DropdownMenuItem> DESTINATION_OPTIONS = [
     DropdownMenuItem(child: Text("S20-S20"), value: "tagO7nMVdwGSqRoRrETW"),
     DropdownMenuItem(child: Text("S8 (token)"), value: "c7u2JBSHSF6zSeYRCFYvWS:APA91bHZ15FelfNe-Qdsi-L7ntwIjSEduTnE5aMlqyGB_anNSpzKheXEki8W8FumZ4CZX2LkxXPtkxQB5GArzh6Gt2UeE6bAk5wmK9mKn2rjJKXnENs_Xq6CNBqwx1Jh3ODYcGYnJn3m"),

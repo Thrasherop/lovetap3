@@ -128,8 +128,6 @@ class OutgoingPackage extends Package {
     String currentUserId = FirebaseAuth.instance.currentUser!.uid;
 
 
-
-
     // Returns the map of the data
     return <String, String>{
       Config.PACKAGE_DATA_MAP: timingString,
@@ -142,13 +140,6 @@ class OutgoingPackage extends Package {
 
   }
 
-
-  /*
-    Setters
-   */
-
-
-
   /*
     Functional Methods (do-ers)
    */
@@ -156,7 +147,9 @@ class OutgoingPackage extends Package {
 
   void press(){
     /*
-      Call this when the tap is pressed. This will add the time delta
+      Call this when the tap is pressed.
+
+      This will add the time delta
       to the timing array, and set _isPressed to true
      */
 
@@ -169,7 +162,9 @@ class OutgoingPackage extends Package {
 
   void release() {
     /*
-      Call this when the tap is released. This will add the time delta
+      Call this when the tap is released.
+
+      This will add the time delta
       to the timing array, and set _isPressed to false. It also creates
       a new _packageTimeout daemon with the delay of Config.PACKAGE_TIMEOUT
      */
@@ -185,10 +180,10 @@ class OutgoingPackage extends Package {
 
   void _cycleTimings(){
     /*
-      This method cycles the timings. This means
-      taking the current time delta (now - lastUpdate)
-      and appending it to the _timingArray. Then
-      it updates _lastUpdate.
+      This method cycles the timings.
+
+      This means taking the current time delta (now - lastUpdate)
+      and appending it to the _timingArray. Then it updates _lastUpdate.
      */
 
     // Gets this timing array based on _lastUpdate
@@ -203,7 +198,8 @@ class OutgoingPackage extends Package {
 
   void _packageTimeout(){
     /*
-      This function is called to check if a package has timed-out.
+      Checks if a package has timed out.
+
       Specifically, this is called 4 seconds after every release.
       If no update has happened in Config.PACKAGE_TIMEOUT time, then
       the package will send.
@@ -224,11 +220,10 @@ class OutgoingPackage extends Package {
 
   void _sendPackage(){
     /*
-      Uploads this package object to Firebase. This is done
-      through MyFirebaseInterface.sendPackage(this).
-     */
+      Uploads this package object to Firebase.
 
-    stamp("Package._sendPackage() has been called. The package is: ${timingArray.toString()}");
+      This is done through MyFirebaseInterface.sendPackage(this).
+     */
 
     MyFirebaseInterface.sendPackage(this);
 

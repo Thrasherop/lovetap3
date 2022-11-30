@@ -8,6 +8,23 @@ class ConnectionObject {
     late bool _isActive;
 
     ConnectionObject.parseString(String rawString){
+
+      /*
+
+        Constructor for taking in a delimited string.
+
+        Takes in a raw string of a connection. It needs
+        to be delimited with "!!!".
+
+        params::
+          -- String rawString: The raw string of connection data
+
+        return::
+          -- ConnectionObject: the newly constructed object
+
+      */
+
+
       List<String> parsed = rawString.split("!!!");
       _connectionID = parsed[0];
       _targetUser = parsed[1];
@@ -18,12 +35,33 @@ class ConnectionObject {
       } else if (parsed[3].toLowerCase() == "false"){
         _isActive = false;
       } else {
-        stampWTF("_IsActive is not true nor false on CoonnectionObject $rawString");
+        stampWTF("_IsActive is not true nor false on ConnectionObject $rawString");
       }
 
     }
 
     ConnectionObject.explicit(String connectionID, String targetUser, String targetEmail, bool isActive){
+
+      /*
+
+        Constructor for explicit values.
+
+        This is for explicitly initializing a new ConnectionObject. This means you are
+        passing in each of the values as parameters.
+
+        params::
+          -- String connectionID: the connectionID for this connection
+          -- String targetUser: the userID that messages will be sent to
+          -- String targetEmail: the user email that messages will be sent to
+          -- bool isActive: whether or not this connection is activated for the current user
+
+
+        return::
+          -- ConnectionObject: the newly created object
+
+      */
+
+
       _connectionID = connectionID;
       _targetUser = targetUser;
       _isActive = isActive;

@@ -4,7 +4,7 @@ import 'package:lovetap3/pages/ConnectionManagementScreen.dart';
 class MyBuffer {
   /*
     This class is simply used for centralized data handling between objects.
-    All attributes should be static
+    All attributes should be static.
    */
 
   static String currentTargetDestination = Config.DESTINATION_OPTIONS[0].value;

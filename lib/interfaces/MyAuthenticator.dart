@@ -20,7 +20,6 @@ class MyAuthenticator {
         + signInWithGoogle()
         + customSnackBar()
 
-
    */
 
   static Future<bool> checkSignedIn() async {

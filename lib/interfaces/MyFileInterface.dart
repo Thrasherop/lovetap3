@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:lovetap3/misc/functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -7,11 +5,28 @@ import '../objects/ConnectionObject.dart';
 import '../objects/MyNullObject.dart';
 
 class MyFileInterface {
+  /*
+   This class is for interfacing with the local client
+   database. Through these functions you can do CRUD
+   operations on connection data.
+   */
+
 
   late SharedPreferences data;
 
 
   static Future<Object> getValue(String key) async {
+
+    /*
+     Get the value at "key" from local database.
+
+     params::
+       -- String key: the hashmap key for the element
+
+     return::
+       -- Future<Object>: the object stored at "key"
+     */
+
     final prefs = await SharedPreferences.getInstance();
 
     if (!prefs.containsKey(key)){
@@ -24,6 +39,12 @@ class MyFileInterface {
   }
 
   static Future<List<String>> getStringList(String key) async {
+
+    /*
+     Gets a string list of all the elements in "key". For example,
+     the key "connections" will give the raw string data for all
+     the connections
+     */
 
     dynamic rawData = await getValue(key);
     List<String> dataArray = <String>[];
@@ -42,11 +63,29 @@ class MyFileInterface {
   }
 
   static Future<bool> deleteAllConnections() async {
+    /*
+     WARNING: Very dangerous method. This will delete
+     all the connection data on the client device.
+     Only use this for debugging.
+     */
+
     setValue("connections", <String>[]);
     return true;
   }
 
   static Future<bool> deleteConnection(String connectionID) async {
+
+    /*
+     Delete a single, specific connection from local database.
+
+     params::
+       -- String connectionID: the ID of the connection to delete
+
+     return::
+       -- Future<bool>: whether the delete was successful or not
+     */
+
+
     Map<String, ConnectionObject> allConnections = await getConnections();
     List<String> updatedArray = <String>[];
 
@@ -61,16 +100,24 @@ class MyFileInterface {
 
     });
 
-    // dataArray.add("${newConnection.getConnectionID()}!!!${newConnection.getTargetUser()}!!!${newConnection.getTargetEmail()}!!!${newConnection.isActive().toString()}");
-    // stamp("Dataarray: ${dataArray.toList()}");
     setValue("connections", updatedArray);
 
-    // TODO: Safe the original connections if this fails
+    // TODO: Save the original connections if this fails
 
     return true;
   }
 
   static Future<bool> acceptConnection(String connectionID) async {
+
+    /*
+     Accepts the connection with connectionID string
+
+     params::
+       -- String connectionID: The connection ID to accept
+
+     return::
+       -- Future<bool>: Whether the operation was successful
+     */
 
     Map<String, ConnectionObject> allConnections = await getConnections();
 
@@ -96,6 +143,17 @@ class MyFileInterface {
 
   static Future<bool> _updateConnection(ConnectionObject connection) async {
 
+    /*
+     Updates a connection. It takes in a ConnectionObject. It uses the ID of this
+     connection object to update that same connection in the local database.
+
+     params::
+       -- ConnectionObject connection: the new connection object
+
+     return::
+       -- Future<bool>: Whether or not the operation was successful
+     */
+
     Map<String, ConnectionObject> allConnections = await getConnections();
     List<String> updatedArray = <String>[];
 
@@ -111,8 +169,6 @@ class MyFileInterface {
 
     });
 
-    // dataArray.add("${newConnection.getConnectionID()}!!!${newConnection.getTargetUser()}!!!${newConnection.getTargetEmail()}!!!${newConnection.isActive().toString()}");
-    // stamp("Dataarray: ${dataArray.toList()}");
     setValue("connections", updatedArray);
 
     // TODO: Save the original connections if this fails
@@ -121,6 +177,17 @@ class MyFileInterface {
   }
 
   static Future<bool> setValue(String key, Object value) async{
+
+    /*
+     Sets a value in the database.
+
+     params::
+       -- String key: The hashmap key to assign value
+       -- Object value: The value to put into the database
+
+     return::
+       -- Future<bool>: Whether or not the operation was successful
+     */
 
     // obtain shared preferences
     final prefs = await SharedPreferences.getInstance();
@@ -140,19 +207,30 @@ class MyFileInterface {
     } else {
       stampE("That type is not supported");
       throw ("Invalid value passed into setValue");
-      return false;
     }
 
+    // return true for success
     return true;
-
   }
 
   static Future<bool> addConnection(ConnectionObject newConnection) async {
+    /*
 
+     Adds a new connection to the local database.
+
+     params::
+       -- ConnectionObject newConnection: The new connection to add
+
+     return::
+       -- Future<bool>: Whether or not the operation was successful
+
+     */
+
+    // fetch the data
     List<String> dataArray = await getStringList("connections");
-    // dataArray.add("${newConnection.getConnectionID()}!!!${newConnection.getTargetUser()}!!!${newConnection.getTargetEmail()}!!!${newConnection.isActive().toString()}");
+
+    // Append new connection data, and update database
     dataArray.add(newConnection.toDataString());
-    stamp("Dataarray: ${dataArray.toList()}");
     setValue("connections", dataArray);
 
     return true;
@@ -160,10 +238,20 @@ class MyFileInterface {
   
   static Future<Map<String, ConnectionObject>> getConnections() async {
 
+    /*
+     Gets a hashmap of all the connections in the local database.
+
+     params::
+       -- None
+
+     return::
+       -- Future<Map<String, ConnectionObject>>: A future of the connection map; the key is connection ID
+     */
+
     List<String> dataArray = await getStringList("connections");
 
+    // Parse the string into the ConnectionObject's
     Map<String, ConnectionObject> connections = {};
-
     for (String thisString in dataArray){
        ConnectionObject thisConnection = ConnectionObject.parseString(thisString);
        connections[thisConnection.getConnectionID()] = thisConnection;
@@ -174,6 +262,16 @@ class MyFileInterface {
 
   static Future<List<String>> getConnectionsString() async {
 
+    /*
+     Gets the connection data as raw strings
+
+     params::
+       -- None
+
+     return::
+       -- Future<List<String>>: List of raw connection strings
+     */
+
     List<String> stringList = <String>[];
 
     (await getConnections()).forEach((key, value) {
@@ -183,10 +281,4 @@ class MyFileInterface {
     return stringList;
 
   }
-
-
-
-
-
-
 }

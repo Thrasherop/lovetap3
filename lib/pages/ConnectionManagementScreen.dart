@@ -37,6 +37,10 @@ class _ConnectionManagementScreenState extends State<ConnectionManagementScreen>
 
   void requestConnection() async {
 
+    /*
+        Requests a connection via email input.
+    */
+
     stamp("Email input: ${emailInput.text}");
 
     // validate that it is a gmail email
@@ -67,6 +71,22 @@ class _ConnectionManagementScreenState extends State<ConnectionManagementScreen>
   }
 
   void acceptConnection(ConnectionObject connection) async {
+
+    /*
+
+        Accepts the connection.
+
+        Takes in a connection object, and accepts the connection
+        that matches the connectionID.
+
+        params::
+          -- ConnectionObject connection: the connection to accept (passes into MyFireBaseInterface.acceptConnection())
+
+        return::
+          -- void
+
+      */
+
     stamp("Accepting ${connection.getConnectionID()}");
 
     bool success = await MyFileInterface.acceptConnection(connection.getConnectionID());
@@ -82,6 +102,22 @@ class _ConnectionManagementScreenState extends State<ConnectionManagementScreen>
   }
 
   void deleteConnection(ConnectionObject connection) async {
+
+    /*
+
+        Deletes the connection.
+
+        Takes in a connection object, and deletes the connection
+        that matches the connectionID.
+
+        params::
+          -- ConnectionObject connection: the connection to accept (passes into MyFireBaseInterface.deleteConnection())
+
+        return::
+          -- void
+
+      */
+
     stamp("Deleting ${connection.getConnectionID()}");
 
     bool success = await MyFileInterface.deleteConnection(connection.getConnectionID());
@@ -92,12 +128,14 @@ class _ConnectionManagementScreenState extends State<ConnectionManagementScreen>
   }
 
   void updateScreen(){
+    /// Callback for updating the screen
     setState(() {});
   }
 
 
   @override
   Widget build(BuildContext context) {
+    /// build function
 
     // update callback
     MyBuffer.updateScreenCallback.insert(0, updateScreen);
@@ -105,10 +143,11 @@ class _ConnectionManagementScreenState extends State<ConnectionManagementScreen>
     return Scaffold(
       body: SafeArea(
         child: Column(
+
+          // Section to input email and request connection
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
 
-            // Section to input email and request connection
             Row (
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -123,7 +162,6 @@ class _ConnectionManagementScreenState extends State<ConnectionManagementScreen>
                   ),
                 ),
 
-
                 ElevatedButton(
                     onPressed: requestConnection,
                     child: Text("REQUEST")
@@ -132,7 +170,7 @@ class _ConnectionManagementScreenState extends State<ConnectionManagementScreen>
             ),
 
 
-
+            // Builder to load (and subsequently display) connections
             FutureBuilder(builder: (stx, snapshot){
 
                 if (snapshot.hasData && snapshot.data != null){
@@ -209,6 +247,7 @@ class _ConnectionManagementScreenState extends State<ConnectionManagementScreen>
                     widgetList.add(thisWidget);
                   }
 
+                  // This is the actual list box
                   return Material(
                     child: SizedBox(
                       height: 300,
@@ -234,8 +273,10 @@ class _ConnectionManagementScreenState extends State<ConnectionManagementScreen>
                   );
 
                 } else if (snapshot.hasError){
+                  // TODO: style this
                   return Text("An error occured while fetching data");
                 } else {
+                  // TODO: style this
                   return Text("Loading connection data...");
                 }
               },

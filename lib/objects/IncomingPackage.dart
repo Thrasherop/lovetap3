@@ -43,7 +43,7 @@ class IncomingPackage extends Package {
       timingArray.add(int.parse(element));
     }
 
-    print("Created new IncomingPackage");
+    stamp("Created new IncomingPackage");
   }
 
 }

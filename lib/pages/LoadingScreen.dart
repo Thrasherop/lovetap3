@@ -8,6 +8,8 @@ import 'package:lovetap3/interfaces/MyAuthenticator.dart';
 import '../interfaces/MyFirebaseInterface.dart';
 import 'package:lovetap3/misc/functions.dart';
 
+import '../misc/Settings.dart';
+
 
 /*
   This screen is used as a temporary display, and makes app
@@ -54,6 +56,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
     // Goes to home if logged in, goes to /login if not
     bool signedIn = await MyAuthenticator.checkSignedIn();
     if (signedIn){
+      // Initializes Settings first
+      await Settings.initialize();
       Navigator.pushReplacementNamed(context, "/home");
     } else {
       stamp("User not logged in; sending them to /login");

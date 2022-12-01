@@ -1,6 +1,7 @@
 import 'package:lovetap3/misc/functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../misc/Settings.dart';
 import '../objects/ConnectionObject.dart';
 import '../objects/MyNullObject.dart';
 
@@ -34,8 +35,8 @@ class MyFileInterface {
     }
     
     // Try reading data from the counter key. If it doesn't exist, return 0.
-    final counter = prefs.get(key) ?? 0;
-    return counter;
+    final data = prefs.get(key) ?? 0;
+    return data;
   }
 
   static Future<List<String>> getStringList(String key) async {
@@ -61,6 +62,26 @@ class MyFileInterface {
 
     return dataArray;
   }
+
+  // static Future<Map<String, String>> loadSettings() async {
+  //
+  //
+  //   String rawStr = (await getValue("settings")).toString();
+  //
+  //   stamp("Raw string: $rawStr");
+  //
+  //   Settings.initialize(rawStr);
+  //
+  //   return {"s":"a"};
+  // }
+  //
+  // static Future<bool> saveSettings() async {
+  //   // make it possible to save settings. Then work to get settings. Then make the settings UI
+  //
+  //   await setValue("settings", Settings.getString());
+  //
+  //   return true;
+  // }
 
   static Future<bool> deleteAllConnections() async {
     /*

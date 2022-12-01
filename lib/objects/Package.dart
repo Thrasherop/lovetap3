@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:lovetap3/misc/Config.dart';
 import 'package:vibration/vibration.dart';
 
+import '../misc/functions.dart';
+
 
 class Package {
   /*
@@ -42,8 +44,22 @@ class Package {
 
      */
 
+    // makes sure that none of the timings is longer than 10 seconds.
+    for (int i = 0; i < timingArray.length; i++){
+      if (timingArray[i] > 30000){
+        // if it is longer than 30 seconds, its probably a glitch
+        // If its not a glitch, it should be limited anyways
+        timingArray[1] = 1; // super short; not noticeable
+      } else if (timingArray[i] > 15000){
+        // if its over 15 seconds, but less than 30, it is
+        // probably an intentional troll. Thus, we limit it
+        // to 2 seconds.
+        timingArray[i] = 2000;
+      }
+    }
+
     // Vibration.vibrate(duration: 199);
-    print(".play() is playing $timingArray");
+    stamp(".play() is playing $timingArray"); // keep this log
     Vibration.vibrate(pattern: timingArray);
   }
 

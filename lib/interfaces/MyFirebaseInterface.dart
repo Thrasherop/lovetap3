@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:lovetap3/enums/PriorityEnum.dart';
 import 'package:lovetap3/objects/IncomingPackage.dart';
 import 'package:lovetap3/objects/OutgoingPackage.dart';
 import 'package:lovetap3/misc/functions.dart';
@@ -70,7 +73,6 @@ class MyFirebaseInterface {
 
   }
 
-
   static void getToken() async {
 
     /*
@@ -87,7 +89,7 @@ class MyFirebaseInterface {
     stamp("Token request fulfilled: ${await FirebaseMessaging.instance.getToken()}");
   }
 
-  static Future<void> sendPackage(OutgoingPackage package) async {
+  static Future<HttpsCallableResult> sendPackage(OutgoingPackage package) async {
     /*
       This uploads a package to the Firebase database.
 
@@ -99,10 +101,19 @@ class MyFirebaseInterface {
      */
 
     // Uploads package
-    final docUser = FirebaseFirestore.instance.collection("incoming").doc(Config.DEMO_USER_NAME).collection(Config.USER_SEND_COLLECTION);
-    await docUser.add(await package.getJson());
+    // final docUser = FirebaseFirestore.instance.collection("incoming").doc(Config.DEMO_USER_NAME).collection(Config.USER_SEND_COLLECTION);
+    // await docUser.add(await package.getJson());
 
-    stamp("Package sent");
+    HttpsCallable callable = FirebaseFunctions.instanceFor(region: "us-central1").httpsCallable("messageDeliverer", options: HttpsCallableOptions(timeout: Duration(seconds: 6)));
+    // final result = await callable();
+    final result = await callable.call(<String, dynamic>{
+      // 'YOUR_PARAMETER_NAME': 'YOUR_PARAMETER_VALUE',
+      "data": await package.getJson()
+    });
+
+    stamp("Package sent with resulting data being: $result Data: ${result.data}");
+
+    return result;
 
   }
 
@@ -170,7 +181,7 @@ class MyFirebaseInterface {
 
      */
 
-    HttpsCallable callable = FirebaseFunctions.instanceFor(region: "us-central1").httpsCallable("acceptConnection", options: HttpsCallableOptions(timeout: Duration(seconds: 5)));
+    HttpsCallable callable = FirebaseFunctions.instanceFor(region: "us-central1").httpsCallable("acceptConnection", options: HttpsCallableOptions(timeout: Duration(seconds: 10)));
     // final result = await callable();
     final result = await callable.call(<String, dynamic>{
       "data": {
@@ -201,7 +212,7 @@ class MyFirebaseInterface {
 
     stamp("New token received: $newToken");
 
-    HttpsCallable callable = FirebaseFunctions.instanceFor(region: "us-central1").httpsCallable("updateToken", options: HttpsCallableOptions(timeout: Duration(seconds: 5)));
+    HttpsCallable callable = FirebaseFunctions.instanceFor(region: "us-central1").httpsCallable("updateToken", options: HttpsCallableOptions(timeout: Duration(seconds: 10)));
     // final result = await callable();
     final result = await callable.call(<String, dynamic>{
       // 'YOUR_PARAMETER_NAME': 'YOUR_PARAMETER_VALUE',
@@ -246,6 +257,31 @@ class MyFirebaseInterface {
     _handleData(message);
   }
 
+  static Future<HttpsCallableResult<dynamic>> setPriority(PriorityEnum newPriority) async {
+
+    String newPriorityStr = "";
+
+    if (newPriority == PriorityEnum.LOW){
+      newPriorityStr = "normal";
+    } else {
+      // default to high
+      newPriorityStr = "high";
+    }
+
+    stamp("Attempting to send priority: ${newPriorityStr}");
+
+    HttpsCallable callable = FirebaseFunctions.instanceFor(region: "us-central1").httpsCallable("updateInfo", options: HttpsCallableOptions(timeout: Duration(seconds: 6)));
+    final result = await callable.call(<String, dynamic>{
+      "data": {
+        "messagePriority": newPriorityStr,
+      }
+    });
+
+    stamp("result: ${result.data}");
+
+    return result;
+  }
+
   static void _handleData(RemoteMessage message) {
     /*
       This function parses the message. This includes
@@ -260,6 +296,13 @@ class MyFirebaseInterface {
       params::
          -- message: RemoteMessage -> the data message to parse
      */
+
+
+
+    stamp("Message: $message");
+    stamp("${message.notification}");
+    stamp("${message.notification?.body}");
+
 
     if (message.data.containsKey(Config.PACKAGE_DATA_MAP)){
 
@@ -299,6 +342,5 @@ class MyFirebaseInterface {
     }
 
   }
-
 
 }

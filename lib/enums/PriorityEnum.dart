@@ -1,0 +1,4 @@
+enum PriorityEnum {
+  HIGH,
+  LOW,
+}

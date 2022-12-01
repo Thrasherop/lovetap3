@@ -113,10 +113,9 @@ class OutgoingPackage extends Package {
 
     // Get the target's Uid
     Map<String, ConnectionObject> connections = await MyFileInterface.getConnections();
-    stamp("currentTargetDestination: ${MyBuffer.currentTargetDestination}");
-    connections.forEach((key, value) {
-      stamp("Connection: ${value.getConnectionID()}");
-    });
+    // connections.forEach((key, value) {
+    //   stamp("Connection: ${value.getConnectionID()}");
+    // });
 
     if (!connections.containsKey(MyBuffer.currentTargetDestination)){
       stampE("Target connection does not exist in connection database");

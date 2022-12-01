@@ -4,6 +4,7 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:lovetap3/enums/PriorityEnum.dart';
 import 'package:lovetap3/interfaces/MyAuthenticator.dart';
 import 'package:lovetap3/interfaces/MyFirebaseInterface.dart';
 import 'package:lovetap3/interfaces/MyFileInterface.dart';
@@ -12,6 +13,7 @@ import 'package:lovetap3/objects/MyNullObject.dart';
 
 import '../misc/Config.dart';
 import '../misc/MyBuffer.dart';
+import '../misc/Settings.dart';
 import '../objects/OutgoingPackage.dart';
 import '../misc/functions.dart';
 
@@ -29,52 +31,30 @@ class TestingScreen extends StatefulWidget {
 class _TestingScreenState extends State<TestingScreen> {
 
   void actionbtn1() async {
-
     stamp("Testing screen: Action button call");
-    
-    // stamp("Calling MyFireBaseInterface.requestConnection: ${await MyFirebaseInterface.requestConnection("ultraprim@gmail.com")}");
-    // FirebaseMessaging.instance.getToken().then((value) => stamp("Token: $value"));
 
-
-    // await MyFileInterface.addConnection("connectionID", "userID", false);
-    // await MyFileInterface.addConnection("connection 2", "user 2", true);
-
-    // stamp("MyFileInterface.getConnections());
-
-
-    // await MyFileInterface.addConnection(ConnectionObject.direct("connection4", "user3", false));
-
-
-    // stamp("Connections: ${await MyFileInterface.getConnections()}");
-
-    // Map<String, ConnectionObject> connections = await MyFileInterface.getConnections();
-    // stamp("Connections: ${connections}");
-    // connections.forEach((key, value) {
-    //   stamp("${value.getTargetEmail()}");
-    // });
-    // stamp("Connections: ${(await MyFileInterface.getConnections())["connection3"]}");
-
-    FirebaseMessaging.instance.deleteToken().then((value) async {
-      stamp("new token should exist: ${await FirebaseMessaging.instance.getToken()}");
-    });
+    stamp("Calling save settings");
+    Settings.saveAll();
 
   }
 
   void actionBtn2() async {
-    stamp("actionBtn2 called");
+    stamp("action button 2: ");
 
 
-    stamp("Calling MyFireBaseInterface.requestConnection: ${await MyFirebaseInterface.requestConnection("ultraprim@gmail.com")}");
+    // stamp("Calling setPriority at low:");
+    // stamp("setpriotity result: ${await MyFirebaseInterface.setPriority(PriorityEnum.LOW)}");
 
+    stamp("Loading settings");
+    Settings.initialize();
+    stamp("Settings loaded");
   }
 
   void actionBtn3() async {
     stamp("Action button 3");
 
-    // await MyFileInterface.deleteAllConnections();
-    MyFirebaseInterface.getToken();
-
-    stamp("deleted data");
+    stamp("checking settings value");
+    stamp("${Settings.getSetting("messagePriority")}");
   }
 
   @override

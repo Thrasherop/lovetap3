@@ -4,6 +4,7 @@ import 'package:lovetap3/pages/ConnectionManagementScreen.dart';
 import 'package:lovetap3/pages/HomeScreen.dart';
 import 'package:lovetap3/pages/LoadingScreen.dart';
 import 'package:lovetap3/pages/LoginScreen.dart';
+import 'package:lovetap3/pages/SettingsScreen.dart';
 import 'package:lovetap3/pages/TestingScreen.dart';
 
 
@@ -22,6 +23,7 @@ Future<void> main() async {
       "/login": (context) => LoginScreen(),
       "/testing": (context) => TestingScreen(),
       "/connection_management": (context) => ConnectionManagementScreen(),
+      "/settings": (context) => SettingsScreen(),
     },
   ));
 }

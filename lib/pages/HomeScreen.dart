@@ -48,8 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void updateList() async {
 
-    stamp("Update list called");
-
     await _updateDestinationOptions();
 
     if (destinationOptions.isEmpty){
@@ -158,6 +156,16 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             ListTile(
+              title: Text("Settings", style: hamburgerTextStyle),
+              onTap: () async {
+                // Close the drawer first
+                Navigator.pop(context);
+
+                // Navigate to testing screen
+                Navigator.pushNamed(context, "/settings");
+              },
+            ),
+            ListTile(
               title: Text("Testing Screen", style: hamburgerTextStyle,),
               onTap: () {
                 // Close the drawer first
@@ -173,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 await MyAuthenticator.signOut(context: context);
                 Navigator.pushReplacementNamed(context, "/loading");
               },
-            )
+            ),
           ],
         ),
       ),

@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:lovetap3/misc/Config.dart';
 import 'package:lovetap3/objects/Package.dart';
 
+import '../misc/functions.dart';
+
 class IncomingPackage extends Package {
   /*
     This class is for representing incoming

@@ -27,12 +27,12 @@ class ConnectionObject {
 
       List<String> parsed = rawString.split("!!!");
       _connectionID = parsed[0];
-      _targetUser = parsed[1];
-      _targetEmail = parsed[2];
+      // _targetUser = parsed[1];
+      _targetEmail = parsed[1];
 
-      if (parsed[3].toLowerCase() == "true"){
+      if (parsed[2].toLowerCase() == "true"){
         _isActive = true;
-      } else if (parsed[3].toLowerCase() == "false"){
+      } else if (parsed[2].toLowerCase() == "false"){
         _isActive = false;
       } else {
         stampWTF("_IsActive is not true nor false on ConnectionObject $rawString");
@@ -40,7 +40,7 @@ class ConnectionObject {
 
     }
 
-    ConnectionObject.explicit(String connectionID, String targetUser, String targetEmail, bool isActive){
+    ConnectionObject.explicit(String connectionID, String targetEmail, bool isActive){ // String targetUser
 
       /*
 
@@ -63,7 +63,7 @@ class ConnectionObject {
 
 
       _connectionID = connectionID;
-      _targetUser = targetUser;
+      // _targetUser = targetUser;
       _isActive = isActive;
       _targetEmail = targetEmail;
     }
@@ -76,9 +76,9 @@ class ConnectionObject {
       return _connectionID;
     }
 
-    String getTargetUser(){
-      return _targetUser;
-    }
+    // String getTargetUser(){
+    //   return _targetUser;
+    // }
 
     bool isActive(){
       return _isActive;
@@ -89,7 +89,8 @@ class ConnectionObject {
     }
 
     String toDataString(){
-      return "${getConnectionID()}!!!${getTargetUser()}!!!${getTargetEmail()}!!!${isActive().toString()}";
+      // return "${getConnectionID()}!!!${getTargetUser()}!!!${getTargetEmail()}!!!${isActive().toString()}";
+      return "${getConnectionID()}!!!${getTargetEmail()}!!!${isActive().toString()}";
     }
 
 }

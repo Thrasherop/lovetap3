@@ -129,12 +129,9 @@ class OutgoingPackage extends Package {
 
     // Returns the map of the data
     return <String, String>{
-      Config.PACKAGE_DATA_MAP: timingString,
-      Config.TARGET_MAP: MyBuffer.currentTargetDestination,
-      // Config.ORIGIN_MAP: MyBuffer.currentToken.toString(), // This is only causing issues since getting current token can take awhile and we don't even need it anymore
-      "toUid": thisConnection.getTargetUser(), //"DkJeDgCrl5b2eLTzTqo7Ch9al1Q2", //find a way to store connection data. Probably time to make a "add connection" feature
-      Config.CONNECTION_ID_MAP: MyBuffer.currentTargetDestination,//"tagO7nMVdwGSqRoRrETW",
-      "fromUid": currentUserId,//"DkJeDgCrl5b2eLTzTqo7Ch9al1Q2" //make this just generate using like Firebase.getuser or smt
+      "pattern": timingString,
+      "connectionID": thisConnection.getConnectionID(),
+      "fromUid": currentUserId,
     };
 
   }

@@ -32,7 +32,7 @@ class Settings {
        */
 
       // Assign the default
-      stampE("Failed to initialize messagePriority: ${e.toString()}");
+      stampE("Failed to initialize messagePriority: ${e.toString()}. Defaulting to high");
       _settingsMap["messagePriority"] = PriorityEnum.HIGH;
 
     }

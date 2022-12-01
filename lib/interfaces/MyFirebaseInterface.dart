@@ -104,6 +104,8 @@ class MyFirebaseInterface {
     // final docUser = FirebaseFirestore.instance.collection("incoming").doc(Config.DEMO_USER_NAME).collection(Config.USER_SEND_COLLECTION);
     // await docUser.add(await package.getJson());
 
+    stamp("Sending data: ${await package.getJson()}");
+
     HttpsCallable callable = FirebaseFunctions.instanceFor(region: "us-central1").httpsCallable("messageDeliverer", options: HttpsCallableOptions(timeout: Duration(seconds: 6)));
     // final result = await callable();
     final result = await callable.call(<String, dynamic>{
@@ -136,7 +138,7 @@ class MyFirebaseInterface {
 
     stamp("Requesting connection for $targetEmail");
 
-    HttpsCallable callable = FirebaseFunctions.instanceFor(region: "us-central1").httpsCallable("requestConnection", options: HttpsCallableOptions(timeout: Duration(seconds: 5)));
+    HttpsCallable callable = FirebaseFunctions.instanceFor(region: "us-central1").httpsCallable("requestConnection", options: HttpsCallableOptions(timeout: Duration(seconds: 10)));
     // final result = await callable();
     final result = await callable.call(<String, dynamic>{
       // 'YOUR_PARAMETER_NAME': 'YOUR_PARAMETER_VALUE',
@@ -148,13 +150,13 @@ class MyFirebaseInterface {
     // TODO: check that the request was successful
 
     stamp("Result: $result");
-    stamp("data: ${result.data}");
+    stamp("The resulting data from requestConnection: ${result.data}");
 
     // Get the connectionID, targetUserID, and targetEmail and put it in a map
     Map<String, String> data = {
       "status":"200",
       "connectionID": result.data["data"]["connectionID"],
-      "targetUid": result.data["data"]["targetUid"],
+      // "targetUid": result.data["data"]["targetUid"],
       "targetEmail": result.data["data"]["targetEmail"]
     };
 
@@ -268,7 +270,7 @@ class MyFirebaseInterface {
       newPriorityStr = "high";
     }
 
-    stamp("Attempting to send priority: ${newPriorityStr}");
+    stamp("Attempting to send priority: $newPriorityStr");
 
     HttpsCallable callable = FirebaseFunctions.instanceFor(region: "us-central1").httpsCallable("updateInfo", options: HttpsCallableOptions(timeout: Duration(seconds: 6)));
     final result = await callable.call(<String, dynamic>{
@@ -298,12 +300,6 @@ class MyFirebaseInterface {
      */
 
 
-
-    stamp("Message: $message");
-    stamp("${message.notification}");
-    stamp("${message.notification?.body}");
-
-
     if (message.data.containsKey(Config.PACKAGE_DATA_MAP)){
 
       // Creates IncomingPackage object
@@ -318,11 +314,11 @@ class MyFirebaseInterface {
 
       // Parse the data
       String connectionID = message.data["connectionID"];
-      String targetUser = message.data["senderUid"];
+      // String targetUser = message.data["senderUid"];
 
-      stamp("Received connection request: $connectionID $targetUser");
+      stamp("Received connection request: $connectionID ");
 
-      ConnectionObject newConnection = ConnectionObject.explicit(connectionID, targetUser, message.data["senderEmail"] ,false);
+      ConnectionObject newConnection = ConnectionObject.explicit(connectionID, message.data["senderEmail"] ,false);
       MyFileInterface.addConnection(newConnection);
 
     }

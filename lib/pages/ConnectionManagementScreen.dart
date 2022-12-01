@@ -59,7 +59,8 @@ class _ConnectionManagementScreenState extends State<ConnectionManagementScreen>
 
 
     // Add the connection locally
-    ConnectionObject newConnection = ConnectionObject.explicit(data["connectionID"]!, data["targetUid"]!, data["targetEmail"]!, true);
+    // ConnectionObject newConnection = ConnectionObject.explicit(data["connectionID"]!, data["targetUid"]!, data["targetEmail"]!, true);
+    ConnectionObject newConnection = ConnectionObject.explicit(data["connectionID"]!, data["targetEmail"]!, true);
     MyFileInterface.addConnection(newConnection);
 
     emailInput.text = ""; // clear the text

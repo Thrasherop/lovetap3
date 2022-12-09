@@ -60,6 +60,15 @@ class _TestingScreenState extends State<TestingScreen> {
   @override
   Widget build(BuildContext context) {
 
+    // Some dummy data
+    List<ConnectionObject> connections = [];
+    connections.add(ConnectionObject.explicit("JoshuaKopaunik@gmail.com", "JoshuaKopaunik@gmail.com", false));
+    connections.add(ConnectionObject.explicit("222", "222", false));
+    connections.add(ConnectionObject.explicit("333", "333", true));
+
+
+
+
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -70,7 +79,95 @@ class _TestingScreenState extends State<TestingScreen> {
               ElevatedButton(onPressed: actionBtn2, child: Text("Action Button 2")),
               ElevatedButton(onPressed: actionBtn3, child: Text("Action button 3")),
 
+              // Text("tesgin screen"),
 
+              Expanded(
+                child: Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color(0xfffc03ca),
+                        Color(0xff690254),
+                      ],
+                    ),
+                  ),
+                  child: Center(
+                    child: Column(
+                      children: [
+                        TextField(
+                          decoration: InputDecoration(
+                            hintText: 'Enter email',
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            // Request connection
+                          },
+                          child: Text('Request'),
+                        ),
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: connections.length,
+                            itemBuilder: (context, index) {
+                              ConnectionObject connection = connections[index];
+                              return Card(
+                                color: Color.lerp(
+                                  Color(0xfffc03ca),
+                                  Color(0xff690254),
+                                  0.5,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          connection.getTargetEmail(),
+                                          style: TextStyle(
+                                            color: Color(0xff00ff00), // Bright green
+                                          ),
+                                        ),
+                                      ),
+                                      if (!connection.isActive()) ...[
+                                        TextButton(
+                                          onPressed: () {
+                                            // Accept connection
+                                          },
+                                          child: Text(
+                                            'Accept',
+                                            style: TextStyle(
+                                              color: Color(0xff006400), // Dark green
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                      TextButton(
+                                        onPressed: () {
+                                          // Delete connection
+                                        },
+                                        child: Text(
+                                          'Delete',
+                                          style: TextStyle(
+                                            color: Color(0xff006400), // Dark green
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         ),

@@ -41,7 +41,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     // Parses the current settings
     bool forceDeliver = Settings.getSetting("messagePriority") == PriorityEnum.HIGH;
 
-    return Scaffold(
+    return
+      Scaffold(
       body: SafeArea (
         child: Padding(
           padding: const EdgeInsets.all(8.0),

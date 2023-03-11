@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:lovetap3/enums/PriorityEnum.dart';
@@ -31,10 +32,14 @@ class TestingScreen extends StatefulWidget {
 class _TestingScreenState extends State<TestingScreen> {
 
   void actionbtn1() async {
-    stamp("Testing screen: Action button call");
+    // stamp("Testing screen: Action button call");
+    //
+    // stamp("Calling save settings");
+    // Settings.saveAll();
 
-    stamp("Calling save settings");
-    Settings.saveAll();
+    // await Firebase.initializeApp();
+    stamp("Initiating artificial test crash via FirebaseCrashlytics....");
+    FirebaseCrashlytics.instance.crash();
 
   }
 

@@ -22,8 +22,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
   TextStyle hamburgerTextStyle = TextStyle(
-    color: Config.mainColor,
+    // color: Config.primaryColor,
+    color: Colors.blue,
     fontStyle: FontStyle.italic
+
   );
 
   late OutgoingPackage curPackage = OutgoingPackage.PlaceHolder();
@@ -67,7 +69,17 @@ class _HomeScreenState extends State<HomeScreen> {
     connectionsMap.forEach((key, value) {
       if (value.isActive()) {
         // Add the value IF its active
-        newDestinationOptions.add(DropdownMenuItem(child: Text(value.getTargetEmail()), value: value.getConnectionID()));
+        // This is the style for the individual items
+        newDestinationOptions.add(DropdownMenuItem(
+            value: value.getConnectionID(),
+            child: Text(
+                value.getTargetEmail(),
+                style: TextStyle(
+                  color: Config.secondaryColor,
+                  fontSize: 16,
+                ),
+            ),
+        ));
       }
     });
 
@@ -126,166 +138,206 @@ class _HomeScreenState extends State<HomeScreen> {
 
     _updateDestinationOptions();
 
-    return Scaffold(
-      endDrawer: Drawer(
-        /*
-          This is the layout for the drawer.
-         */
+    stamp("primary: ${Config.primaryColor}");
 
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: NetworkImage(FirebaseAuth.instance.currentUser?.photoURL ?? Config.DEFAULT_PROFILE_PICTURE),
-                    fit: BoxFit.cover,
-                ),
-              ),
-              child: Text(''),
-            ),
-            ListTile(
-              title: Text('Manage Connections', style: hamburgerTextStyle,),
-              onTap: () {
-                // Close the drawer first
-                Navigator.pop(context);
+    return MaterialApp(
+      
+      home: Container(
 
-                // Navigate to connection management screen
-                Navigator.pushNamed(context, "/connection_management");
+        color: Config.primaryColor,
 
-              },
-            ),
-            ListTile(
-              title: Text("Settings", style: hamburgerTextStyle),
-              onTap: () async {
-                // Close the drawer first
-                Navigator.pop(context);
+        child: Scaffold (
+          backgroundColor: Colors.transparent, // transparent to show background of container
+          endDrawer: Drawer(
+            /*
+              This is the layout for the drawer.
+             */
+            child: Container(
+              color: Config.primaryColor,
 
-                // Navigate to testing screen
-                Navigator.pushNamed(context, "/settings");
-              },
-            ),
-            ListTile(
-              title: Text("Testing Screen", style: hamburgerTextStyle,),
-              onTap: () {
-                // Close the drawer first
-                Navigator.pop(context);
-
-                // Navigate to testing screen
-                Navigator.pushNamed(context, "/testing");
-              },
-            ),
-            ListTile(
-              title: Text("Sign Out", style: hamburgerTextStyle),
-              onTap: () async {
-                await MyAuthenticator.signOut(context: context);
-                Navigator.pushReplacementNamed(context, "/loading");
-              },
-            ),
-          ],
-        ),
-      ),
-
-      appBar: AppBar(
-        iconTheme: IconThemeData(color: Config.mainColor), // this sets the drawer color
-        automaticallyImplyLeading: false, // Removes the back arrow from the top left
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: const [
-            Icon(Icons.account_circle_rounded, color: Config.mainColor),
-            SizedBox(width: 118), // centers the title
-            Text("LoveTap", style: TextStyle(color: Config.mainColor),),
-          ]
-        ),
-        centerTitle: false,
-        backgroundColor: Colors.transparent,//Config.mainColor,
-        elevation: 0.0,
-      ),
-
-
-      // WillPopScope prevents back presses
-      body: WillPopScope(
-        onWillPop: () async {
-          stamp("Back press on home screen detected");
-          final scaffold = ScaffoldMessenger.of(context);
-          scaffold.showSnackBar(
-              SnackBar(
-                content: const Text('This is the home screen. To log out, go to settings.'),
-                duration: Duration(milliseconds: Config.SNACKBAR_TIMEOUT),
-              ));
-          return false;
-        },
-
-
-        // Actual UI
-        child: SafeArea(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-
-              children: [
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      // width: 200,
-                      child: DropdownButton (
-                        items: destinationOptions,//Config.DESTINATION_OPTIONS,
-                        onChanged: _destinationChanged,
-                        value: _selectedDestination,
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  DrawerHeader(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: NetworkImage(FirebaseAuth.instance.currentUser?.photoURL ?? Config.DEFAULT_PROFILE_PICTURE),
+                          fit: BoxFit.cover,
                       ),
                     ),
-                    IconButton(
-                      // Update the list and setState()
-                      onPressed: () {updateList(); setState(() {});},
-                      icon: const Icon(Icons.refresh),
-                    )
+                    child: Text(''),
+                  ),
+                  ListTile(
+                    title: Text('Manage Connections', style: hamburgerTextStyle,),
+                    onTap: () {
+                      // Close the drawer first
+                      // Navigator.pop(context);
+
+                      // Navigate to connection management screen
+                      Navigator.pushNamed(context, "/connection_management");
+
+                    },
+                  ),
+                  ListTile(
+                    title: Text("Settings", style: hamburgerTextStyle),
+                    onTap: () async {
+                      // Close the drawer first
+                      // Navigator.pop(context);
+
+                      // Navigate to testing screen
+                      Navigator.pushNamed(context, "/settings");
+                    },
+                  ),
+                  ListTile(
+                    title: Text("Testing Screen", style: hamburgerTextStyle,),
+                    onTap: () {
+                      // Close the drawer first
+                      // Navigator.pop(context);
+
+                      // Navigate to testing screen
+                      Navigator.pushNamed(context, "/testing");
+                    },
+                  ),
+                  ListTile(
+                    title: Text("Sign Out", style: hamburgerTextStyle),
+                    onTap: () async {
+                      await MyAuthenticator.signOut(context: context);
+                      Navigator.pushReplacementNamed(context, "/loading");
+                    },
+                  ),ListTile(
+                    title: Text("Report a bug", style: hamburgerTextStyle,),
+                    onTap: () {
+                      // Close the drawer first
+                      // Navigator.pop(context);
+
+                      // Navigate to testing screen
+                      Navigator.pushNamed(context, "/LogSubmission");
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          appBar: AppBar(
+            iconTheme: IconThemeData(color: Config.secondaryColor), // this sets the drawer color
+            automaticallyImplyLeading: false, // Removes the back arrow from the top left
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(Icons.account_circle_rounded, color: Config.secondaryColor),
+                SizedBox(width: 118), // centers the title
+                Text("LoveTap", style: TextStyle(color: Config.secondaryColor),),
+              ]
+            ),
+            centerTitle: false,
+            backgroundColor: Colors.transparent,//Config.secondaryColor,
+            elevation: 0.0,
+          ),
+
+          // WillPopScope prevents back presses
+          body: WillPopScope(
+            onWillPop: () async {
+              stamp("Back press on home screen detected");
+              final scaffold = ScaffoldMessenger.of(context);
+              scaffold.showSnackBar(
+                  SnackBar(
+                    content: const Text('This is the home screen. To log out, go to settings.'),
+                    duration: Duration(milliseconds: Config.SNACKBAR_TIMEOUT),
+                  ));
+              return false;
+            },
+
+            // UI
+            child: SafeArea(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          // width: 200,
+                          child: Padding(
+                            padding: EdgeInsets.all(2),
+                            child: DropdownButton (
+                              // This styles the menu
+                              dropdownColor: Color.fromRGBO(243, 53, 136, 1),
+                              borderRadius: BorderRadius.circular(10),
+                              style: TextStyle(
+                                color: Config.secondaryColor,
+                                fontSize: 16,
+                              ),
+                              icon: Icon(
+                                Icons.keyboard_arrow_down,
+                                color: Config.secondaryColor,
+                              ),
+                              underline: Container(), // Get rid of the underline
+
+                              // This takes care of logic
+                              items: destinationOptions,
+                              onChanged: _destinationChanged,
+                              value: _selectedDestination,
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          // Update the list and setState()
+                          onPressed: () {updateList(); setState(() {});},
+                          icon: const Icon(Icons.refresh),
+                          color: Config.secondaryColor,
+                        )
+                      ],
+                    ),
+
+                    SizedBox(height: 140),
+
+                    // Tap interface
+                    InkWell(
+                      onTapDown: _press,
+                      onTapUp: _release,
+
+                      splashColor: Config.accent,
+                      highlightColor: Colors.transparent, // This disables the white overlay on presses
+                      customBorder: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+
+                      child: Ink(
+                        width: 300,
+                        height: 300,
+
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Config.primaryColor,
+                          border: Border.all(
+                            color: Config.secondaryColor!,
+                            width: 2.0,
+                            style: BorderStyle.solid,
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            "Tap Here",
+                            style: TextStyle(
+                              fontStyle: FontStyle.italic,
+                              color: Config.secondaryColor,
+                              fontSize: 25,
+                            ),
+                          )
+                        ),
+                      )
+                    ),
                   ],
                 ),
-
-                SizedBox(height: 140),
-
-                InkWell(
-                  onTapDown: _press,
-                  onTapUp: _release,
-
-                  splashColor: Config.accent,
-                  highlightColor: Colors.transparent, // This disables the white overlay on presses
-                  customBorder: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-
-                  child: Ink(
-                    width: 300,
-                    height: 300,
-
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Config.mainColor,
-                    ),
-                    child: Center(
-                        child: Text(
-                          "Tap Here",
-                          style: TextStyle(
-                            fontStyle: FontStyle.italic,
-                            color: Config.mainColor[600],
-                            fontSize: 25,
-                          ),
-                        )
-                    ),
-                  )
-                ),
-              ],
+              )
             ),
           )
         ),
-      )
+      ),
     );
   }
-
 }
-
-
-

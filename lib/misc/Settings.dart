@@ -2,6 +2,7 @@ import 'package:lovetap3/interfaces/MyFileInterface.dart';
 import 'package:lovetap3/interfaces/MyFirebaseInterface.dart';
 
 import '../enums/PriorityEnum.dart';
+import 'Config.dart';
 import 'functions.dart';
 
 class Settings {
@@ -11,6 +12,7 @@ class Settings {
 
   static Map<String, Object> _settingsMap = {
     "messagePriority": PriorityEnum.HIGH,
+    "theme": "light",
   };
 
   static Future<void> initialize() async {
@@ -24,6 +26,10 @@ class Settings {
 
     try {
       _settingsMap["messagePriority"] = PriorityEnum.values.firstWhere((e) => e.toString() == settingsList[0]);
+
+      // Set the theme
+      _settingsMap['theme'] = await MyFileInterface.getValue("theme");
+      _updateAppTheme(_settingsMap['theme'] as String); // update the config
     } catch (e){
       /*
          TODO: Have this callback to the server to get the setting. Only if that also
@@ -46,6 +52,7 @@ class Settings {
     settingsStr += _settingsMap["messagePriority"].toString();
 
     await MyFileInterface.setValue("settings", settingsStr);
+    await MyFileInterface.setValue("theme", _settingsMap['theme'] as String);
     stamp("SaveAll completed");
   }
 
@@ -55,6 +62,7 @@ class Settings {
 
     // Checks special case for messagePriority
     if (key == "messagePriority") {
+
       if (value is! PriorityEnum) {
         stampWTF("ERROR: updateSetting with $key (detected messagePriority) does not have a PriorityEnum input: $value");
       } else {
@@ -64,6 +72,10 @@ class Settings {
         stamp("Attempting to update Firebase preference...");
         stamp("Result: ${await MyFirebaseInterface.setPriority(value)}"); // TODO: Do something if this fails
       }
+
+    } else if (key == "theme"){
+      // Calls _updateAppTheme logic if we want to set theme
+      _updateAppTheme(value as String);
     }
   }
 
@@ -77,6 +89,22 @@ class Settings {
     finalStr += _settingsMap["messagePriority"].toString();
 
     return finalStr;
+  }
+
+  static void _updateAppTheme (String newTheme){
+
+    _settingsMap['theme'] = newTheme;
+
+    if (newTheme == "light") {
+      Config.primaryColor = Config.primaryColorLightMode;
+      Config.secondaryColor = Config.secondaryColorLightMode;
+    } else if (newTheme == "dark"){
+      stamp("setting theme to dark");
+      Config.primaryColor = Config.primaryColorDarkMode;
+      Config.primaryColor = Config.secondaryColorDarkMode;
+    }
+
+
   }
 
 }

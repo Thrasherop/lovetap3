@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:lovetap3/enums/PriorityEnum.dart';
@@ -52,6 +53,7 @@ class MyFirebaseInterface {
 
 
     await Firebase.initializeApp();
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
 
     // This needs to run. Don't know why, but messages might not get delivered if this isn't called
     // TODO: Figure out why this must be called. Foreground messages might not get delivered properly if it isn't
@@ -117,6 +119,21 @@ class MyFirebaseInterface {
 
     return result;
 
+  }
+
+  static Future<HttpsCallableResult> submitRamLog(String explanation) async {
+
+    stamp("Attempting to submit RAM log...");
+
+    HttpsCallable callable = FirebaseFunctions.instanceFor(region: "us-central1").httpsCallable("submitLog", options: HttpsCallableOptions(timeout: Duration(seconds: 15)));
+    final result = await callable.call(<String, dynamic>{
+      "log": liveLog, // from functions
+      "explanation": explanation,
+    });
+
+    stamp("RAM log string has been sent with result ${result.hashCode}");
+
+    return result;
   }
 
   static Future<Map<String, String>> requestConnection(String targetEmail) async{

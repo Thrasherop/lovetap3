@@ -8,6 +8,7 @@ import 'package:lovetap3/interfaces/MyAuthenticator.dart';
 import '../interfaces/MyFirebaseInterface.dart';
 import 'package:lovetap3/misc/functions.dart';
 
+import '../misc/Config.dart';
 import '../misc/Settings.dart';
 
 
@@ -47,6 +48,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
       screen for a second, which is nice and makes it feel super fast
      */
 
+    // Initialize settings
+    Config.init();
 
     // Initialize MyFirebaseInterface
     await MyFirebaseInterface.initialize();

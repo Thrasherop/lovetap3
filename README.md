@@ -1,6 +1,6 @@
 # lovetap3
 
-LoveTap built in Flutter for multi-platform distrobution
+LoveTap built in Flutter for multi-platform distribution
 
 ## Getting Started
 

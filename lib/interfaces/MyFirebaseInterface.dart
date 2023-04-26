@@ -255,9 +255,9 @@ class MyFirebaseInterface {
         -- message: RemoteMessage -> Message to be parsed
      */
 
-    stamp("background handler called");
-
     await Firebase.initializeApp();
+
+    stamp("Background handler called & Firebase initialized");
 
     _handleData(message);
 

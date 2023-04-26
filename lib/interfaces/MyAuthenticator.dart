@@ -97,8 +97,10 @@ class MyAuthenticator {
 
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
-    final GoogleSignInAccount? googleSignInAccount =
-    await googleSignIn.signIn();
+    try {
+      final GoogleSignInAccount? googleSignInAccount =
+      await googleSignIn.signIn();
+
 
     if (googleSignInAccount != null) {
       final GoogleSignInAuthentication googleSignInAuthentication =
@@ -137,6 +139,10 @@ class MyAuthenticator {
           ),
         );
       }
+    }
+    } catch (e) {
+      stamp("Error: ");
+      stamp(e);
     }
 
     return user;

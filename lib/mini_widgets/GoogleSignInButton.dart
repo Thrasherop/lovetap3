@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lovetap3/interfaces/MyAuthenticator.dart';
 import 'package:lovetap3/misc/MyBuffer.dart';
-import 'package:lovetap3/misc/functions.dart';
-import 'package:lovetap3/pages/LoadingScreen.dart';
-
 
 /*
 
@@ -19,10 +15,12 @@ import 'package:lovetap3/pages/LoadingScreen.dart';
 class GoogleSignInButton extends StatefulWidget {
   @override
   _GoogleSignInButtonState createState() => _GoogleSignInButtonState();
+
 }
 
 class _GoogleSignInButtonState extends State<GoogleSignInButton> {
   bool _isSigningIn = false;
+
 
   @override
   Widget build(BuildContext context) {

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "450986871741",
+    "firebase_url": "https://lovetap3-dd028-default-rtdb.firebaseio.com",
+    "project_id": "lovetap3-dd028",
+    "storage_bucket": "lovetap3-dd028.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:450986871741:android:b918f5b348d4338dd960d4",
+        "android_client_info": {
+          "package_name": "com.KopaunikSoftware.lovetap3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "450986871741-h1pp2d0rineb98b431hsivle6umfbnpv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.KopaunikSoftware.lovetap3",
+            "certificate_hash": "7bc6374a30ff2604ae99e0bf80a55678adcce66f"
+          }
+        },
+        {
+          "client_id": "450986871741-bjv16cinace62vou7vi4lv6c9p2afmi3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSmLBCf7-ziHbfEGvU4Ca1UqZmM4duELE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "450986871741-bjv16cinace62vou7vi4lv6c9p2afmi3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

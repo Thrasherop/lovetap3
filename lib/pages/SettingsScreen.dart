@@ -32,12 +32,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
     } else if (settingKey == "theme") {
       // Updates the theme
       if (newValue == true){
-        stamp("dark mode active...");
+        stamp("Switching to dark mode");
         // await MyFileInterface.setValue("theme", "dark");
-        Settings.updateValue("theme", "light");
+        Settings.updateValue("theme", "dark");
         darkMode = true; // update the attribute to display
       } else {
-        stamp("using light mode...");
+        stamp("Switching to light mode");
         // await MyFileInterface.setValue("theme", "light");
         Settings.updateValue("theme", "light");
         darkMode = false; // update the attribute to display

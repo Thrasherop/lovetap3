@@ -68,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (destinationOptions.isEmpty){
       destinationOptions = <DropdownMenuItem>[DropdownMenuItem(child: Text("No connections"), value: "No connections")];
     }
-    _selectedDestination = destinationOptions[0].value;
+    _selectedDestination = destinationOptions[0].value ?? "No connections";
     setState(() {});
 
   }
@@ -156,7 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       home: Container(
 
-        color: SettingManager.colorArray[400], // Home screen background
+        color: SettingManager.colorArray[1], // Home screen background
 
         child: Scaffold (
           backgroundColor: Colors.transparent, // transparent to show background of container
@@ -236,14 +236,14 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
 
           appBar: AppBar(
-            iconTheme: IconThemeData(color: SettingManager.colorArray[500]), // this sets the drawer color
+            iconTheme: IconThemeData(color: SettingManager.colorArray[2]), // this sets the drawer color
             automaticallyImplyLeading: false, // Removes the back arrow from the top left
             title: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Icon(Icons.account_circle_rounded, color: SettingManager.colorArray[500]),
+                Icon(Icons.account_circle_rounded, color: SettingManager.colorArray[2]),
                 SizedBox(width: 118), // centers the title
-                Text("LoveTap", style: TextStyle(color: SettingManager.colorArray[500]),),
+                Text("LoveTap", style: TextStyle(color: SettingManager.colorArray[2]),),
               ]
             ),
             centerTitle: false,
@@ -284,12 +284,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               dropdownColor: Color.fromRGBO(243, 53, 136, 1),
                               borderRadius: BorderRadius.circular(10),
                               style: TextStyle(
-                                color: SettingManager.colorArray[500],
+                                color: SettingManager.colorArray[2],
                                 fontSize: 16,
                               ),
                               icon: Icon(
                                 Icons.keyboard_arrow_down,
-                                color: SettingManager.colorArray[500],
+                                color: SettingManager.colorArray[2],
                               ),
                               underline: Container(), // Get rid of the underline
 
@@ -304,7 +304,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           // Update the list and setState()
                           onPressed: () {updateList(); setState(() {});},
                           icon: const Icon(Icons.refresh),
-                          color: SettingManager.colorArray[500],
+                          color: SettingManager.colorArray[2],
                         )
                       ],
                     ),
@@ -328,9 +328,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: SettingManager.colorArray[500], // Color of the tap square
+                          color: SettingManager.colorArray[2], // Color of the tap square
                           border: Border.all(
-                            color: SettingManager.colorArray[500]!,
+                            color: SettingManager.colorArray[2]!,
                             width: 2.0,
                             style: BorderStyle.solid,
                           ),
@@ -340,7 +340,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             "Tap Here",
                             style: TextStyle(
                               fontStyle: FontStyle.italic,
-                              color: SettingManager.colorArray[500],
+                              color: SettingManager.colorArray[1],
                               fontSize: 25,
                             ),
                           )

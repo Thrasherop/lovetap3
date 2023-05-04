@@ -2,8 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lovetap3/enums/PriorityEnum.dart';
 import 'package:lovetap3/interfaces/MyFileInterface.dart';
+import 'package:lovetap3/misc/MyBuffer.dart';
 
-import '../misc/Settings.dart';
+import '../interfaces/SettingManager.dart';
 import '../misc/functions.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -15,7 +16,7 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
 
-  bool darkMode = false;
+  bool darkMode = SettingManager.getSetting("theme") == "dark";
 
   void updateSetting(String settingKey, Object newValue) async {
     stamp("New value: $newValue");
@@ -25,21 +26,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
       if (newValue is! bool) {
         stampWTF("ERROR: updateSetting with $settingKey (detected messagePriority) does not have a bool input: $newValue");
       } else if (!newValue) {
-        Settings.updateValue(settingKey, PriorityEnum.LOW);
+        SettingManager.updateValue(settingKey, PriorityEnum.LOW);
       } else {
-        Settings.updateValue(settingKey, PriorityEnum.HIGH);
+        SettingManager.updateValue(settingKey, PriorityEnum.HIGH);
       }
     } else if (settingKey == "theme") {
       // Updates the theme
       if (newValue == true){
         stamp("Switching to dark mode");
         // await MyFileInterface.setValue("theme", "dark");
-        Settings.updateValue("theme", "dark");
+        // Settings.updateValue("theme", "light");
+        SettingManager.updateValue("theme", "dark");
         darkMode = true; // update the attribute to display
       } else {
         stamp("Switching to light mode");
         // await MyFileInterface.setValue("theme", "light");
-        Settings.updateValue("theme", "light");
+        SettingManager.updateValue("theme", "light");
         darkMode = false; // update the attribute to display
 
       }
@@ -49,20 +51,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() {});
 
     // save the new changes
-    Settings.saveAll();
+    SettingManager.saveAll();
 
     stamp("After saving: ${await MyFileInterface.getValue("theme")}");
   }
 
+  @override
+  void dispose(){
+
+    // Run the update for the home screen
+    MyBuffer.runLastScreenCallback();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
 
     // Parses the current settings
-    bool forceDeliver = Settings.getSetting("messagePriority") == PriorityEnum.HIGH;
+    bool forceDeliver = SettingManager.getSetting("messagePriority") == PriorityEnum.HIGH;
 
-
-    // stamp()
 
     if (MyFileInterface.getValue("theme").toString() == "dark") {
       stamp("Dark mode detectd");

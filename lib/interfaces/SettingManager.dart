@@ -1,11 +1,16 @@
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
 import 'package:lovetap3/interfaces/MyFileInterface.dart';
 import 'package:lovetap3/interfaces/MyFirebaseInterface.dart';
 
 import '../enums/PriorityEnum.dart';
-import 'Config.dart';
-import 'functions.dart';
+import '../misc/Config.dart';
+import '../misc/functions.dart';
 
-class Settings {
+import 'package:lovetap3/misc/functions.dart';
+
+class SettingManager {
 
   // various settings
   // static PriorityEnum messagePriority = PriorityEnum.HIGH; // default HIGH
@@ -14,6 +19,9 @@ class Settings {
     "messagePriority": PriorityEnum.HIGH,
     "theme": "light",
   };
+
+  // Set the default colorArray to light mode.
+  static late MaterialColor colorArray;
 
   static Future<void> initialize() async {
 
@@ -43,7 +51,9 @@ class Settings {
 
     }
 
-    stamp("Parsed messagePriority: ${_settingsMap["messagePriority"]}");
+    // Get the theme data & call the update function
+    String theme = (await MyFileInterface.getValue("theme")).toString();
+    _updateAppTheme(theme);
 
   }
 
@@ -93,17 +103,45 @@ class Settings {
 
   static void _updateAppTheme (String newTheme){
 
+    /*
+
+      Update the app theme. This includes changing _settingsMap, colorArray,
+      and updating the local database
+
+     */
+
     _settingsMap['theme'] = newTheme;
 
-    if (newTheme == "light") {
-      Config.primaryColor = Config.primaryColorLightMode;
-      Config.secondaryColor = Config.secondaryColorLightMode;
-    } else if (newTheme == "dark"){
-      stamp("setting theme to dark");
-      Config.primaryColor = Config.primaryColorDarkMode;
-      Config.primaryColor = Config.secondaryColorDarkMode;
-    }
+    // Update the colorArray
+    if (newTheme == "dark"){
 
+      colorArray = MaterialColor(0xFF343A40, const <int, Color>{
+        1: Color(0xFFE5E5E5),
+        2: Color(0xFFBDBDBD),
+        3: Color(0xFF9E9E9E),
+        400: Color(0xFFf53325), // Red
+        500: Color(0xFFFFFFFF)
+      });
+
+    } else { // Default to light
+      colorArray = MaterialColor(0xFF343A40, const <int, Color>{
+        1: Color(0xFFE5E5E5),
+        2: Color(0xFFBDBDBD),
+        3: Color(0xFF9E9E9E),
+        400: Color(0xFF8800FF),
+        500: Color(0xFF41fc03),
+        // 500: Color(0xFFdcb5ff)
+      });
+    }
+    
+    // Update the database
+    MyFileInterface.setValue("theme", newTheme).catchError((error, stackTrace) {
+      /*
+        TODO: Handle this more gracefully
+       */
+      stampE("SettingManager: Failed to safe theme to local database: $error, stacktrace: $stackTrace");
+      return false;
+    });
 
   }
 

@@ -1,10 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:lovetap3/interfaces/MyAuthenticator.dart';
 import 'package:lovetap3/interfaces/MyFileInterface.dart';
+import 'package:lovetap3/interfaces/SettingManager.dart';
 import 'package:lovetap3/objects/ConnectionObject.dart';
-import 'package:lovetap3/objects/MyNullObject.dart';
 
 import '../misc/Config.dart';
 import '../misc/MyBuffer.dart';
@@ -19,6 +18,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  // Scaffold key. We use this reference to close the drawer
+  GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
 
   TextStyle hamburgerTextStyle = TextStyle(
@@ -38,8 +40,11 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _selectedDestination = destinationOptions[0].value;
 
-    // Push our updateList() callback onto MyBuffer.updateScreenCallback stack.
-    MyBuffer.updateScreenCallback.insert(0, updateList);
+    // Push our resumeContext() callback onto MyBuffer.updateScreenCallback stack.
+    MyBuffer.updateScreenCallback.insert(0, (){
+       // Call resumeContext after the screen is calledback
+       WidgetsBinding.instance.addPostFrameCallback((_) => resumeContext());
+    });
 
 
     // Initialize the list, but delayed to ensure the screen has been created
@@ -47,6 +52,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   }
 
+  void resumeContext() {
+
+    // Update the list
+    updateList();
+
+    // Update screen
+    setState(() {});
+  }
 
   void updateList() async {
 
@@ -138,22 +151,22 @@ class _HomeScreenState extends State<HomeScreen> {
 
     _updateDestinationOptions();
 
-    stamp("primary: ${Config.primaryColor}");
 
     return MaterialApp(
-      
+
       home: Container(
 
-        color: Config.primaryColor,
+        color: SettingManager.colorArray[400], // Home screen background
 
         child: Scaffold (
           backgroundColor: Colors.transparent, // transparent to show background of container
+          key: _scaffoldKey,
           endDrawer: Drawer(
             /*
               This is the layout for the drawer.
              */
             child: Container(
-              color: Config.primaryColor,
+              color: Colors.transparent,//SettingManager.colorArray[400],
 
               child: ListView(
                 padding: EdgeInsets.zero,
@@ -170,8 +183,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ListTile(
                     title: Text('Manage Connections', style: hamburgerTextStyle,),
                     onTap: () {
-                      // Close the drawer first
-                      // Navigator.pop(context);
+                      // Close the drawer
+                      _scaffoldKey.currentState?.closeEndDrawer();
 
                       // Navigate to connection management screen
                       Navigator.pushNamed(context, "/connection_management");
@@ -182,7 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: Text("Settings", style: hamburgerTextStyle),
                     onTap: () async {
                       // Close the drawer first
-                      // Navigator.pop(context);
+                      _scaffoldKey.currentState?.closeEndDrawer();
 
                       // Navigate to testing screen
                       Navigator.pushNamed(context, "/settings");
@@ -192,7 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: Text("Testing Screen", style: hamburgerTextStyle,),
                     onTap: () {
                       // Close the drawer first
-                      // Navigator.pop(context);
+                      _scaffoldKey.currentState?.closeEndDrawer();
 
                       // Navigate to testing screen
                       Navigator.pushNamed(context, "/testing");
@@ -202,13 +215,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: Text("Sign Out", style: hamburgerTextStyle),
                     onTap: () async {
                       await MyAuthenticator.signOut(context: context);
-                      Navigator.pushReplacementNamed(context, "/loading");
+                      await Navigator.pushReplacementNamed(context, "/loading"); // Await so that we can resume when it returns
+                      stamp("pushreplacement ended. Resetting screen");
+                      setState(() {}); // refresh now that it returns
+                      stamp("PushReplacement ended. Screen reset");
                     },
                   ),ListTile(
                     title: Text("Report a bug", style: hamburgerTextStyle,),
                     onTap: () {
                       // Close the drawer first
-                      // Navigator.pop(context);
+                      _scaffoldKey.currentState?.closeEndDrawer();
 
                       // Navigate to testing screen
                       Navigator.pushNamed(context, "/LogSubmission");
@@ -220,14 +236,14 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
 
           appBar: AppBar(
-            iconTheme: IconThemeData(color: Config.secondaryColor), // this sets the drawer color
+            iconTheme: IconThemeData(color: SettingManager.colorArray[500]), // this sets the drawer color
             automaticallyImplyLeading: false, // Removes the back arrow from the top left
             title: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Icon(Icons.account_circle_rounded, color: Config.secondaryColor),
+                Icon(Icons.account_circle_rounded, color: SettingManager.colorArray[500]),
                 SizedBox(width: 118), // centers the title
-                Text("LoveTap", style: TextStyle(color: Config.secondaryColor),),
+                Text("LoveTap", style: TextStyle(color: SettingManager.colorArray[500]),),
               ]
             ),
             centerTitle: false,
@@ -268,12 +284,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               dropdownColor: Color.fromRGBO(243, 53, 136, 1),
                               borderRadius: BorderRadius.circular(10),
                               style: TextStyle(
-                                color: Config.secondaryColor,
+                                color: SettingManager.colorArray[500],
                                 fontSize: 16,
                               ),
                               icon: Icon(
                                 Icons.keyboard_arrow_down,
-                                color: Config.secondaryColor,
+                                color: SettingManager.colorArray[500],
                               ),
                               underline: Container(), // Get rid of the underline
 
@@ -288,7 +304,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           // Update the list and setState()
                           onPressed: () {updateList(); setState(() {});},
                           icon: const Icon(Icons.refresh),
-                          color: Config.secondaryColor,
+                          color: SettingManager.colorArray[500],
                         )
                       ],
                     ),
@@ -300,7 +316,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       onTapDown: _press,
                       onTapUp: _release,
 
-                      splashColor: Config.accent,
+                      splashColor: SettingManager.colorArray[1],
                       highlightColor: Colors.transparent, // This disables the white overlay on presses
                       customBorder: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
@@ -312,9 +328,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: Config.primaryColor,
+                          color: SettingManager.colorArray[500], // Color of the tap square
                           border: Border.all(
-                            color: Config.secondaryColor!,
+                            color: SettingManager.colorArray[500]!,
                             width: 2.0,
                             style: BorderStyle.solid,
                           ),
@@ -324,7 +340,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             "Tap Here",
                             style: TextStyle(
                               fontStyle: FontStyle.italic,
-                              color: Config.secondaryColor,
+                              color: SettingManager.colorArray[500],
                               fontSize: 25,
                             ),
                           )

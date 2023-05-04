@@ -14,6 +14,8 @@ class MyBuffer {
 
   static late String userID;
 
+  static late dynamic refreshHomeFunction;
+
 
   /*
    * This is used to update the screen.
@@ -25,6 +27,19 @@ class MyBuffer {
    * is the one at index 0.
    */
   static late List<Function> updateScreenCallback = <Function>[];
+
+  static void runLastScreenCallback(){
+    /*
+      Call the last callback in updateScreenCallback
+
+      This is meant to update the last page (e.g. homepage) after something
+      just occured
+     */
+
+    // Call the last updateCallback function
+    MyBuffer.updateScreenCallback.last();
+
+  }
 
 
 }

@@ -14,7 +14,7 @@ import 'package:lovetap3/objects/MyNullObject.dart';
 
 import '../misc/Config.dart';
 import '../misc/MyBuffer.dart';
-import '../misc/Settings.dart';
+import '../interfaces/SettingManager.dart';
 import '../objects/OutgoingPackage.dart';
 import '../misc/functions.dart';
 
@@ -51,7 +51,7 @@ class _TestingScreenState extends State<TestingScreen> {
     // stamp("setpriotity result: ${await MyFirebaseInterface.setPriority(PriorityEnum.LOW)}");
 
     stamp("Loading settings");
-    Settings.initialize();
+    SettingManager.initialize();
     stamp("Settings loaded");
   }
 
@@ -59,7 +59,7 @@ class _TestingScreenState extends State<TestingScreen> {
     stamp("Action button 3");
 
     stamp("checking settings value");
-    stamp("${Settings.getSetting("messagePriority")}");
+    stamp("${SettingManager.getSetting("messagePriority")}");
   }
 
   @override

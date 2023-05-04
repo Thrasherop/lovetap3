@@ -9,7 +9,7 @@ import '../interfaces/MyFirebaseInterface.dart';
 import 'package:lovetap3/misc/functions.dart';
 
 import '../misc/Config.dart';
-import '../misc/Settings.dart';
+import '../interfaces/SettingManager.dart';
 
 
 /*
@@ -60,7 +60,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     bool signedIn = await MyAuthenticator.checkSignedIn();
     if (signedIn){
       // Initializes Settings first
-      await Settings.initialize();
+      await SettingManager.initialize();
       Navigator.pushReplacementNamed(context, "/home");
     } else {
       stamp("User not logged in; sending them to /login");

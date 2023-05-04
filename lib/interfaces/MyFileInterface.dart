@@ -1,7 +1,7 @@
 import 'package:lovetap3/misc/functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../misc/Settings.dart';
+import 'SettingManager.dart';
 import '../objects/ConnectionObject.dart';
 import '../objects/MyNullObject.dart';
 

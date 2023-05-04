@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   TextStyle hamburgerTextStyle = TextStyle(
     // color: Config.primaryColor,
-    color: Colors.blue,
+    color: SettingManager.colorArray[2],
     fontStyle: FontStyle.italic
 
   );
@@ -166,12 +166,13 @@ class _HomeScreenState extends State<HomeScreen> {
               This is the layout for the drawer.
              */
             child: Container(
-              color: Colors.transparent,//SettingManager.colorArray[400],
+              color: SettingManager.colorArray[3],//Colors.transparent,//SettingManager.colorArray[400],
 
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: [
                   DrawerHeader(
+
                     decoration: BoxDecoration(
                       image: DecorationImage(
                           image: NetworkImage(FirebaseAuth.instance.currentUser?.photoURL ?? Config.DEFAULT_PROFILE_PICTURE),

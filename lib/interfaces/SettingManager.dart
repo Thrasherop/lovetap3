@@ -118,16 +118,16 @@ class SettingManager {
       colorArray = MaterialColor(0xFF343A40, const <int, Color>{
         1: Color(0xFF1B1B1B), // Primary color
         2: Color(0xFFE8F4F6), // Secondary color
-        3: Color(0xFF111111),
+        3: Color(0xFF111111), // Alternative Primary
         400: Color(0xFFf53325), // Red
         500: Color(0xFFFFFFFF)
       });
 
     } else { // Default to light
       colorArray = MaterialColor(0xFF343A40, const <int, Color>{
-        1: Color(0xFFee578a),
-        2: Color(0xFFFFF3F9),
-        3: Color(0xFFe35281),
+        1: Color(0xFFee578a), // Primary color
+        2: Color(0xFFFFF3F9), // Secondary color
+        3: Color(0xFFe35281), // Alternative primary
         400: Color(0xFF8800FF),
         500: Color(0xFF41fc03),
         // 500: Color(0xFFdcb5ff)

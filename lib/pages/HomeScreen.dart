@@ -100,6 +100,13 @@ class _HomeScreenState extends State<HomeScreen> {
     destinationOptions = newDestinationOptions;
     Config.DESTINATION_OPTIONS = destinationOptions;
 
+    // Check for empty. If so, display No connections
+    if (destinationOptions.isEmpty){
+      destinationOptions = <DropdownMenuItem>[DropdownMenuItem(child: Text("No connections"), value: "No connections")];
+    }
+    _selectedDestination = destinationOptions[0].value ?? "No connections";
+    setState(() {});
+
   }
 
   void _press(TapDownDetails event){
@@ -146,6 +153,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   }
 
+  void _addMenuButtonPressed(){
+    stamp("Add button clicked");
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -161,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Scaffold (
           backgroundColor: Colors.transparent, // transparent to show background of container
           key: _scaffoldKey,
-          endDrawer: Drawer(
+          drawer: Drawer(
             /*
               This is the layout for the drawer.
              */
@@ -237,19 +248,27 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
 
           appBar: AppBar(
+
             iconTheme: IconThemeData(color: SettingManager.colorArray[2]), // this sets the drawer color
-            automaticallyImplyLeading: false, // Removes the back arrow from the top left
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Icon(Icons.account_circle_rounded, color: SettingManager.colorArray[2]),
-                SizedBox(width: 118), // centers the title
-                Text("LoveTap", style: TextStyle(color: SettingManager.colorArray[2]),),
-              ]
-            ),
-            centerTitle: false,
+            automaticallyImplyLeading: true, // Removes the back arrow from the top left
+
+            title: Text("Lovetap", style: TextStyle(color: SettingManager.colorArray[2])),
+
+            actions: [
+              Padding( // Padding for the plus icon
+                padding: const EdgeInsets.only(right: 1.0),
+                child: IconButton(
+                        onPressed: _addMenuButtonPressed,
+                        icon: const Icon(Icons.add),
+                        color: SettingManager.colorArray[2],
+                        padding: EdgeInsets.zero,
+                      ),
+              ),
+            ],
+            centerTitle: true,
             backgroundColor: Colors.transparent,//Config.secondaryColor,
             elevation: 0.0,
+
           ),
 
           // WillPopScope prevents back presses
@@ -273,40 +292,52 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
 
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SizedBox(
-                          // width: 200,
-                          child: Padding(
-                            padding: EdgeInsets.all(2),
-                            child: DropdownButton (
-                              // This styles the menu
-                              dropdownColor: Color.fromRGBO(243, 53, 136, 1),
-                              borderRadius: BorderRadius.circular(10),
-                              style: TextStyle(
-                                color: SettingManager.colorArray[2],
-                                fontSize: 16,
-                              ),
-                              icon: Icon(
-                                Icons.keyboard_arrow_down,
-                                color: SettingManager.colorArray[2],
-                              ),
-                              underline: Container(), // Get rid of the underline
-
-                              // This takes care of logic
-                              items: destinationOptions,
-                              onChanged: _destinationChanged,
-                              value: _selectedDestination,
-                            ),
+                        Text(
+                            "Sending   to   ",
+                          style: TextStyle(
+                            color: SettingManager.colorArray[2],
+                            fontSize: 20,
                           ),
                         ),
-                        IconButton(
-                          // Update the list and setState()
-                          onPressed: () {updateList(); setState(() {});},
-                          icon: const Icon(Icons.refresh),
-                          color: SettingManager.colorArray[2],
-                        )
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              // width: 200,
+                              child: Padding(
+                                padding: EdgeInsets.all(2),
+                                child: DropdownButton (
+                                  // This styles the menu
+                                  dropdownColor: Color.fromRGBO(243, 53, 136, 1),
+                                  borderRadius: BorderRadius.circular(10),
+                                  style: TextStyle(
+                                    color: SettingManager.colorArray[2],
+                                    fontSize: 16,
+                                  ),
+                                  icon: Icon(
+                                    Icons.keyboard_arrow_down,
+                                    color: SettingManager.colorArray[2],
+                                  ),
+                                  underline: Container(), // Get rid of the underline
+
+                                  // This takes care of logic
+                                  items: destinationOptions,
+                                  onChanged: _destinationChanged,
+                                  value: _selectedDestination,
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                              // Update the list and setState()
+                              onPressed: () {updateList(); setState(() {});},
+                              icon: const Icon(Icons.refresh),
+                              color: SettingManager.colorArray[2],
+                            )
+                          ],
+                        ),
                       ],
                     ),
 

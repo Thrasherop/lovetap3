@@ -133,7 +133,6 @@ class _ConnectionManagementScreenState extends State<ConnectionManagementScreen>
     setState(() {});
   }
 
-
   @override
   Widget build(BuildContext context) {
     /// build function

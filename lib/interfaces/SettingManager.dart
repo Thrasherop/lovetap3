@@ -119,6 +119,7 @@ class SettingManager {
         1: Color(0xFF1B1B1B), // Primary color
         2: Color(0xFFE8F4F6), // Secondary color
         3: Color(0xFF111111), // Alternative Primary
+        // 4: Color(0xFF8E7980), //
         400: Color(0xFFf53325), // Red
         500: Color(0xFFFFFFFF)
       });

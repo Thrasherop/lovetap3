@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lovetap3/pages/AddConnectionScreen.dart';
 import 'package:lovetap3/pages/ConnectionFailedScreen.dart';
 import 'package:lovetap3/pages/ConnectionManagementScreen.dart';
 import 'package:lovetap3/pages/HomeScreen.dart';
@@ -26,6 +27,7 @@ Future<void> main() async {
       "/connection_management": (context) => ConnectionManagementScreen(),
       "/settings": (context) => SettingsScreen(),
       "/LogSubmission": (context) => LogSubmissionScreen(),
+      "/add_connection": (context) => AddConnectionScreen(),
     },
   ));
 }

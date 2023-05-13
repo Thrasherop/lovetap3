@@ -48,6 +48,10 @@ dependencies:
   cloud_functions: ^4.0.3 #^3.3.2 # // needs to be older version to work with firebase_core
   firebase_messaging: ^14.0.4 #^13.1.0
 
+  # For styling
+  google_fonts: ^4.0.4 # dynamically fetches fonts for rapid development
+  simple_gradient_text: ^1.2.4 # Allows for text gradients
+
 
 
   # The following adds the Cupertino Icons font to your application.

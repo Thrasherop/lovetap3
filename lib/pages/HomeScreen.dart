@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -175,10 +176,50 @@ class _HomeScreenState extends State<HomeScreen> {
 
       home: Container(
 
-        color: SettingManager.colorArray[1], // Home screen background
+        color: Colors.transparent, //SettingManager.colorArray[1], // Home screen background
 
         child: Stack(
           children: [
+
+            // LoveTap title
+            Positioned(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: Scaffold (
+
+                backgroundColor: SettingManager.colorArray[1],
+
+                body: SafeArea(
+                  child: SizedBox(
+                    height: 150,
+                    width: MediaQuery.of(context).size.width,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GradientText(
+                          "LoveTap",
+                          style: GoogleFonts.getFont("Alex Brush",
+                            textStyle: TextStyle(
+                                fontSize: 75,
+                                color: SettingManager.colorArray[2],
+                                decoration: TextDecoration.none
+                            ),
+                          ),
+
+                          colors: [
+                            SettingManager.colorArray[2]!,
+                            SettingManager.colorArray[3]!,
+                          ],
+                        ),
+
+
+                      ],
+                    )
+                  ),
+                ),
+              ),
+            ),
+
             Scaffold (
             backgroundColor: Colors.transparent, // transparent to show background of container
             key: _scaffoldKey,
@@ -187,8 +228,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 This is the layout for the drawer.
                */
               child: Container(
-                color: SettingManager.colorArray[3],//Colors.transparent,//SettingManager.colorArray[400],
+                color: SettingManager.colorArray[4],//Colors.transparent,//SettingManager.colorArray[400],
 
+                // Drawer
                 child: ListView(
                   padding: EdgeInsets.zero,
                   children: [
@@ -305,12 +347,20 @@ class _HomeScreenState extends State<HomeScreen> {
                       Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+
+                          SizedBox(
+                              height: 10
+                          ),
+
                           Text(
                               "Sending   to   ",
-                            style: TextStyle(
-                              color: SettingManager.colorArray[2],
-                              fontSize: 20,
-                            ),
+                            style: GoogleFonts.getFont(
+                              "Alex Brush",
+                              textStyle: TextStyle(
+                                color: SettingManager.colorArray[2],
+                                fontSize: 20,
+                              ),
+                            )
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -321,11 +371,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   padding: EdgeInsets.all(2),
                                   child: DropdownButton (
                                     // This styles the menu
-                                    dropdownColor: Color.fromRGBO(243, 53, 136, 1),
+                                    dropdownColor: SettingManager.colorArray[4],//Color.fromRGBO(243, 53, 136, 1),
                                     borderRadius: BorderRadius.circular(10),
-                                    style: TextStyle(
-                                      color: SettingManager.colorArray[2],
-                                      fontSize: 16,
+                                    style: GoogleFonts.getFont(
+                                      "Alex Brush",
+                                      textStyle: TextStyle (
+                                        color: SettingManager.colorArray[2],
+                                        fontSize: 19,
+                                      ),
                                     ),
                                     icon: Icon(
                                       Icons.keyboard_arrow_down,
@@ -351,40 +404,67 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
 
-                      SizedBox(height: 140),
+                      SizedBox(
+                        height: 80
+                      ),
+
+                      // Heart icons
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            CupertinoIcons.heart_fill,
+                            color: SettingManager.colorArray[20]!,
+                            size: 120,
+                          ),
+
+                          Icon(
+                            CupertinoIcons.heart_fill,
+                            color: SettingManager.colorArray[21]!,
+                            size: 120,
+                          ),
+
+                        ],
+                      ),
+
+                      SizedBox(height: 20),
 
                       // Tap interface
                       InkWell(
+
                         onTapDown: _press,
                         onTapUp: _release,
 
-                        splashColor: SettingManager.colorArray[1],
+                        splashColor: SettingManager.colorArray[3],
                         highlightColor: Colors.transparent, // This disables the white overlay on presses
                         customBorder: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
 
                         child: Ink(
-                          width: 300,
-                          height: 300,
+                          width: 270,
+                          height: 270,
 
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            color: SettingManager.colorArray[2], // Color of the tap square
+                            color: SettingManager.colorArray[1], // Color of the tap square
                             border: Border.all(
                               color: SettingManager.colorArray[2]!,
-                              width: 2.0,
+                              width: 4.0,
                               style: BorderStyle.solid,
                             ),
                           ),
                           child: Center(
                             child: Text(
                               "Tap Here",
-                              style: TextStyle(
-                                fontStyle: FontStyle.italic,
-                                color: SettingManager.colorArray[1],
-                                fontSize: 25,
-                              ),
+                              style: GoogleFonts.getFont(
+                                "Alex Brush",
+                                textStyle: TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                  color: SettingManager.colorArray[2],
+                                  fontSize: 50,
+                                ),
+                              )
                             )
                           ),
                         )
@@ -397,39 +477,6 @@ class _HomeScreenState extends State<HomeScreen> {
             )
           ),
 
-            // LoveTap title
-            Positioned(
-              height: 200,
-              width: MediaQuery.of(context).size.width,
-              child: SafeArea(
-                child: Scaffold(
-                  backgroundColor: Colors.transparent,
-                  body: SizedBox(
-                      height: 200,
-                      width: MediaQuery.of(context).size.width,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          GradientText(
-                            "LoveTap",
-                            style: GoogleFonts.getFont("Alex Brush",
-                              textStyle: TextStyle(
-                                fontSize: 75,
-                                color: SettingManager.colorArray[2]
-                              ),
-                            ),
-                            colors: [
-                              Colors.blue,
-                              Colors.red,
-                              Colors.teal,
-                            ],
-                          ),
-                        ],
-                      )
-                  ),
-                ),
-              ),
-            )
           ]
         ),
       ),

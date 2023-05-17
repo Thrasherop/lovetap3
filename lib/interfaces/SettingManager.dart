@@ -116,21 +116,37 @@ class SettingManager {
     if (newTheme == "dark"){
 
       colorArray = MaterialColor(0xFF343A40, const <int, Color>{
-        1: Color(0xFF1B1B1B), // Primary color
-        2: Color(0xFFE8F4F6), // Secondary color
-        3: Color(0xFF111111), // Alternative Primary
-        // 4: Color(0xFF8E7980), //
-        400: Color(0xFFf53325), // Red
-        500: Color(0xFFFFFFFF)
+        1: Color(0xFF000000), // Background color
+        // 2: Color(0xFFC7B1B7), // Text color 1
+        // 3: Color(0xFF8E7378), // Text color 2
+        2: Color(0xFFF2C6C7), // Text color 1
+        3: Color(0xFFCCABAC), // Text color 2
+        4: Color(0xFF212121), // Alternative background color
+
+
+        // 20: Color(0xFFC8B7BA), // Left heart color // 208 // 183 // 186
+        // 21: Color(0xFFAC9798), // Right heart color // 188 151 152
+
+
+        20: Color(0xFFCCB2B4), // Left heart color // 208 // 183 // 186
+        21: Color(0xFFB29699), // Right heart color // 190 96 99
+
+        400: Color(0xFF8800FF),
+        500: Color(0xFF41fc03),
       });
 
     } else { // Default to light
       colorArray = MaterialColor(0xFF343A40, const <int, Color>{
-        1: Color(0xFFee578a), // Primary color
-        2: Color(0xFFFFF3F9), // Secondary color
-        3: Color(0xFFe35281), // Alternative primary
-        400: Color(0xFF8800FF),
-        500: Color(0xFF41fc03),
+        1: Color(0xFFE8F4F6), // Background color
+        2: Color(0xFFE8F4F6), // Secondary color
+        3: Color(0xFF111111), // Alternative Primary
+        4: Color(0xFF8E7980), //
+
+        20: Color(0xFFCFB3B5), // Left heart color
+        21: Color(0xFFBC9798), // Right heart color
+
+        400: Color(0xFFf53325), // Red
+        500: Color(0xFFFFFFFF)
         // 500: Color(0xFFdcb5ff)
       });
     }

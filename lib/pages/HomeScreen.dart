@@ -27,12 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
 
-  TextStyle hamburgerTextStyle = TextStyle(
-    // color: Config.primaryColor,
-    color: SettingManager.colorArray[2],
-    fontStyle: FontStyle.italic
-
-  );
+  // This is set up in _updateHamburgerTextStyle()
+  late TextStyle hamburgerTextStyle;
 
   late OutgoingPackage curPackage = OutgoingPackage.PlaceHolder();
 
@@ -43,6 +39,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState(){
     super.initState();
     _selectedDestination = destinationOptions[0].value;
+
+    // update the hamburger text style
+    _updateHamburgerTextStyle();
 
     // Push our resumeContext() callback onto MyBuffer.updateScreenCallback stack.
     MyBuffer.updateScreenCallback.insert(0, (){
@@ -166,11 +165,28 @@ class _HomeScreenState extends State<HomeScreen> {
 
   }
 
+  void _updateHamburgerTextStyle(){
+    /*
+
+      This function updates the HamburgerTextStyle. This
+      is necessary in case the theme changes.
+
+     */
+
+    hamburgerTextStyle = TextStyle(
+      // color: Config.primaryColor,
+        color: SettingManager.colorArray[2],
+        fontStyle: FontStyle.italic
+    );
+
+  }
+
   @override
   Widget build(BuildContext context) {
 
+    // Update various values
     _updateDestinationOptions();
-
+    _updateHamburgerTextStyle();
 
     return MaterialApp(
 
@@ -196,21 +212,45 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        GradientText(
-                          "LoveTap",
+
+                        Text(
+                          "Love",
                           style: GoogleFonts.getFont("Alex Brush",
                             textStyle: TextStyle(
                                 fontSize: 75,
                                 color: SettingManager.colorArray[2],
                                 decoration: TextDecoration.none
                             ),
-                          ),
-
-                          colors: [
-                            SettingManager.colorArray[2]!,
-                            SettingManager.colorArray[3]!,
-                          ],
+                          )
                         ),
+
+                        Text(
+                          "Tap",
+                          style: GoogleFonts.getFont("Alex Brush",
+                            textStyle: TextStyle(
+                                fontSize: 75,
+                                color: SettingManager.colorArray[3],
+                                decoration: TextDecoration.none
+                            ),
+                          )
+                        )
+
+
+                        // GradientText(
+                        //   "LoveTap",
+                        //   style: GoogleFonts.getFont("Alex Brush",
+                        //     textStyle: TextStyle(
+                        //         fontSize: 75,
+                        //         color: SettingManager.colorArray[2],
+                        //         decoration: TextDecoration.none
+                        //     ),
+                        //   ),
+                        //
+                        //   colors: [
+                        //     SettingManager.colorArray[2]!,
+                        //     SettingManager.colorArray[3]!,
+                        //   ],
+                        // ),
 
 
                       ],
@@ -248,7 +288,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       title: Text('Manage Connections', style: hamburgerTextStyle,),
                       onTap: () {
                         // Close the drawer
-                        _scaffoldKey.currentState?.closeEndDrawer();
+                        _scaffoldKey.currentState?.closeDrawer();
 
                         // Navigate to connection management screen
                         Navigator.pushNamed(context, "/connection_management");
@@ -259,7 +299,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       title: Text("Settings", style: hamburgerTextStyle),
                       onTap: () async {
                         // Close the drawer first
-                        _scaffoldKey.currentState?.closeEndDrawer();
+                        _scaffoldKey.currentState?.closeDrawer();
 
                         // Navigate to testing screen
                         Navigator.pushNamed(context, "/settings");
@@ -269,7 +309,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       title: Text("Testing Screen", style: hamburgerTextStyle,),
                       onTap: () {
                         // Close the drawer first
-                        _scaffoldKey.currentState?.closeEndDrawer();
+                        _scaffoldKey.currentState?.closeDrawer();
 
                         // Navigate to testing screen
                         Navigator.pushNamed(context, "/testing");
@@ -284,11 +324,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         setState(() {}); // refresh now that it returns
                         stamp("PushReplacement ended. Screen reset");
                       },
-                    ),ListTile(
+                    ),
+                    ListTile(
                       title: Text("Report a bug", style: hamburgerTextStyle,),
                       onTap: () {
                         // Close the drawer first
-                        _scaffoldKey.currentState?.closeEndDrawer();
+                        _scaffoldKey.currentState?.closeDrawer();
 
                         // Navigate to testing screen
                         Navigator.pushNamed(context, "/LogSubmission");
@@ -414,13 +455,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Icon(
                             CupertinoIcons.heart_fill,
-                            color: SettingManager.colorArray[20]!,
+                            color: SettingManager.colorArray[2]!,
                             size: 120,
                           ),
 
                           Icon(
                             CupertinoIcons.heart_fill,
-                            color: SettingManager.colorArray[21]!,
+                            color: SettingManager.colorArray[3]!,
                             size: 120,
                           ),
 
@@ -449,7 +490,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             borderRadius: BorderRadius.circular(20),
                             color: SettingManager.colorArray[1], // Color of the tap square
                             border: Border.all(
-                              color: SettingManager.colorArray[2]!,
+                              color: SettingManager.colorArray[3]!,
                               width: 4.0,
                               style: BorderStyle.solid,
                             ),
@@ -461,7 +502,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 "Alex Brush",
                                 textStyle: TextStyle(
                                   fontStyle: FontStyle.italic,
-                                  color: SettingManager.colorArray[2],
+                                  color: SettingManager.colorArray[3],
                                   fontSize: 50,
                                 ),
                               )

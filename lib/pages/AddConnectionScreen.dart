@@ -127,7 +127,22 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
                   ),
                   SizedBox(height: 50,),
                   ElevatedButton(
-                      onPressed: _requestConnection, child: Text("Request connection")
+                    onPressed: _requestConnection,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: SettingManager.colorArray[1],
+                      side: BorderSide(
+                        color: SettingManager.colorArray[3]!,
+                        width: 1.0,
+                      ),
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.zero)),
+                    ),
+                    child: Text(
+                      "Request connection",
+                      style: TextStyle(
+                        color: SettingManager.colorArray[2],
+                      ),
+                    ),
                   ),
                 ],
               )

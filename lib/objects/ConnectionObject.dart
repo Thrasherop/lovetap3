@@ -3,8 +3,8 @@ import 'package:lovetap3/misc/functions.dart';
 class ConnectionObject {
 
     late String _connectionID;
-    late String _targetUser;
     late String _targetEmail;
+    late String _nickname;
     late bool _isActive;
 
     ConnectionObject.parseString(String rawString){
@@ -27,12 +27,12 @@ class ConnectionObject {
 
       List<String> parsed = rawString.split("!!!");
       _connectionID = parsed[0];
-      // _targetUser = parsed[1];
       _targetEmail = parsed[1];
+      _nickname = parsed[2];
 
-      if (parsed[2].toLowerCase() == "true"){
+      if (parsed[3].contains("true")){
         _isActive = true;
-      } else if (parsed[2].toLowerCase() == "false"){
+      } else if (parsed[3].contains("false")){
         _isActive = false;
       } else {
         stampWTF("_IsActive is not true nor false on ConnectionObject $rawString");
@@ -40,7 +40,7 @@ class ConnectionObject {
 
     }
 
-    ConnectionObject.explicit(String connectionID, String targetEmail, bool isActive){ // String targetUser
+    ConnectionObject.explicit(String connectionID, String targetEmail, String nickname, bool isActive){ // String targetUser
 
       /*
 
@@ -63,9 +63,9 @@ class ConnectionObject {
 
 
       _connectionID = connectionID;
-      // _targetUser = targetUser;
       _isActive = isActive;
       _targetEmail = targetEmail;
+      _nickname = nickname;
     }
 
     String getTargetEmail(){
@@ -76,9 +76,10 @@ class ConnectionObject {
       return _connectionID;
     }
 
-    // String getTargetUser(){
-    //   return _targetUser;
-    // }
+    String getNickname(){
+      return _nickname;
+    }
+
 
     bool isActive(){
       return _isActive;
@@ -90,7 +91,7 @@ class ConnectionObject {
 
     String toDataString(){
       // return "${getConnectionID()}!!!${getTargetUser()}!!!${getTargetEmail()}!!!${isActive().toString()}";
-      return "${getConnectionID()}!!!${getTargetEmail()}!!!${isActive().toString()}";
+      return "${getConnectionID()}!!!${getTargetEmail()}!!!${getNickname()}!!!${isActive().toString()}}";
     }
 
 }

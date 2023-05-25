@@ -81,6 +81,8 @@ class _HomeScreenState extends State<HomeScreen> {
     // Fetch connection information & add to newDestinationOptions
     Map<String, ConnectionObject> connectionsMap = (await MyFileInterface.getConnections());
 
+
+    // Generates the list of destination options
     List<DropdownMenuItem> newDestinationOptions = <DropdownMenuItem>[];
     connectionsMap.forEach((key, value) {
       if (value.isActive()) {
@@ -89,10 +91,10 @@ class _HomeScreenState extends State<HomeScreen> {
         newDestinationOptions.add(DropdownMenuItem(
             value: value.getConnectionID(),
             child: Text(
-                value.getTargetEmail(),
+                value.getNickname(),
                 style: TextStyle(
-                  color: Config.secondaryColor,
-                  fontSize: 16,
+                  color: SettingManager.colorArray[2],
+                  fontSize: 20,
                 ),
             ),
         ));
@@ -106,8 +108,8 @@ class _HomeScreenState extends State<HomeScreen> {
     // Check for empty. If so, display No connections
     if (destinationOptions.isEmpty){
       destinationOptions = <DropdownMenuItem>[DropdownMenuItem(child: Text("No connections"), value: "No connections")];
+      _selectedDestination = destinationOptions[0].value ?? "No connections";
     }
-    _selectedDestination = destinationOptions[0].value ?? "No connections";
     setState(() {});
 
   }
@@ -234,24 +236,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           )
                         )
-
-
-                        // GradientText(
-                        //   "LoveTap",
-                        //   style: GoogleFonts.getFont("Alex Brush",
-                        //     textStyle: TextStyle(
-                        //         fontSize: 75,
-                        //         color: SettingManager.colorArray[2],
-                        //         decoration: TextDecoration.none
-                        //     ),
-                        //   ),
-                        //
-                        //   colors: [
-                        //     SettingManager.colorArray[2]!,
-                        //     SettingManager.colorArray[3]!,
-                        //   ],
-                        // ),
-
 
                       ],
                     )

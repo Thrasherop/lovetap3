@@ -67,9 +67,9 @@ class _TestingScreenState extends State<TestingScreen> {
 
     // Some dummy data
     List<ConnectionObject> connections = [];
-    connections.add(ConnectionObject.explicit("JoshuaKopaunik@gmail.com", "JoshuaKopaunik@gmail.com", false));
-    connections.add(ConnectionObject.explicit("222", "222", false));
-    connections.add(ConnectionObject.explicit("333", "333", true));
+    // connections.add(ConnectionObject.explicit("JoshuaKopaunik@gmail.com", "JoshuaKopaunik@gmail.com", false));
+    // connections.add(ConnectionObject.explicit("222", "222", false));
+    // connections.add(ConnectionObject.explicit("333", "333", true));
 
 
 

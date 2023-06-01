@@ -30,6 +30,7 @@ class ConnectionObject {
       _targetEmail = parsed[1];
       _nickname = parsed[2];
 
+
       if (parsed[3].contains("true")){
         _isActive = true;
       } else if (parsed[3].contains("false")){
@@ -91,6 +92,7 @@ class ConnectionObject {
 
     String toDataString(){
       // return "${getConnectionID()}!!!${getTargetUser()}!!!${getTargetEmail()}!!!${isActive().toString()}";
+      stamp("Saving: ${getConnectionID()}!!!${getTargetEmail()}!!!${getNickname()}!!!${isActive().toString()}}");
       return "${getConnectionID()}!!!${getTargetEmail()}!!!${getNickname()}!!!${isActive().toString()}}";
     }
 

@@ -109,6 +109,8 @@ class _HomeScreenState extends State<HomeScreen> {
     if (destinationOptions.isEmpty){
       destinationOptions = <DropdownMenuItem>[DropdownMenuItem(child: Text("No connections"), value: "No connections")];
       _selectedDestination = destinationOptions[0].value ?? "No connections";
+    } else {
+      _selectedDestination = destinationOptions[0].value;
     }
     setState(() {});
 
@@ -189,6 +191,9 @@ class _HomeScreenState extends State<HomeScreen> {
     // Update various values
     _updateDestinationOptions();
     _updateHamburgerTextStyle();
+
+    // stamp("Destination options: ${destinationOptions[0].value}");
+    // stamp("Selected destination option: ${_selectedDestination}");
 
     return MaterialApp(
 

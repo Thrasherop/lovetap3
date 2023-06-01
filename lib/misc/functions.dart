@@ -5,7 +5,7 @@ import 'package:logger/logger.dart';
 /// logger object
 var logger = Logger(
   printer: PrettyPrinter(
-      methodCount: 3,
+      methodCount: 5,
       colors: true
   ),
 );

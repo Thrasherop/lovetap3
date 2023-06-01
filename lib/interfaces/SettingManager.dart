@@ -120,6 +120,8 @@ class SettingManager {
         2: Color(0xFFCCB2B4), // Text color 1
         3: Color(0xFFBC9B98), // Text color 2
         4: Color(0xFF212121), // Alternative background color
+        5: Color(0xFFBC9B98), // Switch track active (settings screen)
+        6: Color(0xFF8a706e), // Switch track inactive (settings screen)
 
         20: Color(0xFFCCB2B4), // Left heart color // 208 // 183 // 186
         21: Color(0xFFB29699), // Right heart color // 190 96 99
@@ -132,8 +134,10 @@ class SettingManager {
       colorArray = MaterialColor(0xFFFFFFFF, const <int, Color>{
         1: Color(0xFFFFFFFF), // Background color
         2: Color(0xFF111111), // Secondary color
-        3: Color(0xFF111111), // Alternative Primary
+        3: Color(0xFF010101), // Alternative Primary
         4: Color(0xFFFFFFFF), //
+        5: Color(0xFF303030), // Switch track active (settings screen)
+        6: Color(0xFF525252), // Switch track inactive (settings screen)
 
         20: Color(0xFFCFB3B5), // Left heart color
         21: Color(0xFFBC9798), // Right heart color

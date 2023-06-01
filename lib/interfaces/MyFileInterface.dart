@@ -252,7 +252,10 @@ class MyFileInterface {
 
     // Append new connection data, and update database
     dataArray.add(newConnection.toDataString());
+    stamp("Saving new connection: ${newConnection.toDataString()}. Existing list was: ${dataArray.toString()}");
     setValue("connections", dataArray);
+
+    stamp("New list is ${await getStringList("connection")}");
 
     return true;
   }

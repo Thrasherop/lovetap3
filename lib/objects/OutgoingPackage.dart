@@ -117,6 +117,8 @@ class OutgoingPackage extends Package {
     //   stamp("Connection: ${value.getConnectionID()}");
     // });
 
+    stamp("All connectiosn: ${connections.toString()}");
+
     if (!connections.containsKey(MyBuffer.currentTargetDestination)){
       stampE("Target connection does not exist in connection database");
       return {};

@@ -84,32 +84,61 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     return
       Scaffold(
-      body: SafeArea (
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
 
-            crossAxisAlignment: CrossAxisAlignment.center,
+        backgroundColor: SettingManager.colorArray[1],
 
-            children: [
+        body: SafeArea (
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Force deliver messages immediately: "), Switch(value: forceDeliver, onChanged: (bool newValue) => updateSetting("messagePriority", newValue)),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Dark mode: "), Switch(value: darkMode, onChanged: (bool newValue) => updateSetting("theme", newValue))
-                ],
-              )
+              crossAxisAlignment: CrossAxisAlignment.center,
 
-            ],
+              children: [
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Force deliver messages immediately: ",
+                      style: TextStyle(
+                        color: SettingManager.colorArray[2]
+                      ),
+                    ),
+                    Switch(
+                      value: forceDeliver,
+                      onChanged: (bool newValue) => updateSetting("messagePriority", newValue),
+                      activeColor: SettingManager.colorArray[3],
+                      activeTrackColor: SettingManager.colorArray[5],
+                      inactiveThumbColor: SettingManager.colorArray[3],
+                      inactiveTrackColor: SettingManager.colorArray[6],
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Dark mode: ",
+                      style: TextStyle(
+                          color: SettingManager.colorArray[2]
+                      ),
+                    ),
+                    Switch(
+                      value: darkMode,
+                      onChanged: (bool newValue) => updateSetting("theme", newValue),
+                      activeColor: SettingManager.colorArray[3],
+                      activeTrackColor: SettingManager.colorArray[5],
+                      inactiveThumbColor: SettingManager.colorArray[3],
+                      inactiveTrackColor: SettingManager.colorArray[6],
+                    )
+                  ],
+                )
+
+              ],
+            ),
           ),
         ),
-      ),
     );
   }
 }

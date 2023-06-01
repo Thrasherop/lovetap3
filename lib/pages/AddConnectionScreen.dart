@@ -98,8 +98,12 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
     ConnectionObject newConnection = ConnectionObject.explicit(data["connectionID"]!, data["targetEmail"]!, nickname, true);
     MyFileInterface.addConnection(newConnection);
 
-    // emailInput.text = ""; // clear the text
-    FocusManager.instance.primaryFocus?.unfocus(); // this closes the keyboard
+    // clear the text
+    emailInput.text = "";
+    nicknameInput.text = "";
+
+    // this closes the keyboard
+    FocusManager.instance.primaryFocus?.unfocus();
 
     setState(() {});
   }

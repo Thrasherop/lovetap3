@@ -27,9 +27,6 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
         Requests a connection via email input.
     */
 
-    stamp("Email input: ${emailInput.text}");
-
-    stamp("attempting to show toast");
     Fluttertoast.showToast(
         msg: "Sending your request...",
         toastLength: Toast.LENGTH_SHORT,

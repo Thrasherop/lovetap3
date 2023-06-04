@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lovetap3/interfaces/MyFirebaseInterface.dart';
 import 'package:lovetap3/objects/Package.dart';
 import 'package:lovetap3/misc/Config.dart';
@@ -9,6 +10,8 @@ import 'package:lovetap3/interfaces/MyAuthenticator.dart';
 import 'package:lovetap3/misc/functions.dart';
 import 'package:lovetap3/interfaces/MyFileInterface.dart';
 import 'package:lovetap3/objects/ConnectionObject.dart';
+
+import '../interfaces/SettingManager.dart';
 
 class OutgoingPackage extends Package {
 
@@ -224,6 +227,17 @@ class OutgoingPackage extends Package {
      */
 
     MyFirebaseInterface.sendPackage(this);
+
+    stamp("trying to show toast");
+    Fluttertoast.showToast(
+      msg: "Message Sent",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      textColor: SettingManager.colorArray[1],
+      fontSize: 16.0,
+      backgroundColor: SettingManager.colorArray[2],
+    );
 
   }
 }

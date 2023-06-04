@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lovetap3/enums/PriorityEnum.dart';
 import 'package:lovetap3/interfaces/MyFileInterface.dart';
 import 'package:lovetap3/misc/MyBuffer.dart';
@@ -17,6 +18,8 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
 
   bool darkMode = SettingManager.getSetting("theme") == "dark";
+
+  late TextStyle settingWordsStyle;
 
   void updateSetting(String settingKey, Object newValue) async {
     stamp("New value: $newValue");
@@ -68,6 +71,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
 
+    // Update the words
+    settingWordsStyle =  GoogleFonts.getFont(
+      "Libre Baskerville",
+      textStyle: TextStyle (
+          color: SettingManager.colorArray[2],
+          fontSize: 16,
+          fontStyle: FontStyle.italic
+      ),
+    );
+
     // Parses the current settings
     bool forceDeliver = SettingManager.getSetting("messagePriority") == PriorityEnum.HIGH;
 
@@ -101,9 +114,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   children: [
                     Text(
                       "Force deliver messages immediately: ",
-                      style: TextStyle(
-                        color: SettingManager.colorArray[2]
-                      ),
+                      style: settingWordsStyle
                     ),
                     Switch(
                       value: forceDeliver,
@@ -120,9 +131,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   children: [
                     Text(
                       "Dark mode: ",
-                      style: TextStyle(
-                          color: SettingManager.colorArray[2]
-                      ),
+                      style: settingWordsStyle
                     ),
                     Switch(
                       value: darkMode,

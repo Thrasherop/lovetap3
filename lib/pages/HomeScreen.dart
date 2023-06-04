@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:lovetap3/interfaces/MyAuthenticator.dart';
@@ -124,10 +125,23 @@ class _HomeScreenState extends State<HomeScreen> {
       curPackage.press()
      */
 
-    // Create a new package if the current one has timed out
-    // This is why we need Packages of PlaceHolder type
+    // Check if there is a valid connection selected
+    if (_selectedDestination.contains("No connections")){
+      // Notify user that there is no valid connection
+      Fluttertoast.showToast(
+        msg: "No connections. Press + to add one",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        textColor: SettingManager.colorArray[1],
+        fontSize: 16.0,
+        backgroundColor: SettingManager.colorArray[2],
+      );
+      return; // exit the press
+    }
 
 
+    // Initialize a new package
     if (curPackage.isPlaceHolder() || curPackage.hasTimedOut()){
       curPackage = OutgoingPackage();
     }
@@ -167,6 +181,12 @@ class _HomeScreenState extends State<HomeScreen> {
     // Navigate to add connection screen
     Navigator.pushNamed(context, "/add_connection");
 
+  }
+
+  void _editConnectionMenuButtonPressed(){
+
+
+    Navigator.pushNamed(context, "/connection_management");
   }
 
   void _updateHamburgerTextStyle(){
@@ -340,11 +360,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 Padding( // Padding for the plus icon
                   padding: const EdgeInsets.only(right: 1.0),
                   child: IconButton(
-                          onPressed: _addConnectionMenuButtonPressed,
-                          icon: const Icon(Icons.add),
-                          color: SettingManager.colorArray[2],
-                          padding: EdgeInsets.zero,
-                        ),
+                    onPressed: _editConnectionMenuButtonPressed,
+                    icon: const Icon(Icons.edit),
+                    color: SettingManager.colorArray[2],
+                    padding: EdgeInsets.zero,
+                  ),
                 ),
               ],
               centerTitle: true,
@@ -385,10 +405,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           Text(
                               "Sending   to   ",
                             style: GoogleFonts.getFont(
-                              "Alex Brush",
+                              "Libre Baskerville",
                               textStyle: TextStyle(
                                 color: SettingManager.colorArray[2],
                                 fontSize: 20,
+                                fontStyle: FontStyle.italic
                               ),
                             )
                           ),
@@ -398,16 +419,17 @@ class _HomeScreenState extends State<HomeScreen> {
                               SizedBox(
                                 // width: 200,
                                 child: Padding(
-                                  padding: EdgeInsets.all(2),
+                                  padding: EdgeInsets.all(0),
                                   child: DropdownButton (
                                     // This styles the menu
                                     dropdownColor: SettingManager.colorArray[4],//Color.fromRGBO(243, 53, 136, 1),
                                     borderRadius: BorderRadius.circular(10),
                                     style: GoogleFonts.getFont(
-                                      "Alex Brush",
+                                      "Libre Baskerville",
                                       textStyle: TextStyle (
                                         color: SettingManager.colorArray[2],
                                         fontSize: 19,
+                                        fontStyle: FontStyle.italic
                                       ),
                                     ),
                                     icon: Icon(
@@ -424,11 +446,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                               IconButton(
-                                // Update the list and setState()
-                                onPressed: () {updateList(); setState(() {});},
-                                icon: const Icon(Icons.refresh),
+                                onPressed: _addConnectionMenuButtonPressed,
+                                icon: const Icon(Icons.add),
                                 color: SettingManager.colorArray[2],
-                              )
+                                padding: EdgeInsets.all(0),
+                                iconSize: 30,
+                              ),
+                              // IconButton(
+                              //   // Update the list and setState()
+                              //   onPressed: () {updateList(); setState(() {});},
+                              //   icon: const Icon(Icons.refresh),
+                              //   color: SettingManager.colorArray[2],
+                              // )
                             ],
                           ),
                         ],
@@ -439,23 +468,23 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
 
                       // Heart icons
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            CupertinoIcons.heart_fill,
-                            color: SettingManager.colorArray[2]!,
-                            size: 120,
-                          ),
-
-                          Icon(
-                            CupertinoIcons.heart_fill,
-                            color: SettingManager.colorArray[3]!,
-                            size: 120,
-                          ),
-
-                        ],
-                      ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [
+                      //     Icon(
+                      //       CupertinoIcons.heart_fill,
+                      //       color: SettingManager.colorArray[2]!,
+                      //       size: 120,
+                      //     ),
+                      //
+                      //     Icon(
+                      //       CupertinoIcons.heart_fill,
+                      //       color: SettingManager.colorArray[3]!,
+                      //       size: 120,
+                      //     ),
+                      //
+                      //   ],
+                      // ),
 
                       SizedBox(height: 20),
 

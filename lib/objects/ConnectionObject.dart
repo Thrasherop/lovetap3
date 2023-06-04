@@ -41,7 +41,7 @@ class ConnectionObject {
 
     }
 
-    ConnectionObject.explicit(String connectionID, String targetEmail, String nickname, bool isActive){ // String targetUser
+    ConnectionObject.explicit(String connectionID, String targetEmail, String nickname, bool isActive){
 
       /*
 

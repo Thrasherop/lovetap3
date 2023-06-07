@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:badges/badges.dart' as badges;
 
 import 'package:lovetap3/interfaces/MyAuthenticator.dart';
 import 'package:lovetap3/interfaces/MyFileInterface.dart';
@@ -34,7 +35,10 @@ class _HomeScreenState extends State<HomeScreen> {
   late OutgoingPackage curPackage = OutgoingPackage.PlaceHolder();
 
   List<DropdownMenuItem> destinationOptions = <DropdownMenuItem>[DropdownMenuItem(child: Text("Loading..."), value: "Loading...")];
-  late String _selectedDestination;// = MyNullObject().toString();//Config.DESTINATION_OPTIONS[0].value;
+  late String _selectedDestination;
+
+  // Defines whether or not to show notification on edit button
+  bool _showNotification = true;
 
   @override
   void initState(){
@@ -132,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
         msg: "No connections. Press + to add one",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
+        timeInSecForIosWeb: 3,
         textColor: SettingManager.colorArray[1],
         fontSize: 16.0,
         backgroundColor: SettingManager.colorArray[2],
@@ -184,8 +188,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _editConnectionMenuButtonPressed(){
-
-
     Navigator.pushNamed(context, "/connection_management");
   }
 
@@ -205,15 +207,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   }
 
+  void _updateNotificationStatus() async {
+     _showNotification = await MyFileInterface.hasNewRequests();
+     // stamp("_showNotification status: ${_showNotification}");
+  }
+
   @override
   Widget build(BuildContext context) {
 
     // Update various values
     _updateDestinationOptions();
     _updateHamburgerTextStyle();
-
-    // stamp("Destination options: ${destinationOptions[0].value}");
-    // stamp("Selected destination option: ${_selectedDestination}");
+    _updateNotificationStatus();
 
     return MaterialApp(
 
@@ -359,11 +364,21 @@ class _HomeScreenState extends State<HomeScreen> {
               actions: [
                 Padding( // Padding for the plus icon
                   padding: const EdgeInsets.only(right: 1.0),
-                  child: IconButton(
-                    onPressed: _editConnectionMenuButtonPressed,
-                    icon: const Icon(Icons.edit),
-                    color: SettingManager.colorArray[2],
-                    padding: EdgeInsets.zero,
+                  child: SizedBox(
+                    height: 3,
+                    child: badges.Badge(
+                      // badgeContent: Text("0"),
+                      position: badges.BadgePosition.bottomStart(bottom: 17, start: 10),
+                      showBadge: _showNotification,
+                      badgeAnimation: badges.BadgeAnimation.scale(),
+
+                      child: IconButton(
+                        onPressed: _editConnectionMenuButtonPressed,
+                        icon: const Icon(Icons.edit_square, size: 25,),
+                        color: SettingManager.colorArray[2],
+                        padding: EdgeInsets.zero,
+                      ),
+                    ),
                   ),
                 ),
               ],

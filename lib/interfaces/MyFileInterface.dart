@@ -305,4 +305,40 @@ class MyFileInterface {
     return stringList;
 
   }
+
+  static Future<bool> hasNewRequests() async {
+
+    // loop through all connections and check for an inactive one
+    Map<String, ConnectionObject> connections = await getConnections();
+    for (ConnectionObject thisConn in connections.values){
+      // stamp("Checking ${thisConn.toDataString()}");
+      if (!thisConn.beenSeen()){
+        return true;
+      }
+    }
+
+    // No inactive connections so return true
+    return false;
+  }
+
+  static Future<void> printConnections() async {
+
+  }
+
+  static Future<bool> setRequestsAsRead() async {
+    // loop through all connections and check for an inactive one
+    Map<String, ConnectionObject> connections = await getConnections();
+    // stamp("Number of connections ${connections.length}");
+    for (ConnectionObject thisConn in connections.values) {
+      if (!thisConn.beenSeen()){
+        // Update and save the connection
+        thisConn.setBeenSeen(true);
+        _updateConnection(thisConn);
+      }
+    }
+
+
+    // No inactive connections so return true
+    return false;
+  }
 }

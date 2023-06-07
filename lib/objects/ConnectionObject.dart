@@ -6,6 +6,7 @@ class ConnectionObject {
     late String _targetEmail;
     late String _nickname;
     late bool _isActive;
+    late bool _beenSeen;
 
     ConnectionObject.parseString(String rawString){
 
@@ -39,9 +40,17 @@ class ConnectionObject {
         stampWTF("_IsActive is not true nor false on ConnectionObject $rawString");
       }
 
+      if (parsed[4].contains("true")){
+        _beenSeen = true;
+      } else if (parsed[4].contains("false")){
+        _beenSeen = false;
+      } else {
+        stampWTF("_beenSeen is not true nor false on ConnectionObject $rawString");
+      }
+
     }
 
-    ConnectionObject.explicit(String connectionID, String targetEmail, String nickname, bool isActive){
+    ConnectionObject.explicit(String connectionID, String targetEmail, String nickname, bool isActive, bool beenSeen){
 
       /*
 
@@ -67,6 +76,7 @@ class ConnectionObject {
       _isActive = isActive;
       _targetEmail = targetEmail;
       _nickname = nickname;
+      _beenSeen = beenSeen;
     }
 
     String getTargetEmail(){
@@ -86,14 +96,20 @@ class ConnectionObject {
       return _isActive;
     }
 
+    bool beenSeen(){
+      return _beenSeen;
+    }
+
     void setActive(bool newStatus){
       _isActive = newStatus;
     }
 
+    void setBeenSeen(bool newStatus){
+      _beenSeen = newStatus;
+    }
+
     String toDataString(){
-      // return "${getConnectionID()}!!!${getTargetUser()}!!!${getTargetEmail()}!!!${isActive().toString()}";
-      stamp("Saving: ${getConnectionID()}!!!${getTargetEmail()}!!!${getNickname()}!!!${isActive().toString()}}");
-      return "${getConnectionID()}!!!${getTargetEmail()}!!!${getNickname()}!!!${isActive().toString()}}";
+      return "${getConnectionID()}!!!${getTargetEmail()}!!!${getNickname()}!!!${isActive().toString()}!!!${_beenSeen.toString()}";
     }
 
 }

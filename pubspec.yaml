@@ -37,6 +37,7 @@ dependencies:
   logger: ^1.1.0
   shared_preferences: ^2.0.15
   fluttertoast: ^8.1.1
+  badges: ^3.1.1
 
   # Firebase & google API's
   firebase_core: ^2.1.1 #^1.24.0

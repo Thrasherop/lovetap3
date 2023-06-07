@@ -92,7 +92,7 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
 
     // Add the connection locally
     // ConnectionObject newConnection = ConnectionObject.explicit(data["connectionID"]!, data["targetUid"]!, data["targetEmail"]!, true);
-    ConnectionObject newConnection = ConnectionObject.explicit(data["connectionID"]!, data["targetEmail"]!, nickname, true);
+    ConnectionObject newConnection = ConnectionObject.explicit(data["connectionID"]!, data["targetEmail"]!, nickname, true, true);
     MyFileInterface.addConnection(newConnection);
 
     // clear the text

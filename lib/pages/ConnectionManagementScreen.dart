@@ -60,7 +60,7 @@ class _ConnectionManagementScreenState extends State<ConnectionManagementScreen>
 
     // Add the connection locally
     // ConnectionObject newConnection = ConnectionObject.explicit(data["connectionID"]!, data["targetUid"]!, data["targetEmail"]!, true);
-    ConnectionObject newConnection = ConnectionObject.explicit(data["connectionID"]!, data["targetEmail"]!, "No nickname", true);
+    ConnectionObject newConnection = ConnectionObject.explicit(data["connectionID"]!, data["targetEmail"]!, "No nickname", true, true);
     MyFileInterface.addConnection(newConnection);
 
     emailInput.text = ""; // clear the text
@@ -133,9 +133,18 @@ class _ConnectionManagementScreenState extends State<ConnectionManagementScreen>
     setState(() {});
   }
 
+  void setRequestsAsRead() async {
+    await MyFileInterface.setRequestsAsRead();
+    // rebuild the screen
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    /// build function
+
+    // set everything as read
+    // stamp("Calling setRequestsAsRead");
+    setRequestsAsRead();
 
     // update callback
     MyBuffer.updateScreenCallback.insert(0, updateScreen);

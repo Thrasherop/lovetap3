@@ -91,6 +91,10 @@ class ConnectionObject {
       return _nickname;
     }
 
+    bool setNickname(String newNickname){
+      _nickname = newNickname;
+      return true;
+    }
 
     bool isActive(){
       return _isActive;

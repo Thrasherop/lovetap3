@@ -40,6 +40,9 @@ class Config {
   // Configs for demoing
   static const String DEMO_USER_NAME = "demoUser";
 
+  static const String MAIN_FONT = "Alex Brush";
+  static const String SECONDARY_FONT = "Libre Baskerville";
+
 
   // Colors
   // static const MaterialColor mainColor = Colors.blue;

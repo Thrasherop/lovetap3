@@ -156,13 +156,13 @@ class MyFileInterface {
 
     stamp("updated object: ${targetConnection.toDataString()}");
 
-    _updateConnection(targetConnection);
+    updateConnection(targetConnection);
 
     return true;
 
   }
 
-  static Future<bool> _updateConnection(ConnectionObject connection) async {
+  static Future<bool> updateConnection(ConnectionObject connection) async {
 
     /*
      Updates a connection. It takes in a ConnectionObject. It uses the ID of this
@@ -333,7 +333,7 @@ class MyFileInterface {
       if (!thisConn.beenSeen()){
         // Update and save the connection
         thisConn.setBeenSeen(true);
-        _updateConnection(thisConn);
+        updateConnection(thisConn);
       }
     }
 

@@ -258,7 +258,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         Text(
                           "Tap",
-                          style: GoogleFonts.getFont("Alex Brush",
+                          style: GoogleFonts.getFont(
+                            Config.MAIN_FONT,
                             textStyle: TextStyle(
                                 fontSize: 75,
                                 color: SettingManager.colorArray[3],
@@ -420,7 +421,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Text(
                               "Sending   to   ",
                             style: GoogleFonts.getFont(
-                              "Libre Baskerville",
+                              Config.SECONDARY_FONT,
                               textStyle: TextStyle(
                                 color: SettingManager.colorArray[2],
                                 fontSize: 20,
@@ -440,7 +441,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     dropdownColor: SettingManager.colorArray[4],//Color.fromRGBO(243, 53, 136, 1),
                                     borderRadius: BorderRadius.circular(10),
                                     style: GoogleFonts.getFont(
-                                      "Libre Baskerville",
+                                      Config.SECONDARY_FONT,
                                       textStyle: TextStyle (
                                         color: SettingManager.colorArray[2],
                                         fontSize: 19,
@@ -532,7 +533,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Text(
                               "Tap Here",
                               style: GoogleFonts.getFont(
-                                "Alex Brush",
+                                Config.MAIN_FONT,
                                 textStyle: TextStyle(
                                   fontStyle: FontStyle.italic,
                                   color: SettingManager.colorArray[3],

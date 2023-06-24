@@ -123,27 +123,40 @@ class SettingManager {
         5: Color(0xFFBC9B98), // Switch track active (settings screen)
         6: Color(0xFF8a706e), // Switch track inactive (settings screen)
 
-        20: Color(0xFFCCB2B4), // Left heart color // 208 // 183 // 186
-        21: Color(0xFFB29699), // Right heart color // 190 96 99
 
-        400: Color(0xFF8800FF),
-        500: Color(0xFF41fc03),
+        /*
+          These colors are for stronger screens like
+          the connection management screen
+         */
+        10: Color(0xFF000000), // Primary color for strong screens
+        11: Color(0xFF111111), // secondary color for strong screens
+        12: Color(0xFF525252), // Horizontal line
+        13: Color(0xFFBC9B98), // Text color for strong screens
+        14: Color(0xFFBC9B98), // Secondary text color for strong screens
+
+
+
       });
 
     } else { // Default to light
       colorArray = MaterialColor(0xFFFFFFFF, const <int, Color>{
-        1: Color(0xFFFFFFFF), // Background color
-        2: Color(0xFF111111), // Secondary color
-        3: Color(0xFF010101), // Alternative Primary
-        4: Color(0xFFFFFFFF), //
-        5: Color(0xFF303030), // Switch track active (settings screen)
-        6: Color(0xFF525252), // Switch track inactive (settings screen)
+        1: Color(0xFFFFFFFF),  // Background color
+        2: Color(0xFF111111),  // Secondary color
+        3: Color(0xFF010101),  // Alternative Primary
+        4: Color(0xFFFFFFFF),  //
+        5: Color(0xFF303030),  // Switch track active (settings screen)
+        6: Color(0xFF525252),  // Switch track inactive (settings screen)
 
-        20: Color(0xFFCFB3B5), // Left heart color
-        21: Color(0xFFBC9798), // Right heart color
+        /*
+          These colors are for stronger screens like
+          the connection management screen
+         */
+        10: Color(0xFF111111), // Primary color for strong screens
+        11: Color(0xFFFFFFFF), // secondary color for strong screens
+        12: Color(0xFF525252), // Horizontal line
+        13: Color(0xFFFFFFFF), // Text color for strong screens
+        14: Color(0xFF111111), // Secondary text color for strong screens
 
-        400: Color(0xFFf53325), // Red
-        500: Color(0xFFFFFFFF)
       });
     }
     

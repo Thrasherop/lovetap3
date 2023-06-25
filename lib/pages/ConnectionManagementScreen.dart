@@ -184,7 +184,10 @@ class _ConnectionManagementScreenState extends State<ConnectionManagementScreen>
 
                   Flexible(
                     child: TextField(
-                        controller: nicknameInput,
+                      controller: nicknameInput,
+                      style: TextStyle(
+                        color: SettingManager.colorArray[2]
+                      ),
                     ),
                   ),
 
@@ -358,7 +361,13 @@ class _ConnectionManagementScreenState extends State<ConnectionManagementScreen>
               SizedBox(height: 40),
 
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  // Pop the current screen off
+                  Navigator.pop(context);
+
+                  // Add the add connection screen
+                  Navigator.pushNamed(context, "/add_connection");
+                },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(SettingManager.colorArray[10]!),
                 ),
@@ -375,6 +384,10 @@ class _ConnectionManagementScreenState extends State<ConnectionManagementScreen>
         ),
       );
     }
+
+    /*
+     There are connections, so continue
+     */
 
     // Generate all sub-widgets
     List<Widget> widgetList = <Widget>[];
@@ -444,19 +457,6 @@ class _ConnectionManagementScreenState extends State<ConnectionManagementScreen>
               ),
             ),
           )
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //   children: [
-          //     ElevatedButton(
-          //       onPressed: () {acceptConnection(conn);},
-          //       child: Text("Accept")
-          //     ),
-          //     ElevatedButton(
-          //       onPressed: () {deleteConnection(conn);},
-          //       child: Text("Delete")
-          //     )
-          //   ],
-          // )
         );
       }
 

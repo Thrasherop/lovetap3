@@ -135,7 +135,7 @@ class _ConnectionManagementScreenState extends State<ConnectionManagementScreen>
     stamp("Deleting ${connection.getConnectionID()}");
 
     bool success = await MyFileInterface.deleteConnection(connection.getConnectionID());
-    stamp("Acceptance status: $success");
+    stamp("Success status: $success");
 
     // Reload the screen to show changes
     setState(() {});
@@ -218,7 +218,7 @@ class _ConnectionManagementScreenState extends State<ConnectionManagementScreen>
           ),
           ElevatedButton(
               onPressed: () {
-                // Send accept request
+                // Send delete request
                 deleteConnection(connection);
 
                 // Close the dialog

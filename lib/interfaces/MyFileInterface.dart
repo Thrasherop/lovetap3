@@ -106,6 +106,11 @@ class MyFileInterface {
        -- Future<bool>: whether the delete was successful or not
      */
 
+    /*
+      TODO: Send request to the server to remove self
+          from connection
+     */
+
 
     Map<String, ConnectionObject> allConnections = await getConnections();
     List<String> updatedArray = <String>[];

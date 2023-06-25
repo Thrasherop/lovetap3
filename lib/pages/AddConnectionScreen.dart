@@ -6,6 +6,7 @@ import 'package:lovetap3/interfaces/SettingManager.dart';
 
 import '../interfaces/MyFileInterface.dart';
 import '../interfaces/MyFirebaseInterface.dart';
+import '../misc/MyBuffer.dart';
 import '../misc/functions.dart';
 import '../objects/ConnectionObject.dart';
 
@@ -105,6 +106,15 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
     setState(() {});
   }
 
+  @override
+  void dispose(){
+
+    // Run the update for the home screen
+    MyBuffer.runLastScreenCallback();
+
+    super.dispose();
+
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -9,7 +9,6 @@ import 'package:lovetap3/interfaces/MyAuthenticator.dart';
 import 'package:lovetap3/interfaces/MyFileInterface.dart';
 import 'package:lovetap3/interfaces/SettingManager.dart';
 import 'package:lovetap3/objects/ConnectionObject.dart';
-import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 import '../misc/Config.dart';
 import '../misc/MyBuffer.dart';
@@ -53,7 +52,6 @@ class _HomeScreenState extends State<HomeScreen> {
        // Call resumeContext after the screen is calledback
        WidgetsBinding.instance.addPostFrameCallback((_) => resumeContext());
     });
-
 
     // Initialize the list, but delayed to ensure the screen has been created
     Future.delayed(Duration(milliseconds: 100), updateList);
@@ -267,7 +265,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           )
                         )
-
                       ],
                     )
                   ),
@@ -468,12 +465,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 padding: EdgeInsets.all(0),
                                 iconSize: 30,
                               ),
-                              // IconButton(
-                              //   // Update the list and setState()
-                              //   onPressed: () {updateList(); setState(() {});},
-                              //   icon: const Icon(Icons.refresh),
-                              //   color: SettingManager.colorArray[2],
-                              // )
                             ],
                           ),
                         ],

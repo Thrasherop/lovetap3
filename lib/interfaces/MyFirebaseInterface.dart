@@ -63,6 +63,25 @@ class MyFirebaseInterface {
       newTokenReceived(MyBuffer.currentToken!);
     });
 
+    // Request notification permission
+    NotificationSettings settings = await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: false,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: false,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      stamp('User granted notification permission');
+    } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+      stamp('User granted provisional notification permission');
+    } else {
+      stamp('User declined or has not accepted notification permission');
+    }
+
     // Register listeners
     FirebaseMessaging.onBackgroundMessage(MyFirebaseInterface.backgroundHandler);
     FirebaseMessaging.onMessage.listen(MyFirebaseInterface.foregroundHandler);

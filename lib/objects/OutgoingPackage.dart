@@ -154,6 +154,8 @@ class OutgoingPackage extends Package {
       to the timing array, and set _isPressed to true
      */
 
+    log4Bug(1, "pressed");
+
     // Updates lastUpdate to right now
     _cycleTimings();
 
@@ -169,6 +171,8 @@ class OutgoingPackage extends Package {
       to the timing array, and set _isPressed to false. It also creates
       a new _packageTimeout daemon with the delay of Config.PACKAGE_TIMEOUT
      */
+
+    log4Bug(1, "Released");
 
     _cycleTimings();
 
@@ -186,6 +190,8 @@ class OutgoingPackage extends Package {
       This means taking the current time delta (now - lastUpdate)
       and appending it to the _timingArray. Then it updates _lastUpdate.
      */
+
+    log4Bug(1, "_cycleTimings called");
 
     // Gets this timing array based on _lastUpdate
     // (this needs to happen before we change _lastUpdate)
@@ -206,14 +212,19 @@ class OutgoingPackage extends Package {
       the package will send.
      */
 
+    log4Bug(1, "_packageTimeout occured");
+
     Duration timeDelta = DateTime.now().difference(_lastUpdate);
 
+                              // 200 delay to give some tolerance
     if (timeDelta.inMilliseconds > Config.PACKAGE_TIMEOUT){
       stamp("Package has timed out");
+      log4Bug(1, "Daemon finished WITH a timeout. timeDelta: ${timeDelta.inMilliseconds}");
       _sendPackage();
       _hasTimedOut = true;
     } else {
       stamp("Daemon has finished without a timeout.");
+      log4Bug(1, "Daemon finished without a timeout. timeDelta: ${timeDelta.inMilliseconds}");
       _hasTimedOut = false;
     }
 

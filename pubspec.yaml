@@ -61,6 +61,17 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_crashlytics: ^3.0.11
 
+  # Icon stuff
+  flutter_launcher_icons: "^0.13.1"
+
+# Icon config
+flutter_launcher_icons:
+  android: true #"launcher_icon"
+  ios: true
+  image_path: "assets/icon-2.png"
+  adaptive_icon_background: "#35363a"
+  adaptive_icon_foreground: "assets/logo-foreground.png"
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

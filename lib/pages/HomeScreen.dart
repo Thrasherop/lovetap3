@@ -39,6 +39,12 @@ class _HomeScreenState extends State<HomeScreen> {
   // Defines whether or not to show notification on edit button
   bool _showNotification = true;
 
+  // Manager to make sure the demo mode can only be displayed once
+  bool _demoModeDisclaimerDisplayed = false;
+
+  // Get a reference to the context
+  late BuildContext _context;
+
   @override
   void initState(){
     super.initState();
@@ -128,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
      */
 
     // Check if there is a valid connection selected
-    if (_selectedDestination.contains("No connections")){
+    if (_selectedDestination.contains("No connections") && !SettingManager.inDemoMode){
       // Notify user that there is no valid connection
       Fluttertoast.showToast(
         msg: "No connections. Press + to add one",
@@ -182,7 +188,6 @@ class _HomeScreenState extends State<HomeScreen> {
     _press(null);
   }
 
-
   void _destinationChanged(newValue){
 
     if (newValue is String){
@@ -232,6 +237,36 @@ class _HomeScreenState extends State<HomeScreen> {
      // stamp("_showNotification status: ${_showNotification}");
   }
 
+  void _showDemoDisclaimer(){
+
+    showDialog(
+      context: _context,
+      builder: (context) => AlertDialog(
+        backgroundColor: SettingManager.colorArray[4],
+        content: Text(
+          "You are in demo mode. In this mode, your messages will be sent to your own phone. " +
+              "To exit this, please log out and log into your own account.",
+          style: TextStyle(
+            color: SettingManager.colorArray[2],
+          ),
+        ),
+        actions: [
+          TextButton(
+              onPressed: () {
+                stamp("Okay button pressed");
+
+                // Close the dialog
+                Navigator.pop(_context);
+              },
+              child: Text("Okay")
+          ),
+        ],
+      ),
+    );
+
+
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -239,6 +274,16 @@ class _HomeScreenState extends State<HomeScreen> {
     _updateDestinationOptions();
     _updateHamburgerTextStyle();
     _updateNotificationStatus();
+
+    _context = context;
+
+    // Show the demo mode disclaimer if we need to
+    bool demoMode = SettingManager.getSetting("demoMode") == true ? true : false;
+    if (!_demoModeDisclaimerDisplayed && demoMode){
+      _demoModeDisclaimerDisplayed = true;
+      Future.delayed(Duration(milliseconds: 100), _showDemoDisclaimer);
+    }
+
 
     return MaterialApp(
 
@@ -495,25 +540,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(
                         height: 80
                       ),
-
-                      // Heart icons
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.center,
-                      //   children: [
-                      //     Icon(
-                      //       CupertinoIcons.heart_fill,
-                      //       color: SettingManager.colorArray[2]!,
-                      //       size: 120,
-                      //     ),
-                      //
-                      //     Icon(
-                      //       CupertinoIcons.heart_fill,
-                      //       color: SettingManager.colorArray[3]!,
-                      //       size: 120,
-                      //     ),
-                      //
-                      //   ],
-                      // ),
 
                       SizedBox(height: 20),
 

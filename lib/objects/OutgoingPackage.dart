@@ -220,6 +220,14 @@ class OutgoingPackage extends Package {
     if (timeDelta.inMilliseconds > Config.PACKAGE_TIMEOUT){
       stamp("Package has timed out");
       log4Bug(1, "Daemon finished WITH a timeout. timeDelta: ${timeDelta.inMilliseconds}");
+
+      // Simply play the message if the app is in demo mode
+      if (SettingManager.inDemoMode){
+        play();
+        return;
+      }
+
+
       _sendPackage();
       _hasTimedOut = true;
     } else {

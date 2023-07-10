@@ -18,10 +18,14 @@ class SettingManager {
   static Map<String, Object> _settingsMap = {
     "messagePriority": PriorityEnum.HIGH,
     "theme": "light",
+    "demoMode": false,
   };
 
   // Set the default colorArray to light mode.
   static late MaterialColor colorArray;
+
+  // Demo mode handler
+  static bool inDemoMode = false;
 
   static Future<void> initialize() async {
 
@@ -86,6 +90,14 @@ class SettingManager {
     } else if (key == "theme"){
       // Calls _updateAppTheme logic if we want to set theme
       _updateAppTheme(value as String);
+    } else if (key == "demoMode"){
+      _updateDemoMode(value);
+    } else if (_settingsMap.containsKey(key)){
+      // Update that setting
+      stamp("Updating $key to $value");
+      _settingsMap[key] = value;
+    } else {
+      stampWTF("FAILED TO SET SETTING: KEY NOT IN MAP: $key}");
     }
   }
 
@@ -99,6 +111,12 @@ class SettingManager {
     finalStr += _settingsMap["messagePriority"].toString();
 
     return finalStr;
+  }
+
+  static void _updateDemoMode(Object? newVal){
+    bool newValBool = newVal == true ? true : false;
+    _settingsMap["demoMode"] = newValBool;
+    inDemoMode = newValBool;
   }
 
   static void _updateAppTheme (String newTheme){

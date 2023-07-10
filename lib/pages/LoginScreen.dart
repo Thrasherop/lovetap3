@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:lovetap3/interfaces/SettingManager.dart';
 import 'package:lovetap3/misc/MyBuffer.dart';
 import 'package:lovetap3/mini_widgets/GoogleSignInButton.dart';
 
@@ -14,6 +15,19 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+
+  int _numClicks = 0;
+
+  void demoLogin(){
+    stamp("Demo login attempt detected. Processing");
+
+    // Set the setting then switch to homescreen
+    SettingManager.updateValue("demoMode", true);
+
+    // Navigator.pushReplacementNamed(context, "/loading");
+    Navigator.popAndPushNamed(context, "/loading");
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -64,8 +78,29 @@ class _LoginScreenState extends State<LoginScreen> {
       child: SafeArea(
           child: Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                SizedBox(height: 80,),
+                OutlinedButton(
+
+                  onPressed: (){
+                    _numClicks++;
+                    if (_numClicks >= 10){
+                      demoLogin();
+                    }
+                  },
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(width: 5.0, color: Colors.transparent),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(30), // Image border
+                    child: SizedBox.fromSize(
+                      size: Size.fromRadius(100), // Image radius
+                      child: Image.asset('assets/logo-foreground.png'),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 130,),
                 Text("Sign in with google"),
                 GoogleSignInButton()
               ],

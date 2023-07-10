@@ -58,12 +58,12 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
     // Goes to home if logged in, goes to /login if not
     bool signedIn = await MyAuthenticator.checkSignedIn();
-    if (signedIn){
+    if (signedIn || SettingManager.inDemoMode){
       // Initializes Settings first
       await SettingManager.initialize();
       Navigator.pushReplacementNamed(context, "/home");
     } else {
-      stamp("User not logged in; sending them to /login");
+      stamp("User not logged in; sending them to /login (demoMode is ${SettingManager.inDemoMode})");
       Navigator.pushNamed(context, "/login");
     }
   }

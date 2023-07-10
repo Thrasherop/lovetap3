@@ -119,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   }
 
-  void _press(TapDownDetails event){
+  void _press(TapDownDetails? event){
     /*
       This method is called when the button is pressed. It
       then processes it by first initializing a valid Package
@@ -151,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
     curPackage.press();
   }
 
-  void _release(TapUpDetails event){
+  void _release(TapUpDetails? event){
 
     /*
       This registers when the tap button is released. This
@@ -160,6 +160,28 @@ class _HomeScreenState extends State<HomeScreen> {
 
     curPackage.release();
   }
+
+  void _tap_cancel(){
+    /*
+
+       This simply calls _release with a null parameter. This is
+       a compatibility layer with Inkwell.onTapCancel since onTapCanel
+       passes no parameters but _release takes in one parameter
+
+     */
+
+    _release(null);
+  }
+
+  void _tap(){
+    /*
+       This simply calls _press with a null parameter. This is
+       a compatibility layer with Inkwell.onTap since onTap
+       passes no parameters but _press takes in one parameter
+     */
+    _press(null);
+  }
+
 
   void _destinationChanged(newValue){
 
@@ -500,6 +522,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         onTapDown: _press,
                         onTapUp: _release,
+                        onTapCancel: _tap_cancel,
+                        onTap: _tap,
 
                         splashColor: SettingManager.colorArray[3],
                         highlightColor: Colors.transparent, // This disables the white overlay on presses

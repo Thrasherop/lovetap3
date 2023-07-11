@@ -19,6 +19,8 @@ Map<int, String> bugIdDescription = <int, String>{
   1: "Message not sending; long buz\n"
 };
 
+bool doDebug = true;
+
 void stamp(Object str){
     /*
       This is a custom print function.
@@ -36,7 +38,7 @@ void stamp(Object str){
     FirebaseCrashlytics.instance.log("stamp: $thisLog");
 
     // Output if debug is active
-    if (kDebugMode) {
+    if (doDebug) {
      logger.i("stamp: $str");
     }
 }
@@ -59,7 +61,7 @@ void stampE(Object str){
 
     // Output if debug is active
 
-    if (kDebugMode) {
+    if (doDebug) {
       logger.e(str);
     }
 }
@@ -82,7 +84,7 @@ void stampWTF(Object str){
 
     // Output if debug is active
 
-    if (kDebugMode){
+    if (doDebug){
       logger.wtf(str);
     }
 }

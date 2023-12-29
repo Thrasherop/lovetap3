@@ -44,6 +44,9 @@ class Package {
 
      */
 
+
+    log4Bug(2, "Package.play() has been enteered");
+
     // makes sure that none of the timings is longer than 10 seconds.
     for (int i = 0; i < timingArray.length; i++){
       if (timingArray[i] > 30000){
@@ -58,9 +61,12 @@ class Package {
       }
     }
 
+
+    log4Bug(2, "Package.play() is passing the timing array to Vibration.vibrate()");
     // Vibration.vibrate(duration: 199);
     stamp(".play() is playing $timingArray"); // keep this log
     Vibration.vibrate(pattern: timingArray);
+    log4Bug(2, "Package.play(): Vibration.vibrate() has returned. ");
   }
 
 }

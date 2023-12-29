@@ -270,6 +270,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
 
+    // print("GOOOOOING");
+    // stamp("should be going");
+
     // Update various values
     _updateDestinationOptions();
     _updateHamburgerTextStyle();
@@ -548,8 +551,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         onTapDown: _press,
                         onTapUp: _release,
-                        onTapCancel: _tap_cancel,
-                        onTap: _tap,
+                        // onTapCancel: _tap_cancel,
+                        // onTap: _tap,
 
                         splashColor: SettingManager.colorArray[3],
                         highlightColor: Colors.transparent, // This disables the white overlay on presses

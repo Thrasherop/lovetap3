@@ -16,10 +16,12 @@ String debugStr ="💡 !!! --- stamp: \$\$\$ \n\n";
 // This is the map of error messages to active bugs
 // This is used for log4Bug()
 Map<int, String> bugIdDescription = <int, String>{
-  1: "Message not sending; long buz\n"
+  1: "Message not sending; long buz\n",
+  2: "Background message not bibrating\n",
 };
 
 bool doDebug = true;
+bool doPrint = true;
 
 void stamp(Object str){
     /*
@@ -40,6 +42,10 @@ void stamp(Object str){
     // Output if debug is active
     if (doDebug) {
      logger.i("stamp: $str");
+    }
+
+    if (doPrint){
+      print("Stamp: $str");
     }
 }
 
@@ -64,6 +70,10 @@ void stampE(Object str){
     if (doDebug) {
       logger.e(str);
     }
+
+    if (doPrint){
+      print("Stamp ERROR: $str");
+    }
 }
 
 void stampWTF(Object str){
@@ -87,6 +97,10 @@ void stampWTF(Object str){
     if (doDebug){
       logger.wtf(str);
     }
+
+    if (doPrint){
+      print("StampWTF: $str");
+    }
 }
 
 void log4Bug(int id, Object str){
@@ -108,5 +122,9 @@ void log4Bug(int id, Object str){
   // if (kDebugMode) {
   //   logger.i("log4bug $thisBugDescOpt: $str");
   // }
+  if (doPrint){
+    print("Log4Bug $id -- $thisBugDescOpt: $str");
+    logger.i("log4bug $thisBugDescOpt: $str");
+  }
 
 }

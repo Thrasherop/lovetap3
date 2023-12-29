@@ -17,6 +17,7 @@ import 'package:lovetap3/objects/ConnectionObject.dart';
 import '../misc/MyBuffer.dart';
 import 'MyFileInterface.dart';
 
+@pragma('vm:entry-point')
 class MyFirebaseInterface {
   /*
     This class is for interfacing with Firebase.
@@ -263,6 +264,7 @@ class MyFirebaseInterface {
 
   }
 
+  @pragma('vm:entry-point')
   static Future<void> backgroundHandler(RemoteMessage message) async {
 
     /*
@@ -282,6 +284,7 @@ class MyFirebaseInterface {
 
   }
 
+  @pragma('vm:entry-point')
   static void foregroundHandler(RemoteMessage message) async{
     /*
       The callback function for a foreground FCM message.
@@ -320,6 +323,7 @@ class MyFirebaseInterface {
     return result;
   }
 
+  @pragma('vm:entry-point')
   static void _handleData(RemoteMessage message) {
     /*
       This function parses the message. This includes
@@ -338,9 +342,11 @@ class MyFirebaseInterface {
 
     if (message.data.containsKey(Config.PACKAGE_DATA_MAP)){
 
+      log4Bug(2, "MyFirebaseInterface detected a message incoming. Trying to play... ");
       // Creates IncomingPackage object
       IncomingPackage thisPackage = IncomingPackage(message);
       thisPackage.play();
+      log4Bug(2, "MyFirebaseInterface detected thisPackage.play() has returned");
 
 
     } else if (message.data.containsKey("connectionID")){
@@ -357,10 +363,7 @@ class MyFirebaseInterface {
       ConnectionObject newConnection = ConnectionObject.explicit(connectionID, message.data["senderEmail"], message.data["senderEmail"], false, false);
       MyFileInterface.addConnection(newConnection);
 
-    }
-    
-    
-    else {
+    } else {
       stamp("Incoming package did not have known pattern");
     }
 
